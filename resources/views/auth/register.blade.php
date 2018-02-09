@@ -1,79 +1,93 @@
 @component('layouts.main')
 @slot('title')
-Regist Your Account 
+ Signup Page
 @endslot
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
-
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('register') }}">
+    <div class="message is-link mt-7">
+        <div class="message-body ">
+            <div class="title">Register</div>
+                <div class="control">
+                    <form class="control" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                        <div class="field">
+                                <label for="name" class="label">Your Name</label>
+                                <div class="control has-icons-left has-icons-right">
+                                    <input id="name" placeholder="Your Name in Full"type="text" class="input {{ $errors->has('name') ? 'is-danger' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-user"></i>
                                     </span>
-                                @endif
+                                    @if ($errors->has('name'))
+                                        <span class="icon is-small is-right">
+                                            <i class="fa fa-warning"></i>
+                                        </span>
+                                        <span class="help is-danger">
+                                            <strong>{{ $errors->first('name') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
+                        <div class="field">
+                            <label for="email" class="label">E-Mail Address</label>
+                            <div class="control has-icons-left has-icons-right">
+                                <input id="email" placeholder="Email Address"type="email" class="input {{ $errors->has('email') ? 'is-danger' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-envelope"></i>
+                                </span>
                                 @if ($errors->has('email'))
-                                    <span class="help-block">
+                                    <span class="icon is-small is-right">
+                                        <i class="fa fa-warning"></i>
+                                    </span>
+                                    <span class="help is-danger">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
+                        <div class="field">
+                            <label for="password" class="label">Password</label>
+                            <div class="control has-icons-left">
+                                <input id="password" placeholder="Password"type="password" class="input {{ $errors->has('password') ? ' has-error' : '' }}" name="password" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
                                 @if ($errors->has('password'))
-                                    <span class="help-block">
+                                    <span class="help is-danger">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                        <div class="field">
+                            <label for="password-confirm" class="label">Confirm Password</label>
+                            <div class="control has-icons-left">
+                                <input id="password-confirm" placeholder="Please Confirm Your Password"type="password" class="input {{ $errors->has('password') ? ' has-error' : '' }}" name="password_confirmation" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                @if ($errors->has('password'))
+                                    <span class="help is-danger">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
+                        <div class="field">
+                            <div class="columns">
+                                <div class="column is-2">
+                                    <div class="control">
+                                        <button type="submit" class="button is-link">
+                                            Click to Regster your Account
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="column is-3 is-offset-6">    
+                                    <a class="button is-danger ml-5" href="{{ route('password.request') }}">
+                                        Forgot Your Password?
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
-            </div>
         </div>
     </div>
-</div>
 @endcomponent

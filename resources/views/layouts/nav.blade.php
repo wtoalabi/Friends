@@ -1,9 +1,12 @@
 <nav id="navbar" class="navbar is-fixed-top">
-    <div class="container ">
-        <div class="navbar-brand pl-2">
+    <div class="container is-fluid ">
+        <div class="navbar-brand ">
             <a class="navbar-item" href="/">
+            <p class="button is-primary">LARABOOK</p>
+            </a>
+            <a class="navbar-item" href="/home">
                 <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>
-             Home Page
+             Home
             </a>
             <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuDocumentation">
                 <span></span>
@@ -69,19 +72,19 @@
                         Channels Page
                     </a>  --}}
                 </div>
-            <div class="navbar-end">    
+            <div class="navbar-end navbar-right">    
                 
                 <div class="navbar-item">
                     <div class="field is-grouped">
                      @guest
                         <p class="control">
-                            <a class="button is-primary" href="/login">
+                            <a class="button is-info" href="/login">
                                 <span class="icon">
                                     <i class="fa fa-lock"></i>
                                 </span>
                                 <span>Login</span>
                             </a>
-                            <a class="button is-primary" href="/register">
+                            <a class="button is-info" href="/register">
                                 <span class="icon">
                                     <i class="fa fa-user"></i>
                                 </span>
@@ -90,7 +93,7 @@
                         </p>
                           @else
                             <div class="navbar-item has-dropdown is-hoverable control">
-                                <a class="button is-primary " href="#">
+                                <a class="button is-info " href="/dashboard">
                                     <span class="icon">
                                         <i class="fa fa-user"></i>
                                     </span>

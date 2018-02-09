@@ -7,14 +7,15 @@
     <link rel="shortcut icon" href="images/favicon.ico">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{$title}} | {{ config('app.name', 'Laravel') }}</title>
+    <title>{{$title}} | {{ config('app.name', 'LaraBook') }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
 </head>
 
 <body>
     <section class="main-section">
-        <div class="container">
+        <div class="container is-fluid">
             <div id="app">  
                 @include('layouts.nav')

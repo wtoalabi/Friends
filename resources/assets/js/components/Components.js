@@ -1,1 +1,1 @@
-Vue.component('vote-for-link', require('./Links/VoteForLink'));
+Vue.component('notification', require('./Notification'));

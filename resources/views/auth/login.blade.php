@@ -2,7 +2,7 @@
 @slot('title')
  Login Page
 @endslot
-    <div class="message is-primary mt-7">
+    <div class="message is-link mt-7">
         <div class="message-body ">
             <div class="title">Login</div>
                 <div class="control">
@@ -52,7 +52,7 @@
                             <div class="columns">
                                 <div class="column is-2">
                                     <div class="control">
-                                        <button type="submit" class="button is-primary">
+                                        <button type="submit" class="button is-link">
                                             Login
                                         </button>
                                     </div>

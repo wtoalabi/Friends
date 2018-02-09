@@ -1099,6 +1099,18 @@
   border-radius: 60px;
 }
 
+.notificationss {
+  background-color: whitesmoke;
+  border-radius: 3px;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+  position: fixed !important;
+  bottom: 15px;
+}
+
+.navbar-right {
+  margin-right: -8px !important;
+}
+
 /*! bulma.io v0.6.1 | MIT License | github.com/jgthms/bulma */
 
 @-webkit-keyframes spinAround {

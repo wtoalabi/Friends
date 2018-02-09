@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 
 import Vue from 'vue'
@@ -6,7 +5,6 @@ import axios from 'axios'
 import swal from 'sweetalert2';
 
 window.swal = swal;
-
 
 window.axios = axios;
 window.Vue = Vue;

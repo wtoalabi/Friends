@@ -4,7 +4,6 @@
 </body> {{--  Closes the Body Tag  --}}
 <!-- Main JS Entry Point -->
 <script src="{{ asset('js/app.js') }}"></script>
-
 <!-- Hamburger Script for Bulma -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {

@@ -11,6 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/* Statc Pages */
+Route::view('/', 'pages.home');
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');
