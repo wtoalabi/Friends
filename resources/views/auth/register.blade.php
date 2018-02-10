@@ -6,7 +6,7 @@
         <div class="message-body ">
             <div class="title">Register</div>
                 <div class="control">
-                    <form class="control" method="POST" action="{{ route('register') }}">
+                    <form class="control" method="POST" action="{{ route('accounts.store') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="field">
                                 <label for="name" class="label">Your Name</label>
@@ -66,6 +66,20 @@
                                 @if ($errors->has('password'))
                                     <span class="help is-danger">
                                         <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="profileImage" class="label">Upload Profile Image</label>
+                            <div class="control has-icons-left">
+                                <input id="profileImage" placeholder="Please upload your profile image/avatar here"type="file" class="input {{ $errors->has('profileImage') ? ' has-error' : '' }}" name="profileImage">
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-camera"></i>
+                                    </span>
+                                @if ($errors->has('profileImage'))
+                                    <span class="help is-danger">
+                                        <strong>{{ $errors->first('profileImage') }}</strong>
                                     </span>
                                 @endif
                             </div>

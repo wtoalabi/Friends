@@ -13,5 +13,6 @@
 
 /* Statc Pages */
 Route::view('/', 'pages.home');
+Route::resource('accounts', 'User\AccountController');
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
