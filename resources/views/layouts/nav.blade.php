@@ -1,21 +1,22 @@
 <nav id="navbar" class="navbar is-fixed-top">
     <div class="container is-fluid ">
         <div class="navbar-brand ">
-            <a class="navbar-item" href="/">
-            <p class="button is-primary">LARABOOK</p>
-            </a>
-            <a class="navbar-item" href="/home">
-                <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>
-             Home
-            </a>
+            <div class="navbar-item">
+                <div class="field is-grouped">
+                    <p class="button is-primary">LARABOOK</p>
+                </div>
+            </div>
             <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuDocumentation">
                 <span></span>
                 <span></span>
                 <span></span>
           </div>
         </div>
-        <div id="navMenuDocumentation" class="navbar-menu ">
+        <div id="navMenuDocumentation" class="navbar-menu">
             <div class="navbar-start ">
+                    <a class="navbar-item" href="/home">
+                        <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>Home
+                    </a>
                 {{--  <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link  is-active" href="#">Dropdown</a>
                         <div class="navbar-dropdown ">
@@ -72,7 +73,7 @@
                         Channels Page
                     </a>  --}}
                 </div>
-            <div class="navbar-end navbar-right">    
+            <div class="navbar-end">    
                 
                 <div class="navbar-item">
                     <div class="field is-grouped">
@@ -105,7 +106,7 @@
                                 </a>
                             </div>
                         </div>
-                        <p class="control">
+                        <p>
                             <a href="{{ route('logout') }}" class="button is-danger"
                                 onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
