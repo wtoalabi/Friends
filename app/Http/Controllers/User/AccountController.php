@@ -13,7 +13,7 @@ class AccountController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest')->only('store');
     }
     /**
      * Display a listing of the resource.

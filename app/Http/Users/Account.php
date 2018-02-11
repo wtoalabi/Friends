@@ -16,7 +16,7 @@ class Account{
             $user = User::create([
                 'name' => $data->name,
                 'email' => $data->email,
-                'password' => bcrypt($data->email),
+                'password' => bcrypt($data->password),
             ]); 
             if($data->profileImage){
                 $album = UserAlbums::createNew("Profile", $user->id);

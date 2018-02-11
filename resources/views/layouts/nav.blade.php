@@ -3,7 +3,7 @@
         <div class="navbar-brand ">
             <div class="navbar-item">
                 <div class="field is-grouped">
-                    <p class="button is-primary">LARABOOK</p>
+                    <a href="/" class="button is-primary">LARABOOK</a>
                 </div>
             </div>
             <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuDocumentation">
@@ -92,13 +92,14 @@
                                 <span>Register</span>
                             </a>
                         </p>
-                          @else
+                        @endguest
+                        @user
                             <div class="navbar-item has-dropdown is-hoverable control">
                                 <a class="button is-info " href="/dashboard">
                                     <span class="icon">
                                         <i class="fa fa-user"></i>
                                     </span>
-                                    <span>{{ Auth::user()->name }}</span>
+                                    <span>{{ $user->name }}</span>
                                 </a>
                             <div class="navbar-dropdown ">
                                 <a class="navbar-item " href="#/">
@@ -118,7 +119,7 @@
                             </form>        
                             </a>
                         </p>
-                            @endguest
+                           @enduser
                     </div>
                 </div>
             </div>
