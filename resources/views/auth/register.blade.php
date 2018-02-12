@@ -89,7 +89,7 @@
                                 <div class="column is-2">
                                     <div class="control">
                                         <button type="submit" class="button is-link">
-                                            Click to Regster your Account
+                                            Click to Register your Account
                                         </button>
                                     </div>
                                 </div>
