@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Users\Account;
+
 use Illuminate\Http\Request;
+use App\Helpers\Users\Account;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\UserValidation;
+use App\Http\Requests\ValidatesUser;
 use App\Events\Registration\UserRegistered;
 
 class AccountController extends Controller
@@ -21,15 +22,16 @@ class AccountController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(UserValidation $validated)
+    public function store(ValidatesUser $validated)
     {
         $user = Account::persist(request());
+        //dd($user);
 
         event(new UserRegistered($user));
 
         auth()->login($user);
 
-        return redirect('/home');
+        return redirect('home');
     }
 
     /**

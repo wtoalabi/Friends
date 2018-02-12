@@ -26,6 +26,23 @@
                                 </div>
                             </div>
                         <div class="field">
+                                <label for="username" class="label">Your Username</label>
+                                <div class="control has-icons-left has-icons-right">
+                                    <input id="username" placeholder="Your Username"type="text" class="input {{ $errors->has('username') ? 'is-danger' : '' }}" name="username" value="{{ old('username') }}" required autofocus>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                    @if ($errors->has('username'))
+                                        <span class="icon is-small is-right">
+                                            <i class="fa fa-warning"></i>
+                                        </span>
+                                        <span class="help is-danger">
+                                            <strong>{{ $errors->first('username') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        <div class="field">
                             <label for="email" class="label">E-Mail Address</label>
                             <div class="control has-icons-left has-icons-right">
                                 <input id="email" placeholder="Email Address"type="email" class="input {{ $errors->has('email') ? 'is-danger' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
@@ -70,19 +87,23 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="field">
-                            <label for="profileImage" class="label">Upload Profile Image</label>
-                            <div class="control has-icons-left">
-                                <input id="profileImage" placeholder="Please upload your profile image/avatar here"type="file" class="input {{ $errors->has('profileImage') ? ' has-error' : '' }}" name="profileImage">
-                                    <span class="icon is-small is-left">
-                                        <i class="fa fa-camera"></i>
+                        <div class="file mb-2">
+                            <label for="profileImage" class="file-label">
+                                <input id="profileImage" placeholder="Please upload your profile image/avatar here"type="file" class="file-input {{ $errors->has('profileImage') ? ' has-error' : '' }}" name="profileImage">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                            <i class="fa fa-camera"></i>
+                                        </span>
+                                    <span class="file-label">
+                                        Upload Profile Image
                                     </span>
+                                </span>
                                 @if ($errors->has('profileImage'))
                                     <span class="help is-danger">
                                         <strong>{{ $errors->first('profileImage') }}</strong>
                                     </span>
-                                @endif
-                            </div>
+                                @endif                            
+                            </label>
                         </div>
                         <div class="field">
                             <div class="columns">

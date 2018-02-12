@@ -2,11 +2,12 @@
 
 namespace Tests\Browser\User;
 
-use App\User;
+
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\Models\Users\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LoginTest extends DuskTestCase
@@ -26,10 +27,10 @@ class LoginTest extends DuskTestCase
         $this->browse(function ($browser) use ($user) {
             $browser->visit('/login')
                     ->type('email', $user->email)
-                    ->type('password', 'secret')
+                    ->type('password', '12')
                     ->press('Login')
                     ->assertPathIs('/home')
-                    ->assertSee('Dashboard');
+                    ->assertSee('My Stream');
         });
         $user->delete();
         

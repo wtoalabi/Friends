@@ -18,6 +18,11 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\UserRegistered\SendMailToUser',
             'App\Listeners\UserRegistered\SessionNotification',
         ],
+        'App\Events\Statuses\StatusCreated' => [
+            'App\Listeners\StatusCreated\UpdateFriendsWall',
+            'App\Listeners\StatusCreated\UpdateFriendsSideBar',
+        ],
+        
     ];
 
     /**

@@ -17,8 +17,8 @@ class CreateImagesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('album_id')->unsigned();
-            $table->boolean('profile_image')->default(false);
-            $table->string('url');
+            $table->string('full');
+            $table->string('thumb');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
             $table->timestamps();

@@ -1,5 +1,5 @@
 <nav id="navbar" class="navbar is-fixed-top">
-    <div class="container is-fluid ">
+    <div class="container is-fluid">
         <div class="navbar-brand ">
             <div class="navbar-item">
                 <div class="field is-grouped">
@@ -12,11 +12,14 @@
                 <span></span>
           </div>
         </div>
+        
         <div id="navMenuDocumentation" class="navbar-menu">
             <div class="navbar-start ">
-                    <a class="navbar-item" href="/home">
-                        <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>Home
-                    </a>
+                    @user
+                        <a class="navbar-item" href="/home">
+                            <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>My Stream
+                        </a>
+                    @enduser
                 {{--  <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link  is-active" href="#">Dropdown</a>
                         <div class="navbar-dropdown ">
@@ -100,6 +103,7 @@
                                         <i class="fa fa-user"></i>
                                     </span>
                                     <span>{{ $user->name }}</span>
+                                    <img class="avatar is-circle"src="{{asset("storage/user/".$user->profile_image()->image->thumb)}}" alt="Image">
                                 </a>
                             <div class="navbar-dropdown ">
                                 <a class="navbar-item " href="#/">

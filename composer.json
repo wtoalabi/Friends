@@ -7,7 +7,6 @@
     "require": {
         "php": ">=7.0.0",
         "algolia/algoliasearch-client-php": "^1.25",
-        "codeception/codeception": "^2.3",
         "fideloper/proxy": "~3.3",
         "gloudemans/shoppingcart": "^2.4",
         "intervention/image": "^2.4",
@@ -44,7 +43,7 @@
         "psr-4": {
             "Tests\\": "tests/"
         },
-        "files": ["app/helpers.php"]
+        "files": ["app/Helpers/general.php"]
     },
     "extra": {
         "laravel": {
