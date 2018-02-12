@@ -28,6 +28,6 @@ class SessionNotification
     public function handle(UserRegistered $event)
     {
         $name = $event->user->name;
-        Alert::success("Hey $name! <p>You are welcome!!!</p>")->autoclose(300000);
+        Alert::success("Hey $name! <p>You are welcome!!!</p>")->autoclose(3000);
     }
 }

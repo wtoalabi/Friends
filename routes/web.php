@@ -11,8 +11,22 @@
 |
 */
 
-/* Statc Pages */
+/* Static Pages */
 Route::view('/', 'pages.home');
 Route::resource('accounts', 'User\AccountController');
+/* Users Registration/Login */
 Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
+/* Home */
+Route::get('/home', 'User\HomeController@index')->name('home');
+
+Route::group(['middleware'=>'auth', 'prefix'=>''], function(){
+    Route::resource('user','User\UserProfile');
+});
+
+/* Statuses */
+Route::group(["middleware"=>"auth", "prefix"=>""], function(){
+    Route::resource('statuses', 'Statuses\StatusController')
+            ->middleware('auth')
+            ->only('store');
+});
+

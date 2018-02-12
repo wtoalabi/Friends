@@ -1111,6 +1111,14 @@
   margin-right: -25px !important;
 }
 
+.message a:not(.button):not(.tag) {
+  text-decoration: none !important;
+}
+
+.avatar {
+  height: 65px !important;
+}
+
 /*! bulma.io v0.6.1 | MIT License | github.com/jgthms/bulma */
 
 @-webkit-keyframes spinAround {
