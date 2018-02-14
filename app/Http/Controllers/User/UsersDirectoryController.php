@@ -10,7 +10,7 @@ class UsersDirectoryController extends Controller
 {
     public function index (){
 
-        $users = User::with('statuses')->latest()->paginate(1);
+        $users = User::with('statuses')->latest()->paginate(5);
         return view('users.users_directory.index',compact('users'));
     }
 }

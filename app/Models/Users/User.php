@@ -47,5 +47,9 @@ class User extends Authenticatable
     public function statuses (){
         return $this->hasMany(Status::class);
    }
+   
+   public function getRouteKeyName(){
+    return 'email';
+}
   
 }

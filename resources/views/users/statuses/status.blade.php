@@ -32,3 +32,4 @@
     </article>
 </div>
 @endforeach
+{{ $statuses->links() }}

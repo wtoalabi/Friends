@@ -26,7 +26,7 @@ class HomeController extends Controller
     public function index()
     {
         //$statuses = Status::paginate(10)->get()->with('user');
-        $statuses = Status::with('user')->latest()->paginate(10);
+        $statuses = Status::with('user')->latest()->paginate(5);
         return view('users.home',compact('statuses'));
     }
 }

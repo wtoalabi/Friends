@@ -22,7 +22,7 @@ Auth::routes();
 Route::get('/home', 'User\HomeController@index')->name('home');
 
 Route::group(['middleware'=>'auth', 'prefix'=>''], function(){
-    Route::resource('user','User\UserProfile');
+    //Route::resource('user','User\UserProfile');
 });
 
 /* Statuses */
@@ -31,6 +31,10 @@ Route::group(["middleware"=>"auth", "prefix"=>""], function(){
             ->middleware('auth')
             ->only('store');
 });
+
+/* ProfilePage */
+
+Route::get('user/@{username}', 'User\UserProfileController@show')->name('profile');
 
 /* Users Directory Page*/
 

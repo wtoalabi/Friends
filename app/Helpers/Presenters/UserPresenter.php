@@ -16,15 +16,21 @@ Trait UserPresenter{
     }
     
     public function usernameSlug(){
-        return $this->username;
+        return "@$this->username";
     }
     
     public function usernameTag(){
-        return str_replace($this->username, $this->username, "<a href='/user/$this->username'>@$this->username</a>");           
+        return str_replace($this->username, $this->username, "<a href='/user/@$this->username'>@$this->username</a>");           
     }
 
     public function latestStatus(){
         return $this->statuses()->latest()->first();
+    }
+    public function pageTitle(){
+        if(preg_match('/[s]$/',$this->name)){
+            return "$this->name"."'";
+        }
+        return $this->name."'s";
     }
 
 }
