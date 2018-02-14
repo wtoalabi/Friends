@@ -103,7 +103,7 @@
                                         <i class="fa fa-user"></i>
                                     </span>
                                     <span>{{ $user->name }}</span>
-                                    <img class="avatar is-circle"src="{{asset("storage/user/".$user->profile_image()->image->thumb)}}" alt="Image">
+                                    <img class="is-circle"src="{{asset("storage/user/".$user->profile_image()->image->thumb)}}" alt="Image">
                                 </a>
                             <div class="navbar-dropdown ">
                                 <a class="navbar-item " href="#/">
