@@ -4,13 +4,15 @@ namespace App\Models\Users;
 
 
 use App\Models\Images\Image;
+use App\Models\Statuses\Status;
 use App\Helpers\Users\Profileable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Helpers\Presenters\UserPresenter as Presentable;
 
 class User extends Authenticatable
 {
-    use Notifiable, Profileable;
+    use Notifiable, Profileable, Presentable;
 
     /**
      * The attributes that are mass assignable.

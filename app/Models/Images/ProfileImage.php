@@ -16,12 +16,11 @@ class ProfileImage extends Model
          return $this->belongsTo(Image::class);
     }
 
-    public static function activate($image, $activate = null){
+    public static function add($image){
+        //dd($image);
         $profileImage = new static;
         $profileImage->create([
-            'user_id' => $image->user->id,
             'image_id' => $image->id,
-            'activated' => $activate
         ]);
         //dd($profileImage->user());
         //$profileImage->user()->sync($image->id);

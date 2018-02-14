@@ -6,6 +6,7 @@ use App\Models\Users\User;
 use App\Models\Images\Image;
 use App\Models\Images\Album;
 use Illuminate\Http\UploadedFile;
+use App\Models\Images\ProfileImage;
 use Illuminate\Support\Facades\File;
 
 class ImageUpload{
@@ -33,7 +34,10 @@ class ImageUpload{
              ->generatePaths()
             ->makeDirectory()
             ->makeThumbnail();
-        $image = $this->saveToDB();
+            $image = $this->saveToDB();
+            if($this->profile){
+                ProfileImage::add($image);
+            }
               return $image;
         }
 
@@ -62,6 +66,7 @@ class ImageUpload{
             'user_id' => $this->user->id,
             'full' => $this->fullUrlOnDB,
             'thumb' => $this->thumbUrlOnDB,
+            'profile' => $this->profile,
             ]);
     }
     

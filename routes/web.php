@@ -14,8 +14,10 @@
 /* Static Pages */
 Route::view('/', 'pages.home');
 Route::resource('accounts', 'User\AccountController');
+
 /* Users Registration/Login */
 Auth::routes();
+
 /* Home */
 Route::get('/home', 'User\HomeController@index')->name('home');
 
@@ -30,3 +32,6 @@ Route::group(["middleware"=>"auth", "prefix"=>""], function(){
             ->only('store');
 });
 
+/* Users Directory Page*/
+
+Route::get('users', 'User\UsersDirectoryController@index')->name('users_directory')->middleware('auth');

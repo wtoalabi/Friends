@@ -5,9 +5,11 @@ namespace App\Models\Statuses;
 use App\Models\Users\User;
 use App\Models\Statuses\Mood;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\Presenters\StatusPresenter as Presentable;
 
 class Status extends Model
 {
+    use Presentable;
     protected $fillable = ['user_id', 'body', 'mood_id'];
 
     public function mood (){
