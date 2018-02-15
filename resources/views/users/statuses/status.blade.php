@@ -16,6 +16,7 @@
                         <small>{!!$status->user->usernameTag()!!}</small> <small>{{$status->createdAt()}}</small>
                         <br>
                 {{$status->body}}
+                {{$status->user->id}}
                 </p>
             </div>
         <nav class="level is-mobile">

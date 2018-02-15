@@ -8,18 +8,21 @@
         <div class="media">        
             <div class="media-content">
                 <a href="/user/{{$user->usernameSlug()}}">
-                    <p class="title is-4">{{$user->name}}</p>
+                    <p class="title is-5">{{$user->name}}</p>
                 </a> 
-                <p class="subtitle is-6">{!!$user->usernameTag()!!}</p>
+                <p class="subtitle is-">{!!$user->usernameTag()!!}</p>
             </div>
         </div>
         <div class="content columns mt-2">
                 <footer class="card-footer column is-12">
                         <div class="columns">
-                            <a href="#" class="card-footer-item column">Followers: 1230</a>
-                            <a href="#" class="card-footer-item column is-4 ">
-                              <button class="button is-primary"> Follow</button>
+                            <a href="#" class="card-footer-item column is-7">
+                                    Followers: <button class="button is-small mb-1"> <span class="has-text-success is-link is-size-6">{{$user->followers->count()}}</span></button>
+                                    Following: <button class="button is-small mb-1"> <span class="has-text-info is-link is-size-6">{{$user->following->count()}}</span></button>
                             </a>
+                            <div class="card-footer-item column is-4 m-2">
+                                    @include('users.profile.follow')
+                            </div>
                         </div>
                         </footer>
         </div>

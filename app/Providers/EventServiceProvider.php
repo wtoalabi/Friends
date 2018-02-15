@@ -23,6 +23,15 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\StatusCreated\UpdateFriendsSideBar',
         ],
         
+        'App\Events\User\UserFollowed' => [
+            'App\Listeners\UserFollowed\UpdateUserFollowed',
+            'App\Listeners\UserFollowed\UpdateUsersWall',
+        ],
+        'App\Events\User\UserUnFollowed' => [
+            'App\Listeners\UserUnFollowed\UpdateUnfollowed',
+            'App\Listeners\UserUnFollowed\UpdateUsersWall',
+        ],
+        
     ];
 
     /**

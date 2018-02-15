@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
 use App\Models\Statuses\Status;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -25,9 +26,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //$statuses = Status::paginate(10)->get()->with('user');
-        $statuses = Status::with(['user'])->latest()->paginate(2);
-        //dd($statuses);
+        $userIDs = $this->getIDs();
+        $statuses = Status::with(['user'])
+        ->whereIn('user_id', $userIDs)
+        ->latest()->paginate(10);
         return view('users.home',compact('statuses'));
+    }
+
+    public function getIDs (){
+        $loggedInUserID[] = Auth::user()->id;
+        $followedUsers = Auth::user()->following
+        ->pluck('id')->toArray();
+        $allUsers = array_merge($loggedInUserID, $followedUsers);
+        return $allUsers;
     }
 }

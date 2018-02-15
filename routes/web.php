@@ -26,19 +26,26 @@ Route::group(['middleware'=>'auth', 'prefix'=>''], function(){
 });
 
 /* Statuses */
-Route::group(["middleware"=>"auth", "prefix"=>""], function(){
     Route::resource('statuses', 'Statuses\StatusController')
             ->middleware('auth')
             ->only('store');
-/*     Route::resource('profile_statuses', 'Statuses\ProfileStatusController')
-            ->middleware('auth')
-            ->only('store'); */
-});
 
 /* ProfilePage */
 
-Route::get('user/@{username}', 'User\UserProfileController@show')->name('profile')->middleware('auth');
+Route::get('user/@{username}', 'User\UserProfileController@show')
+        ->name('profile')
+        ->middleware('auth');
+
+        
+/* Following */
+
+Route::resource('following', 'User\FollowingController')
+        ->only(['store', 'destroy'])
+        ->middleware('auth');
+
 
 /* Users Directory Page*/
 
-Route::get('users', 'User\UsersDirectoryController@index')->name('users_directory')->middleware('auth');
+Route::get('users', 'User\UsersDirectoryController@index')
+        ->name('users_directory')
+        ->middleware('auth');
