@@ -1,10 +1,8 @@
 <div class="message ">                            
         <div class="message-body">
             <form action="{{route('statuses.store')}}" method="POST">
-                {{csrf_field()}}
-                @if(isset($profileOwner))
-                    <input type="hidden" name="profileOwner" value="{{$profileOwner}}">
-                @endif
+                {{csrf_field()}}                
+                    <input type="hidden" name="profileID" value="{{$profileID}}">
                 <textarea class="textarea mb-1" name="body" placeholder="Whats on your mind...?" required></textarea> 
                 <div class="columns">
                     <div class="file column is-primary  is-4">

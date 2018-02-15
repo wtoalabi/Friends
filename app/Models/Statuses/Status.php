@@ -10,7 +10,7 @@ use App\Helpers\Presenters\StatusPresenter as Presentable;
 class Status extends Model
 {
     use Presentable;
-    protected $fillable = ['user_id', 'body', 'mood_id'];
+    protected $fillable = ['user_id', 'body', 'mood_id','profile_id'];
 
     public function mood (){
          return $this->belongsTo(Mood::class);

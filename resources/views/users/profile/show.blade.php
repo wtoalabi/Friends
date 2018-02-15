@@ -3,8 +3,8 @@
  {{$user->pageTitle()}} Profile Page
 @endslot
 
-@include('users.statuses.post',['profileOwner'=>$user->id])
-@include('users.statuses.status')
+@include('users.statuses.post',['profileID'=>$user->id])
+@include('users.statuses.status',['sharedBy'=>"Posted By:"])
 
 
 @endcomponent

@@ -19,6 +19,7 @@ class CreateStatus {
             'user_id'=> Auth::user()->id,
             'body'=> $request['body'],
             'mood_id'=> $request['mood'],
+            'profile_id'=> $request['profileID'],
         ]);
         
     }

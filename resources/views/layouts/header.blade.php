@@ -26,7 +26,7 @@
                             </div>
                             <div class="column is-3 is-offset-2">
                                     @user
-                                    <a href="/stream">My Stream</a> 
+                                    <a href="/user/{{$user->usernameSlug()}}">My Stream</a> 
                                     |
                                     <a class="" href="/profile">
                                         My Profile

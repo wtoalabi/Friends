@@ -9,6 +9,9 @@
         <div class="media-content">
             <div class="content">
                 <p>
+                    @if(isset($sharedBy) && $status->profile_id !=$status->user_id)
+                    {{$sharedBy}}
+                    @endif
                     <strong><a href="/user/{{$status->user->usernameSlug()}}">{{$status->user->name}}</a></strong> 
                         <small>{!!$status->user->usernameTag()!!}</small> <small>{{$status->createdAt()}}</small>
                         <br>
