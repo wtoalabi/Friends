@@ -30,7 +30,7 @@ class StatusController extends Controller
     public function store(ValidateStatus $valid)
     {
         //dd(collect($valid->request));
-        //dd(request()->all());
+        dd(request()->all());
         $status = CreateStatus::with($valid->request);
         event(new StatusCreated($status));
         return redirect()->back();

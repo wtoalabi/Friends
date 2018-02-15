@@ -14,7 +14,9 @@ Trait Profileable{
         $this->attributes['username'] = str_slug($username);
    }
    
-    
+    public function getRouteKeyName(){
+         return 'username';
+    }
     
     public function profile_images(){
         return $this->hasManyThrough(ProfileImage::class, Image::class);

@@ -3,4 +3,8 @@
  {{$user->pageTitle()}} Profile Page
 @endslot
 
+@include('users.statuses.post',['profileOwner'=>$user->id])
+@include('users.statuses.status')
+
+
 @endcomponent

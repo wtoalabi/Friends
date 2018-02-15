@@ -30,11 +30,14 @@ Route::group(["middleware"=>"auth", "prefix"=>""], function(){
     Route::resource('statuses', 'Statuses\StatusController')
             ->middleware('auth')
             ->only('store');
+/*     Route::resource('profile_statuses', 'Statuses\ProfileStatusController')
+            ->middleware('auth')
+            ->only('store'); */
 });
 
 /* ProfilePage */
 
-Route::get('user/@{username}', 'User\UserProfileController@show')->name('profile');
+Route::get('user/@{username}', 'User\UserProfileController@show')->name('profile')->middleware('auth');
 
 /* Users Directory Page*/
 

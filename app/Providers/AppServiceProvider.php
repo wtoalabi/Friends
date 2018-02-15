@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        \DB::listen(function($query){\Log::info($query->sql, $query->bindings);});
         Schema::defaultStringLength(191);
         //dd(View::share('user', !Auth::user()));
     }

@@ -19,3 +19,22 @@
         <div class="container is-fluid">
             <div id="app">  
                 @include('layouts.nav')
+                <div class="hero is-info">
+                        <div class="hero-body is-success columns">
+                            <div class="column is-8">
+                                <h1 class="title">{{$title}}</h1>
+                            </div>
+                            <div class="column is-3 is-offset-2">
+                                    @user
+                                    <a href="/stream">My Stream</a> 
+                                    |
+                                    <a class="" href="/profile">
+                                        My Profile
+                                    </a>
+                                    @enduser
+                                    @guest
+                                    Other Link
+                                    @endguest
+                            </div>
+                        </div>
+                    </div>

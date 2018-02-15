@@ -14,6 +14,12 @@ Trait UserPresenter{
             }
         return "default.jpg";
     }
+    public function profile_image(){
+        if($image = $this->images->where('profile', 1)->first()){
+            return $image->full;
+            }
+        return "default.jpg";
+    }
     
     public function usernameSlug(){
         return "@$this->username";
