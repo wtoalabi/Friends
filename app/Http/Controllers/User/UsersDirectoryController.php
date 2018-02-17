@@ -10,8 +10,7 @@ class UsersDirectoryController extends Controller
 {
     public function index (){
 
-        $users = User::with(['statuses','images','following','followers'])->orderBy('name', 'asc')->paginate(50);
-        //dd($users);
+        $users = User::with(['statuses','images','following','followers'])->orderBy('name', 'asc')->paginate(10);
         return view('users.users_directory.index',compact('users'));
     }
 }

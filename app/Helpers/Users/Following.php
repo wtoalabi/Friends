@@ -21,22 +21,22 @@ class Following{
         $this->userToFollow = User::find($this->followID);
         if($this->user->isFollowing($this->followID)){
             $this->unfollow();
-            return $this->userToFollow;
+            return response(['message'=> 'Unfollowed!', 200]);
         }
         $this->follow();
-        return $this->userToFollow;
+        return response(['message'=> 'Followed!', 200]);     
     }
     
     public function unfollow (){
-       $this->user->following()->detach($this->followID);
-       event (new UserUnFollowed($this->userToFollow));
-       return ;
-
+        $this->user->following()->detach($this->followID);
+        event (new UserUnFollowed($this->userToFollow));
+        return ;
+       
     }
-
+    
     public function follow (){
         $this->user->following()->attach($this->userToFollow);
         event (new UserFollowed($this->userToFollow));
-        return;        
+        return ;
     }
 }

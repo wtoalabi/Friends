@@ -47,6 +47,8 @@ Route::resource('following', 'User\FollowingController')
 /* Ajax Requests */
 Route::group([ 'middleware'=>'auth'], function(){
     Route::get('users-to-follow', 'Ajax\UsersToFollow@index');
+    Route::get('get-moods', 'Ajax\Moods@index');
+    Route::get('get-statuses', 'Ajax\Statuses@index');
 });
 /* Users Directory Page*/
 

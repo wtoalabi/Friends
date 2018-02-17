@@ -14,6 +14,7 @@ class CreateStatus {
     }
     
     public static function persist($request){
+        
         //dd($request['mood']);
         return Status::create([
             'user_id'=> Auth::user()->id,

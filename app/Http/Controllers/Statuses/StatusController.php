@@ -33,7 +33,7 @@ class StatusController extends Controller
         //dd(request()->all());
         $status = CreateStatus::with($valid->request);
         event(new StatusCreated($status));
-        return redirect()->back();
+        return response(['message'=>"Status Posted"], 200);
     }
 
     /**

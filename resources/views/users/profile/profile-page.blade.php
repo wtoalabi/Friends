@@ -8,8 +8,7 @@
 @endslot
 
 @slot('user_left_column')
-@include('users.partials.user-followers-card',['user'=>$profileUser,'count'=>false])
-
+@include('users.partials.user-followers-card',['user'=>$profileUser])
 @endslot
   
 @include('users.partials.status-post',['profileID'=> $profileUser->id])

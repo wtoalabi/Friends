@@ -1,4 +1,8 @@
-@foreach($statuses as $status) 
+
+<statusstream urlpath="{{asset("storage/user")}}">
+
+</statusstream>
+{{--  @foreach($statuses as $status) 
 <div class="box message {{$status->mood->color}} mb-1">
     <article class="media message-body">
         <div class="media-left">
@@ -35,4 +39,5 @@
     </article>
 </div>
 @endforeach
-{{ $statuses->links() }}
+{{ $statuses->links() }} 
+ --}}

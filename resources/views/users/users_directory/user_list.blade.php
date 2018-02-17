@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-image">
         <figure class="image is-4by3">
-            <img class=""src="{{asset("storage/user/".$user->profile_image())}}" alt="Image">
+            <img class=""src="{{asset("storage/user/".$user->profile_image->path)}}" alt="Image">
         </figure>
     </div>
     <div class="card-content">
@@ -21,7 +21,7 @@
                                     Following: <button class="button is-small mb-1"> <span class="has-text-info is-link is-size-6">{{$user->following->count()}}</span></button>
                             </a>
                             <div class="card-footer-item column is-4 m-1">
-                                    @include('users.profile.follow')
+                                    <followbutton following="{{$user->id}}" isfollowed="{{$currentUser->isFollowing($user->id)}}"></followbutton>
                             </div>
                         </div>
                         </footer>
