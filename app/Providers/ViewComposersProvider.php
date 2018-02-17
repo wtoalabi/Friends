@@ -14,10 +14,11 @@ class ViewComposersProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer('users.statuses.post',function($view){
+        view()->composer('users.partials.status-post',function($view){
             $moods = Mood::orderBy('name', 'asc')->get();
             $view->with(compact('moods'));
         });
+        
     }
 
     /**

@@ -3,7 +3,7 @@
     <article class="media message-body">
         <div class="media-left">
             <figure class="image is-65x65">
-                <img class="avatar is-circle"src="{{asset("storage/user/".$user->profile_thumb())}}" alt="Image">
+                <img class="avatar is-circle"src="{{asset("storage/user/".$user->profile_image->path)}}" alt="Image">
             </figure>
         </div>
         <div class="media-content">
@@ -16,7 +16,6 @@
                         <small>{!!$status->user->usernameTag()!!}</small> <small>{{$status->createdAt()}}</small>
                         <br>
                 {{$status->body}}
-                {{$status->user->id}}
                 </p>
             </div>
         <nav class="level is-mobile">

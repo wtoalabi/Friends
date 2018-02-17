@@ -5,15 +5,15 @@
 <div class="hero is-light">
     <div class="hero-body">
         <div class="container has-text-centered">
-            @user
+            @auth
             <p class="title">
-                Hello, {{$user->name}}
+                Hello, {{$currentUser->name}}
             </p>
             
             <p>
                 STATS
             </p>
-            @enduser
+            @endauth
             @guest
             <p class="title">Welcome to Larabook</p>   
             <button class="button is-primary">Signup!</button>            

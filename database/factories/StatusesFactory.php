@@ -10,6 +10,7 @@ $factory->define(Status::class, function (Faker $faker) {
     'user_id'  => 1,
     'mood_id'  => 1,
     'profile_id'  => 1,
+    'created_at'=>$faker->dateTimeThisYear(),
     'body' => $faker->sentence
     ];
 });

@@ -4,11 +4,12 @@ namespace App\Models\Images;
 
 use App\Models\Users\User;
 use App\Models\Images\Image;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class ProfileImage extends Model
 {
-    protected $fillable=['user_id', 'image_id', 'activated'];
+    protected $fillable=['user_id', 'path'];
     public function user (){
          return $this->belongsTo(User::class);
     }
@@ -16,11 +17,12 @@ class ProfileImage extends Model
          return $this->belongsTo(Image::class);
     }
 
-    public static function add($image){
-        //dd($image);
+    public static function add($imagePath,$userID){
+        //dd($userID);
         $profileImage = new static;
         $profileImage->create([
-            'image_id' => $image->id,
+            'path' => $imagePath,
+            'user_id' => $userID,
         ]);
         //dd($profileImage->user());
         //$profileImage->user()->sync($image->id);

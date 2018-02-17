@@ -3,7 +3,12 @@
         <div class="navbar-brand ">
             <div class="navbar-item">
                 <div class="field is-grouped">
-                    <a href="/" class="button is-primary">LARABOOK</a>
+                    @auth
+                    <a href="/home" class="button is-primary">FOLLOWSBOOK</a>
+                    @endauth
+                    @guest
+                    <a href="/" class="button is-primary">FOLLOWSBOOK</a>
+                    @endguest
                 </div>
             </div>
             <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuDocumentation">
@@ -15,11 +20,11 @@
         
         <div id="navMenuDocumentation" class="navbar-menu">
             <div class="navbar-start ">
-                    @user
+                    @auth
                         <a class="navbar-item" href="/home">
-                            <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>My Stream
+                            <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>My Pictures
                         </a>
-                    @enduser
+                    @endauth
                 {{--  <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link  is-active" href="#">Dropdown</a>
                         <div class="navbar-dropdown ">
@@ -96,14 +101,15 @@
                             </a>
                         </p>
                         @endguest
-                        @user
+                        @auth
+                        
                             <div class="navbar-item has-dropdown is-hoverable control">
-                                <a class="button is-info " href="/dashboard">
+                                <a class="button is-info" href="/user/{{$currentUser->usernameSlug()}}">
                                     <span class="icon">
                                         <i class="fa fa-user"></i>
                                     </span>
-                                    <span>{{ $user->name }}</span>
-                                    <img class="is-circle"src="{{asset("storage/user/".$user->profile_thumb())}}" alt="Image">
+                                    <span>{{ $currentUser->name }}</span>
+                                    <img class="is-circle"src="{{asset("storage/user/".$currentUser->profile_image->path)}}" alt="Image">
                                 </a>
                             <div class="navbar-dropdown ">
                                 <a class="navbar-item " href="#/">
@@ -123,7 +129,7 @@
                             </form>        
                             </a>
                         </p>
-                           @enduser
+                           @endauth
                     </div>
                 </div>
             </div>

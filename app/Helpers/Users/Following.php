@@ -17,7 +17,6 @@ class Following{
         $this->user = $users['user'];
 
     }
-    
     public function make(){
         $this->userToFollow = User::find($this->followID);
         if($this->user->isFollowing($this->followID)){

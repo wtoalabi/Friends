@@ -19,7 +19,7 @@ Route::resource('accounts', 'User\AccountController');
 Auth::routes();
 
 /* Home */
-Route::get('/home', 'User\HomeController@index')->name('home');
+Route::get('/home', 'User\StreamController@index')->name('home');
 
 Route::group(['middleware'=>'auth', 'prefix'=>''], function(){
     //Route::resource('user','User\UserProfile');
@@ -44,6 +44,10 @@ Route::resource('following', 'User\FollowingController')
         ->middleware('auth');
 
 
+/* Ajax Requests */
+Route::group([ 'middleware'=>'auth'], function(){
+    Route::get('users-to-follow', 'Ajax\UsersToFollow@index');
+});
 /* Users Directory Page*/
 
 Route::get('users', 'User\UsersDirectoryController@index')

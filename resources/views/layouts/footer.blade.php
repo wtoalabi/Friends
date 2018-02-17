@@ -1,4 +1,6 @@
-      </div>{{--  Closes the #app id  --}}
+</div>
+</div>  
+</div>{{--  Closes the #app id  --}}
     </div>  {{--  Closes the Container class  --}}
   </section>{{--  Closes the Section  --}}
 </body> {{--  Closes the Body Tag  --}}

@@ -15,8 +15,9 @@ class CreateProfileImagesTable extends Migration
     {
         Schema::create('profile_images', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('image_id')->unsigned();            
-            $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
+            $table->integer('user_id')->unsigned();
+            $table->string('path')->default('default.jpg');            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -11,15 +11,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class UserProfileController extends Controller
 {
     public function show ($username){
-        $user = User::where('username', $username)->first();
-        if($user){
-            $statuses = Status::where('profile_id', $user->id)
-                                ->with('mood','user')
-                                ->latest()
-                                ->paginate(10);
-            //$statuses = $user->statuses()->with('mood', 'user')->latest()->paginate(10);
-            return view('users.profile.show', compact('user', 'statuses'));
-        }
-        throw new NotFoundHttpException;
+        $profileUser = User::where('username', $username)
+                        ->first();
+        
+        $profileStatuses = Status::where('profile_id', $profileUser->id)
+        ->with(['mood','user'=>function($query){
+            $query->with('profile_image');
+        }])        
+        ->latest()
+        ->paginate(5);
+            return view('users.profile.profile-page', compact('profileUser', 'profileStatuses'));
+        
     }
 }

@@ -7,7 +7,7 @@ use App\Models\Statuses\Status;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class StreamController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -27,10 +27,12 @@ class HomeController extends Controller
     public function index()
     {
         $userIDs = $this->getIDs();
-        $statuses = Status::with(['user'])
+        $statuses = Status::with(['user'=> function($query){
+            $query->with('profile_image');
+        },'mood'])
         ->whereIn('user_id', $userIDs)
-        ->latest()->paginate(10);
-        return view('users.home',compact('statuses'));
+        ->latest()->paginate(5);
+        return view('users.stream',compact('statuses'));
     }
 
     public function getIDs (){

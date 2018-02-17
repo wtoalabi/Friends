@@ -36,7 +36,7 @@ class ImageUpload{
             ->makeThumbnail();
             $image = $this->saveToDB();
             if($this->profile){
-                ProfileImage::add($image);
+                ProfileImage::add($this->thumbUrlOnDB,$this->user->id);
             }
               return $image;
         }

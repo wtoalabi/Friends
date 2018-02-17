@@ -25,16 +25,18 @@
                                 <h1 class="title">{{$title}}</h1>
                             </div>
                             <div class="column is-3 is-offset-2">
-                                    @user
-                                    <a href="/user/{{$user->usernameSlug()}}">My Stream</a> 
+                                    @auth
+                                    <a href="/home">My Stream</a> 
                                     |
-                                    <a class="" href="/profile">
+                                    <a class="" href="/user/{{$currentUser->usernameSlug()}}">
                                         My Profile
                                     </a>
-                                    @enduser
+                                    @endauth
                                     @guest
                                     Other Link
                                     @endguest
                             </div>
                         </div>
                     </div>
+                    <div class="main">
+                            <div class="row">

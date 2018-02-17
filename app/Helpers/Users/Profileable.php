@@ -3,6 +3,7 @@
 namespace App\Helpers\Users;
 
 use App\Models\Users\User;
+use App\Models\Images\Image;
 use App\Models\Images\ProfileImage;
 
 Trait Profileable{
@@ -19,8 +20,8 @@ Trait Profileable{
          return 'username';
     }
     
-    public function profile_images(){
-        return $this->hasManyThrough(ProfileImage::class, Image::class);
+    public function profile_image(){
+        return $this->hasOne(ProfileImage::class);
     }
     public function followers(){
         return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id')->withTimestamps();

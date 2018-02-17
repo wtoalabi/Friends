@@ -20,7 +20,7 @@
                                     Followers: <button class="button is-small mb-1"> <span class="has-text-success is-link is-size-6">{{$user->followers->count()}}</span></button>
                                     Following: <button class="button is-small mb-1"> <span class="has-text-info is-link is-size-6">{{$user->following->count()}}</span></button>
                             </a>
-                            <div class="card-footer-item column is-4 m-2">
+                            <div class="card-footer-item column is-4 m-1">
                                     @include('users.profile.follow')
                             </div>
                         </div>

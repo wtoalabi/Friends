@@ -8,18 +8,13 @@ use App\Models\Statuses\Status; */
 
 Trait UserPresenter{
 
-    public function profile_thumb(){
-        if($image = $this->images->where('profile', 1)->first()){
-            return $image->thumb;
-            }
-        return "default.jpg";
-    }
-    public function profile_image(){
+    
+    /* public function profile_image(){
         if($image = $this->images->where('profile', 1)->first()){
             return $image->full;
             }
         return "default.jpg";
-    }
+    } */
     
     public function usernameSlug(){
         return "@$this->username";
