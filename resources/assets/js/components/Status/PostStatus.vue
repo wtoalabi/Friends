@@ -63,7 +63,6 @@ import Form from './../../utilities/Form'
         },
         methods:{
             onSubmit(){
-                console.log(this.form)
                 this.form.post(this.posturl)
                 ///this.form.body = ''
             },
