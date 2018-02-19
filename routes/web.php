@@ -12,7 +12,6 @@
 */
 
 /* Static Pages */
-Route::delete('delete-status/{id}', 'Ajax\Statuses@destroy');
 Route::view('/', 'pages.home');
 Route::resource('accounts', 'User\AccountController');
 
@@ -47,11 +46,13 @@ Route::resource('following', 'User\FollowingController')
 
 /* Ajax Requests */
 Route::group([ 'middleware'=>'auth'], function(){
-    Route::get('users-to-follow', 'Ajax\UsersToFollow@index');
-    Route::get('get-moods', 'Ajax\Moods@index');
-    Route::get('get-mood/{id}', 'Ajax\Moods@show');
-    Route::get('get-user/{id}', 'Ajax\GetUser@show');
-    Route::get('get-statuses', 'Ajax\Statuses@index');
+    Route::delete('delete-status/{id}', 'Ajax\StatusesController@destroy');
+    Route::get('users-to-follow', 'Ajax\UsersToFollowController@index');
+    Route::get('get-moods', 'Ajax\MoodsController@index');
+    Route::get('get-mood/{id}', 'Ajax\MoodsController@show');
+    Route::get('get-user/{id}', 'Ajax\GetUserController@show');
+    Route::get('get-statuses', 'Ajax\StatusesController@index');
+    Route::post('post-comment/{status}', 'Ajax\CommentsController@store');
 });
 /* Users Directory Page*/
 

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class UsersToFollow extends Controller
+class UsersToFollowController extends Controller
 {
     public function index(){
         $usersToFollow = Auth::user()->following()->pluck('follow_id');

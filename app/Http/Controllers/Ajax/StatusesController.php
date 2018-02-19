@@ -7,13 +7,14 @@ use App\Models\Statuses\Status;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class Statuses extends Controller
+class StatusesController extends Controller
 {
     public function index (){
         $userIDs = $this->getIDs();
         $statuses = Status::with(['user' => function($query){
             $query->with('profile_image');
-        },'mood'])
+        },'mood','comments'])
+        ->withCount('comments')
         ->whereIn('user_id', $userIDs)
         ->latest()->paginate(5);
         return $statuses;

@@ -1120,6 +1120,16 @@
   width: 65px !important;
 }
 
+.count {
+  height: 23px;
+  width: 23px;
+  background-color: pink;
+}
+
+.count-number {
+  margin-left: 6px;
+}
+
 /*! bulma.io v0.6.1 | MIT License | github.com/jgthms/bulma */
 
 @-webkit-keyframes spinAround {

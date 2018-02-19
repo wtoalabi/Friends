@@ -12,25 +12,33 @@
                     </div>
         <div class="media-content">
             <div class="content">
-                <p>
-                    
+                <p>                    
                     <strong><a :href="decorateUsername(status.user.username)">{{status.user.first_name}} {{status.user.last_name}}</a></strong> 
                         <small>{{status.user.username}}</small> <small>{{formatDate(status.created_at)}}</small>
                         <br>
-                {{status.body}}
+                        {{status.body}}
                 </p>
             </div>
         <nav class="level is-mobile">
             <div class="level-left">
-                <a class="level-item">
-                    <span class="icon is-small"><i class="fa fa-reply"></i></span>
-                </a>
-                <a class="level-item">
-                    <span class="icon is-small"><i class="fa fa-retweet"></i></span>
-                </a>
-                <a class="level-item">
-                    <span class="icon is-small"><i class="fa fa-heart"></i></span>
-                </a>
+                <div class="tags has-addons">
+                        
+                        <span class="tag">{{status.comments_count}}</span>
+                        <span class="tag is-primary mr-1" @click="openCommentBox(status.id)"> <i class="fa fa-reply"></i></span>
+                        <postcomment 
+                                    :clickOpen="activateCommentBox" 
+                                    @hideModalBox="closeCommentBox" 
+                                    :statusid="statusIdForComment">
+                        </postcomment>
+                        
+                       <!--  <span class="tag">{{status.comments_count}}</span>
+                        <span class="tag is-warning mr-1" @click="openCommentBox()"> <i class="fa fa-retweet"></i></span> -->
+                        <!-- <postcomment :clickOpen="activateCommentBox" @hideModalBox="closeCommentBox" :statusid="status.id"></postcomment> -->
+                        
+                        <!-- <span class="tag">{{status.comments_count}}</span>
+                        <span class="tag is-danger" @click="openCommentBox()"> <i class="fa fa-heart"></i></span> -->
+                        <!-- <postcomment :clickOpen="activateCommentBox" @hideModalBox="closeCommentBox" :statusid="status.id"></postcomment> -->
+                    </div>
             </div>
             <div class="level-right" v-show="isOwnedBy(status.user.id)">
                     <button class="button" @click="deleteStatus(status.id) " type="submit">Delete Status</button>
@@ -38,8 +46,9 @@
         </nav>
         </div>
     </article>
-</div>
-      </div>
+    </div>
+    </div>
+
   </div>
 </template>
 
@@ -47,9 +56,12 @@
 import moment from 'moment'
 import {EventBus} from './../../utilities/EventBus'
 import Form from './../../utilities/Form'
+import postcomment  from "./PostComment";
     export default {
         props:['urlpath','currentuserid'],
-
+        components:{
+            'postcomment': postcomment
+        },
         mounted(){
             this.getStatus()
             EventBus.$on('status_posted',status=>{
@@ -58,15 +70,18 @@ import Form from './../../utilities/Form'
         }, 
         data(){
             return{
+             statusIdForComment: '',
              form: new Form(),
              statuses:[],
              imagePath: this.urlpath+"/",
-             status:''
+             status:'',
+             activateCommentBox: false,
         }
         },
         methods:{
             newStatus(status){
                 this.statuses.unshift(status)
+                this.getStatus()
             },
             getStatus(){
                 return  axios.get('/get-statuses').then(response=>(this.prepareStatus(response.data.data)))
@@ -79,6 +94,7 @@ import Form from './../../utilities/Form'
                 return userID == this.currentuserid
             },
             deleteStatus(statusToBeDeleted){
+                //console.log(stat)
                 if ( confirm("Are you sure you want to delete")){
                     this.form.delete('delete-status/'+statusToBeDeleted).then(response=>this.statusDeleted(response))
                 }
@@ -87,6 +103,14 @@ import Form from './../../utilities/Form'
                  this.statuses.splice(statusID, 1);
                  this.getStatus()
                  EventBus.$emit('status_deleted',"deleted")
+            },
+            openCommentBox(statusID){
+                this.statusIdForComment = statusID
+                this.activateCommentBox = 'is-active'
+            },
+            closeCommentBox(){
+                this.activateCommentBox = ''
+                this.getStatus()
             },
             formatDate(date){
                 var differencesInTime = this.getTimeDifferences(date)

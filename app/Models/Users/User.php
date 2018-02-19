@@ -5,6 +5,7 @@ namespace App\Models\Users;
 
 use App\Models\Images\Image;
 use App\Models\Statuses\Status;
+use App\Models\Statuses\Comment;
 use App\Helpers\Users\Profileable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,6 +47,9 @@ class User extends Authenticatable
 
     public function statuses (){
         return $this->hasMany(Status::class);
+   }
+    public function comments (){
+        return $this->hasMany(Comment::class);
    }
    
    public function getRouteKeyName(){
