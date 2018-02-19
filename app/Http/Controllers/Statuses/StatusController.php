@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Statuses;
 
 use Alert;
 use Illuminate\Http\Request;
+use App\Models\Statuses\Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ValidateStatus;
 use App\Helpers\Statuses\CreateStatus;
@@ -32,8 +33,14 @@ class StatusController extends Controller
         //dd(collect($valid->request));
         //dd(request()->all());
         $status = CreateStatus::with($valid->request);
+        //dd($status);
         event(new StatusCreated($status));
-        return response(['message'=>"Status Posted"], 200);
+        $status = Status::where('id', $status->id)->with([
+                    'mood','user'=>function($query){
+                        $query->with('profile_image');
+                    }])->first();
+                    //dd($status);
+        return response(["message"=>"Status Posted", "status"=> $status], 200);
     }
 
     /**

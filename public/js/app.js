@@ -1765,6 +1765,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_Form__ = __webpack_require__("./resources/assets/js/utilities/Form.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__("./resources/assets/js/utilities/EventBus.js");
 //
 //
 //
@@ -1807,42 +1808,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['profileid', 'posturl'],
 
     mounted: function mounted() {
-        this.getTags();
-        //console.log(this.profileid)
+        this.getMoods();
     },
     data: function data() {
         return {
             form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */]({
-                profileID: this.profileid,
+                profileID: '',
                 body: '',
-                mood: '1'
+                mood: ''
             }),
             moods: [],
             selectedMood: 0,
-            defaultMood: 1
+            defaultMood: 1,
+            formBody: '',
+            profile: ''
         };
     },
 
     methods: {
         onSubmit: function onSubmit() {
-            this.form.post(this.posturl);
-            ///this.form.body = ''
-        },
-        getTags: function getTags() {
             var _this = this;
 
+            this.setUpFormFields();
+            this.form.post(this.posturl).then(function (response) {
+                return _this.shout(response.status);
+            });
+        },
+        shout: function shout(postedStatus) {
+            console.log(postedStatus);
+            this.resetFormFields();
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status-posted', postedStatus);
+        },
+        getMoods: function getMoods() {
+            var _this2 = this;
+
             return axios.get('/get-moods').then(function (response) {
-                return _this.moods = response.data;
+                return _this2.moods = response.data;
             });
         },
         sendToForm: function sendToForm(selectedMood) {
             this.form.mood = selectedMood;
+        },
+        setUpFormFields: function setUpFormFields() {
+            this.form.body = this.formBody;
+            this.form.profileID = this.profileid;
+        },
+        resetFormFields: function resetFormFields() {
+            this.formBody = '', this.selectedMood = 0;
         }
     }
 });
@@ -1856,6 +1875,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__("./node_modules/moment/moment.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__("./resources/assets/js/utilities/EventBus.js");
 //
 //
 //
@@ -1896,13 +1916,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['urlpath'],
 
     mounted: function mounted() {
+        var _this = this;
+
         this.getStatus();
+        __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-posted', function (status) {
+            _this.newStatus(status);
+        });
+
         //console.log("dddd");
         //this.getStatus()
         //console.log(this.profileid)
@@ -1915,11 +1942,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        newStatus: function newStatus(status) {
+            /* var formatted = this.formatDate(status.created_at)
+            status['created_at'] = formatted */
+            this.statuses.unshift(status);
+        },
         getStatus: function getStatus() {
-            var _this = this;
+            var _this2 = this;
 
             return axios.get('/get-statuses').then(function (response) {
-                return _this.prepareStatus(response.data.data);
+                return _this2.prepareStatus(response.data.data);
             });
         },
         prepareStatus: function prepareStatus(statuses) {
@@ -38553,7 +38585,7 @@ var render = function() {
   return _c(
     "div",
     _vm._l(_vm.statuses, function(status) {
-      return _c("div", { key: status.id }, [
+      return _c("div", { key: status.create_at }, [
         _c(
           "div",
           { staticClass: "box message mb-1", class: status.mood.color },
@@ -38827,18 +38859,18 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.form.profileID,
-                expression: "form.profileID"
+                value: _vm.profile,
+                expression: "profile"
               }
             ],
             attrs: { type: "hidden", name: "profileID" },
-            domProps: { value: _vm.form.profileID },
+            domProps: { value: _vm.profile },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.form, "profileID", $event.target.value)
+                _vm.profile = $event.target.value
               }
             }
           }),
@@ -38848,8 +38880,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.form.body,
-                expression: "form.body"
+                value: _vm.formBody,
+                expression: "formBody"
               }
             ],
             staticClass: "textarea mb-1",
@@ -38858,13 +38890,13 @@ var render = function() {
               placeholder: "Whats on your mind...?",
               required: ""
             },
-            domProps: { value: _vm.form.body },
+            domProps: { value: _vm.formBody },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.form, "body", $event.target.value)
+                _vm.formBody = $event.target.value
               }
             }
           }),
@@ -50642,6 +50674,18 @@ var Errors = function () {
 }();
 
 /* harmony default export */ __webpack_exports__["a"] = (Errors);
+
+/***/ }),
+
+/***/ "./resources/assets/js/utilities/EventBus.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventBus; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+var EventBus = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a();
 
 /***/ }),
 

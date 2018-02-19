@@ -12,4 +12,7 @@ class Moods extends Controller
         return Mood::orderBy('name', 'asc')
         ->get(['name','id']);
     }
+    public function show($id){
+        return Mood::find($id);        
+    }
 }

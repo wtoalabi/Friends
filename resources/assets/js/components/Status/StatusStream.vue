@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="status in statuses" :key="status.id">
+        <div v-for="status in statuses" :key="status.create_at">
             <div class="box message mb-1" :class="status.mood.color">
                 <article class="media message-body">
                     <div class="media-left">
@@ -40,11 +40,17 @@
 
 <script>
 import moment from 'moment'
+import {EventBus} from './../../utilities/EventBus'
     export default {
         props:['urlpath'],
 
         mounted(){
             this.getStatus()
+            EventBus.$on('status-posted',status=>{
+                this.newStatus(status)
+            })
+
+
             //console.log("dddd");
             //this.getStatus()
             //console.log(this.profileid)
@@ -56,7 +62,11 @@ import moment from 'moment'
         }
         },
         methods:{
-            
+            newStatus(status){
+                /* var formatted = this.formatDate(status.created_at)
+                status['created_at'] = formatted */
+                this.statuses.unshift(status)
+            },
             getStatus(){
                 return  axios.get('/get-statuses').then(response=>(this.prepareStatus(response.data.data)))
             },

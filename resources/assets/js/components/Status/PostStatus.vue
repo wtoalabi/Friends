@@ -2,8 +2,8 @@
     <div class="message ">                            
         <div class="message-body">
             <form action="" method="POST" @submit.prevent="onSubmit">
-                <input type="hidden" name="profileID" v-model="form.profileID">
-                <textarea class="textarea mb-1" name="body" placeholder="Whats on your mind...?" v-model="form.body" required></textarea> 
+                <input type="hidden" name="profileID" v-model="profile">
+                <textarea class="textarea mb-1" name="body" placeholder="Whats on your mind...?" v-model="formBody" required></textarea> 
                 <div class="columns">
                     <div class="file column is-primary  is-4">
                         <label class="file-label">
@@ -42,36 +42,54 @@
 </template>
 <script>
 import Form from './../../utilities/Form'
+import {EventBus} from './../../utilities/EventBus'
     export default {
         props:['profileid','posturl'],
 
         mounted(){
-            this.getTags()
-            //console.log(this.profileid)
+            this.getMoods()
+            
         }, 
         data(){
             return{
                 form: new Form({
-                    profileID: this.profileid,
+                    profileID:'',
                     body: '',
-                    mood: '1'
+                    mood: ''
                 }),
                 moods: [],
                 selectedMood: 0,
-                defaultMood: 1
+                defaultMood: 1,
+                formBody: '',
+                profile: ''
             }
         },
         methods:{
             onSubmit(){
+                this.setUpFormFields()
                 this.form.post(this.posturl)
-                ///this.form.body = ''
+                        .then(response=> this.shout(response.status))
             },
-            getTags(){
+            shout(postedStatus){
+                console.log(postedStatus)
+                this.resetFormFields()
+                EventBus.$emit('status-posted', postedStatus)
+            },
+            getMoods(){
                 return axios.get('/get-moods').then(response =>this.moods=response.data)
             },
             sendToForm(selectedMood){
                 this.form.mood = selectedMood
+            },
+            setUpFormFields(){
+                this.form.body = this.formBody
+                this.form.profileID = this.profileid
+            },
+            resetFormFields(){
+                this.formBody = '',
+                this.selectedMood = 0
             }
+           
         },
     }
 </script>
