@@ -1,7 +1,7 @@
 <template>
 <div>
     <a :href="decorateUsername(user.username)">
-        <p class="title has-text-centered mb-1">{{user.name}}</p>
+        <p class="title has-text-centered mb-1">{{user.first_name}} {{user.last_name}}</p>
     </a> 
     <div class="card">
         <div class="card-image">

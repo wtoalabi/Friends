@@ -8,7 +8,7 @@
         <div class="media">        
             <div class="media-content">
                 <a href="/user/{{$user->usernameSlug()}}">
-                    <p class="title is-5">{{$user->name}}</p>
+                    <p class="title is-5">{{$user->first_name}} {{$user->last_name}}</p>
                 </a> 
                 <p class="subtitle is-">{!!$user->usernameTag()!!}</p>
             </div>

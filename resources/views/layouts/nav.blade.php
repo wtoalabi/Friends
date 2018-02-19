@@ -108,7 +108,7 @@
                                     <span class="icon">
                                         <i class="fa fa-user"></i>
                                     </span>
-                                    <span>{{ $currentUser->name }}</span>
+                                    <span>{{ $currentUser->first_name }}</span>
                                     <img class="is-circle"src="{{asset("storage/user/".$currentUser->profile_image->path)}}" alt="Image">
                                 </a>
                             <div class="navbar-dropdown ">

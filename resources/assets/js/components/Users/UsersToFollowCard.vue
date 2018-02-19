@@ -7,7 +7,7 @@
                     <img :src="linkToThumb(user.profile_image['path'])" alt="Image" class="image is-64x64 is-circle" > 
                  </a>
                  <a :href="linkToUsername(user.username)">
-                    {{user.name}}
+                    {{user.first_name}} 
                 </a> 
                                  
                 <followbutton :following="user.id" :isfollowed="isfollowed"></followbutton>

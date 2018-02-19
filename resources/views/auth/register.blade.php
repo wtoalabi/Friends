@@ -9,18 +9,35 @@
                     <form class="control" method="POST" action="{{ route('accounts.store') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="field">
-                                <label for="name" class="label">Your Name</label>
+                                <label for="name" class="label">Your First Name</label>
                                 <div class="control has-icons-left has-icons-right">
-                                    <input id="name" placeholder="Your Name in Full"type="text" class="input {{ $errors->has('name') ? 'is-danger' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
+                                    <input id="name" placeholder="First Name"type="text" class="input {{ $errors->has('first_name') ? 'is-danger' : '' }}" name="name" value="{{ old('first_name') }}" required autofocus>
                                     <span class="icon is-small is-left">
                                         <i class="fa fa-user"></i>
                                     </span>
-                                    @if ($errors->has('name'))
+                                    @if ($errors->has('first_name'))
                                         <span class="icon is-small is-right">
                                             <i class="fa fa-warning"></i>
                                         </span>
                                         <span class="help is-danger">
-                                            <strong>{{ $errors->first('name') }}</strong>
+                                            <strong>{{ $errors->first('first_name') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        <div class="field">
+                                <label for="last_name" class="label">Your Last Name</label>
+                                <div class="control has-icons-left has-icons-right">
+                                    <input id="name" placeholder="Last Name"type="text" class="input {{ $errors->has('last_name') ? 'is-danger' : '' }}" name="last_name" value="{{ old('last_name') }}" required autofocus>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                    @if ($errors->has('last_name'))
+                                        <span class="icon is-small is-right">
+                                            <i class="fa fa-warning"></i>
+                                        </span>
+                                        <span class="help is-danger">
+                                            <strong>{{ $errors->first('last_name') }}</strong>
                                         </span>
                                     @endif
                                 </div>

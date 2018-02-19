@@ -23,6 +23,6 @@
 @endif
 @else
 <h1 class="title is-5">
-    {{$user->name}} has no follower yet!
+    {{$user->first_name}} has no follower yet!
 </h1>
 @endif

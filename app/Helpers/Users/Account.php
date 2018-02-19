@@ -16,7 +16,8 @@ class Account{
     static function persist($data){
         return DB::transaction(function() use($data){
             $user = User::create([
-                'name' => $data->name,
+                'first_name' => $data->first_name,
+                'last_name' => $data->last_name,
                 'username' => $data->username,
                 'email' => $data->email,
                 'password' => bcrypt($data->password),

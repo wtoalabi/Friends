@@ -38691,7 +38691,13 @@ var render = function() {
                             href: _vm.decorateUsername(status.user.username)
                           }
                         },
-                        [_vm._v(_vm._s(status.user.name))]
+                        [
+                          _vm._v(
+                            _vm._s(status.user.first_name) +
+                              " " +
+                              _vm._s(status.user.last_name)
+                          )
+                        ]
                       )
                     ]),
                     _vm._v(" "),
@@ -38827,8 +38833,8 @@ var render = function() {
                   [
                     _vm._v(
                       "\r\n                    " +
-                        _vm._s(user.name) +
-                        "\r\n                "
+                        _vm._s(user.first_name) +
+                        " \r\n                "
                     )
                   ]
                 ),
@@ -38911,7 +38917,7 @@ var render = function() {
   return _c("div", [
     _c("a", { attrs: { href: _vm.decorateUsername(_vm.user.username) } }, [
       _c("p", { staticClass: "title has-text-centered mb-1" }, [
-        _vm._v(_vm._s(_vm.user.name))
+        _vm._v(_vm._s(_vm.user.first_name) + " " + _vm._s(_vm.user.last_name))
       ])
     ]),
     _vm._v(" "),

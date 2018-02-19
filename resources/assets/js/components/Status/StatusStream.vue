@@ -14,7 +14,7 @@
             <div class="content">
                 <p>
                     
-                    <strong><a :href="decorateUsername(status.user.username)">{{status.user.name}}</a></strong> 
+                    <strong><a :href="decorateUsername(status.user.username)">{{status.user.first_name}} {{status.user.last_name}}</a></strong> 
                         <small>{{status.user.username}}</small> <small>{{formatDate(status.created_at)}}</small>
                         <br>
                 {{status.body}}

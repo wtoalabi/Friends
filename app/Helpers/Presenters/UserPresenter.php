@@ -28,10 +28,10 @@ Trait UserPresenter{
         return $this->statuses()->latest()->first();
     }
     public function pageTitle(){
-        if(preg_match('/[s]$/',$this->name)){
-            return "$this->name"."'";
+        if(preg_match('/[s]$/',$this->first_name)){
+            return "$this->first_name"."'";
         }
-        return $this->name."'s";
+        return $this->first_name."'s";
     }
 
 }
