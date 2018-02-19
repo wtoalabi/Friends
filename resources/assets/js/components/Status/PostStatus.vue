@@ -35,10 +35,9 @@
                         <button type="submit" class="button is-link">Post Status...</button>
                     </div>
                 </div>
-    </form>
-</div>
-    
-</div>
+             </form>
+        </div>
+    </div>
 </template>
 <script>
 import Form from './../../utilities/Form'
@@ -71,9 +70,8 @@ import {EventBus} from './../../utilities/EventBus'
                         .then(response=> this.shout(response.status))
             },
             shout(postedStatus){
-                console.log(postedStatus)
                 this.resetFormFields()
-                EventBus.$emit('status-posted', postedStatus)
+                EventBus.$emit('status_posted', postedStatus)
             },
             getMoods(){
                 return axios.get('/get-moods').then(response =>this.moods=response.data)

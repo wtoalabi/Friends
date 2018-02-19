@@ -10,6 +10,7 @@
 
 <script>
 import Form from '../../utilities/Form';
+import {EventBus} from './../../utilities/EventBus'
 
     export default {
         props:['following', 'isfollowed'],
@@ -50,13 +51,11 @@ import Form from '../../utilities/Form';
                 this.isFollowing = true
                 this.buttonText = "Unfollow"
                 this.stateClass = "button is-danger"
-                this.$emit('userFollowed', id)
             },
             unFollowed(id){
                 this.isFollowing = false
                 this.buttonText = "Follow"
                 this.stateClass = "button is-primary"
-                this.$emit('userUnFollowed', id)
             },
             submitted(response){
                 },

@@ -1807,7 +1807,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -1842,9 +1841,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         shout: function shout(postedStatus) {
-            console.log(postedStatus);
             this.resetFormFields();
-            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status-posted', postedStatus);
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status_posted', postedStatus);
         },
         getMoods: function getMoods() {
             var _this2 = this;
@@ -1876,6 +1874,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__("./node_modules/moment/moment.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__("./resources/assets/js/utilities/EventBus.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utilities_Form__ = __webpack_require__("./resources/assets/js/utilities/Form.js");
 //
 //
 //
@@ -1916,35 +1915,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['urlpath'],
+    props: ['urlpath', 'currentuserid'],
 
     mounted: function mounted() {
         var _this = this;
 
         this.getStatus();
-        __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-posted', function (status) {
+        __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status_posted', function (status) {
             _this.newStatus(status);
         });
-
-        //console.log("dddd");
-        //this.getStatus()
-        //console.log(this.profileid)
     },
     data: function data() {
         return {
+            form: new __WEBPACK_IMPORTED_MODULE_2__utilities_Form__["a" /* default */](),
             statuses: [],
-            imagePath: this.urlpath + "/"
+            imagePath: this.urlpath + "/",
+            status: ''
         };
     },
 
     methods: {
         newStatus: function newStatus(status) {
-            /* var formatted = this.formatDate(status.created_at)
-            status['created_at'] = formatted */
             this.statuses.unshift(status);
         },
         getStatus: function getStatus() {
@@ -1956,6 +1957,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         prepareStatus: function prepareStatus(statuses) {
             this.statuses = statuses;
+        },
+        isOwnedBy: function isOwnedBy(userID) {
+            return userID == this.currentuserid;
+        },
+        deleteStatus: function deleteStatus(statusToBeDeleted) {
+            var _this3 = this;
+
+            if (confirm("Are you sure you want to delete")) {
+                this.form.delete('delete-status/' + statusToBeDeleted).then(function (response) {
+                    return _this3.statusDeleted(response);
+                });
+            }
+        },
+        statusDeleted: function statusDeleted(statusID) {
+            this.statuses.splice(statusID, 1);
+            this.getStatus();
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status_deleted', "deleted");
         },
         formatDate: function formatDate(date) {
             var differencesInTime = this.getTimeDifferences(date);
@@ -1981,6 +1999,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else if (differencesInTime >= 3600) {
                 return __WEBPACK_IMPORTED_MODULE_0_moment___default()(date).startOf('minutes').fromNow();
             }
+        },
+        decorateUsername: function decorateUsername(username) {
+            return "/user/@" + username;
         }
     }
 });
@@ -1993,6 +2014,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_Form__ = __webpack_require__("./resources/assets/js/utilities/Form.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__("./resources/assets/js/utilities/EventBus.js");
 //
 //
 //
@@ -2003,6 +2025,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -2047,13 +2070,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.isFollowing = true;
             this.buttonText = "Unfollow";
             this.stateClass = "button is-danger";
-            this.$emit('userFollowed', id);
         },
         unFollowed: function unFollowed(id) {
             this.isFollowing = false;
             this.buttonText = "Follow";
             this.stateClass = "button is-primary";
-            this.$emit('userUnFollowed', id);
         },
         submitted: function submitted(response) {},
         setUp: function setUp() {
@@ -2071,12 +2092,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton__ = __webpack_require__("./resources/assets/js/components/Users/FollowButton.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Users_FollowButton__);
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__("./resources/assets/js/utilities/EventBus.js");
 //
 //
 //
@@ -2132,30 +2148,76 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['currentuser', 'imagepath'],
-    mounted: function mounted() {
-        this.getUser();
+    props: ['propuserid', 'propimagepath', 'propcurrentuserid', 'propisfollowed'],
+    components: {
+        'followbutton': __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton___default.a
     },
+    mounted: function mounted() {
+        var _this = this;
 
-    components: {},
+        this.getUser();
+        this.confirmIfProfileUser();
+        __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status_posted', function (status) {
+            _this.updateStatusCount(status);
+        });
+        __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status_deleted', function (status) {
+            _this.updateStatusCount(status);
+        });
+    },
     data: function data() {
         return {
-            image: this.imagepath,
             user: '',
-            profileUrl: 'user/' + '@'
+            imagePath: '',
+            currentUser: '',
+            isProfileUser: '',
+            followersCount: '',
+            followingCount: '',
+            statusesCount: ''
         };
     },
 
     methods: {
         getUser: function getUser() {
-            var _this = this;
+            var _this2 = this;
 
-            return axios.get('currentuser/' + '@' + this.currentuser).then(function (response) {
-                return _this.userInfo(response.data);
+            return axios.get('/get-user/' + this.propuserid).then(function (response) {
+                return _this2.prepareUser(response.data);
             });
         },
-        userInfo: function userInfo(user) {
+        prepareUser: function prepareUser(user) {
             this.user = user;
+            this.imagePath = this.propimagepath + "/" + user.profile_image.path;
+            this.currentUser = this.propcurrentuserid;
+            this.followersCount = user.followers_count;
+            this.followingCount = user.following_count;
+            this.statusesCount = user.statuses_count;
+        },
+        decorateUsername: function decorateUsername(username) {
+            return "/user/@" + username;
+        },
+        confirmIfProfileUser: function confirmIfProfileUser() {
+            if (this.propuserid == this.propcurrentuserid) {
+                return this.isProfileUser = true;
+            }
+        },
+        pluraliseStatus: function pluraliseStatus(count) {
+            if (count == 0) {
+                return "No status yet!";
+            }
+
+            if (count == 1) {
+                return "Status:";
+            } else if (count > 1) {
+                return "Statuses:";
+            }
+        },
+        updateStatusCount: function updateStatusCount(status) {
+            console.log(status);
+            if (status == "deleted") {
+                this.statusesCount--;
+            } else {
+                this.statusesCount++;
+            }
         }
     }
 });
@@ -2169,6 +2231,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton__ = __webpack_require__("./resources/assets/js/components/Users/FollowButton.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Users_FollowButton__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__("./resources/assets/js/utilities/EventBus.js");
 //
 //
 //
@@ -2187,13 +2250,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['following', 'userstofollow', 'imagepath', 'isfollowed'],
     mounted: function mounted() {
+        var _this = this;
+
         this.getAllUsersToFollow();
+        __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('userFollowed', function (id) {
+            _this.removeUserFromList(id);
+        });
     },
 
     components: {
@@ -2210,10 +2279,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         getAllUsersToFollow: function getAllUsersToFollow() {
-            var _this = this;
+            var _this2 = this;
 
             return axios.get('users-to-follow').then(function (response) {
-                return _this.getUsers(response.data);
+                return _this2.getUsers(response.data);
             });
         },
         getUsers: function getUsers(data) {
@@ -38585,31 +38654,45 @@ var render = function() {
   return _c(
     "div",
     _vm._l(_vm.statuses, function(status) {
-      return _c("div", { key: status.create_at }, [
+      return _c("div", { key: status.id }, [
         _c(
           "div",
           { staticClass: "box message mb-1", class: status.mood.color },
           [
             _c("article", { staticClass: "media message-body" }, [
               _c("div", { staticClass: "media-left" }, [
-                _c("figure", { staticClass: "image is-65x65" }, [
-                  _c("img", {
-                    staticClass: "avatar is-circle",
-                    attrs: {
-                      src: _vm.imagePath + status.user.profile_image.path,
-                      alt: "Image"
-                    }
-                  })
-                ])
+                _c(
+                  "a",
+                  {
+                    attrs: { href: _vm.decorateUsername(status.user.username) }
+                  },
+                  [
+                    _c("figure", { staticClass: "image is-65x65" }, [
+                      _c("img", {
+                        staticClass: "avatar is-circle",
+                        attrs: {
+                          src: _vm.imagePath + status.user.profile_image.path,
+                          alt: "Image"
+                        }
+                      })
+                    ])
+                  ]
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "media-content" }, [
                 _c("div", { staticClass: "content" }, [
                   _c("p", [
                     _c("strong", [
-                      _c("a", { attrs: { href: status.user.username } }, [
-                        _vm._v(_vm._s(status.user.name))
-                      ])
+                      _c(
+                        "a",
+                        {
+                          attrs: {
+                            href: _vm.decorateUsername(status.user.username)
+                          }
+                        },
+                        [_vm._v(_vm._s(status.user.name))]
+                      )
                     ]),
                     _vm._v(" "),
                     _c("small", [_vm._v(_vm._s(status.user.username))]),
@@ -38627,7 +38710,39 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(0, true)
+                _c("nav", { staticClass: "level is-mobile" }, [
+                  _vm._m(0, true),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.isOwnedBy(status.user.id),
+                          expression: "isOwnedBy(status.user.id)"
+                        }
+                      ],
+                      staticClass: "level-right"
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button",
+                          attrs: { type: "submit" },
+                          on: {
+                            click: function($event) {
+                              _vm.deleteStatus(status.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete Status")]
+                      )
+                    ]
+                  )
+                ])
               ])
             ])
           ]
@@ -38641,24 +38756,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("nav", { staticClass: "level is-mobile" }, [
-      _c("div", { staticClass: "level-left" }, [
-        _c("a", { staticClass: "level-item" }, [
-          _c("span", { staticClass: "icon is-small" }, [
-            _c("i", { staticClass: "fa fa-reply" })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("a", { staticClass: "level-item" }, [
-          _c("span", { staticClass: "icon is-small" }, [
-            _c("i", { staticClass: "fa fa-retweet" })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("a", { staticClass: "level-item" }, [
-          _c("span", { staticClass: "icon is-small" }, [
-            _c("i", { staticClass: "fa fa-heart" })
-          ])
+    return _c("div", { staticClass: "level-left" }, [
+      _c("a", { staticClass: "level-item" }, [
+        _c("span", { staticClass: "icon is-small" }, [
+          _c("i", { staticClass: "fa fa-reply" })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("a", { staticClass: "level-item" }, [
+        _c("span", { staticClass: "icon is-small" }, [
+          _c("i", { staticClass: "fa fa-retweet" })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("a", { staticClass: "level-item" }, [
+        _c("span", { staticClass: "icon is-small" }, [
+          _c("i", { staticClass: "fa fa-heart" })
         ])
       ])
     ])
@@ -38721,8 +38834,7 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c("followbutton", {
-                  attrs: { following: user.id, isfollowed: _vm.isfollowed },
-                  on: { userFollowed: _vm.removeUserFromList }
+                  attrs: { following: user.id, isfollowed: _vm.isfollowed }
                 })
               ],
               1
@@ -38797,31 +38909,128 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("a", { attrs: { href: _vm.profileUrl + _vm.user.username } }, [
+    _c("a", { attrs: { href: _vm.decorateUsername(_vm.user.username) } }, [
       _c("p", { staticClass: "title has-text-centered mb-1" }, [
         _vm._v(_vm._s(_vm.user.name))
       ])
     ]),
     _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
+    _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-image" }, [
         _c("figure", { staticClass: "image is-4by3" }, [
-          _c("img", {
-            attrs: { src: "image+'/'", "{{user.name}}": "", alt: "Image" }
-          })
+          _c(
+            "a",
+            { attrs: { href: _vm.decorateUsername(_vm.user.username) } },
+            [_c("img", { attrs: { src: _vm.imagePath, alt: "Image" } })]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-content" }, [
+        _c("div", { staticClass: "media" }, [
+          _c("div", { staticClass: "media-content" }, [
+            _c(
+              "a",
+              { attrs: { href: _vm.decorateUsername(_vm.user.username) } },
+              [
+                _c("p", { staticClass: "subtitle has-text-centered" }, [
+                  _vm._v(_vm._s("@" + _vm.user.username))
+                ])
+              ]
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: !_vm.isProfileUser,
+              expression: "!isProfileUser"
+            }
+          ],
+          staticClass: "card-footer column is-centered"
+        },
+        [
+          _c("div", { staticClass: "columns is-centered" }, [
+            _c(
+              "div",
+              { staticClass: "column has-text-centered" },
+              [
+                _c("followbutton", {
+                  attrs: {
+                    following: _vm.propuserid,
+                    isfollowed: this.propisfollowed
+                  }
+                })
+              ],
+              1
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "column is-centered card-footer" }, [
+        _c("div", { staticClass: "columns" }, [
+          _c("span", { staticClass: "column is-8 title is-size-4" }, [
+            _vm._v(_vm._s(_vm.pluraliseStatus(_vm.statusesCount)))
+          ]),
+          _vm._v(" "),
+          _vm.statusesCount
+            ? _c("span", { staticClass: "column is-4" }, [
+                _c("span", { staticClass: "button mb-1" }, [
+                  _c(
+                    "span",
+                    { staticClass: "has-text-success is-link is-size-6" },
+                    [_vm._v(_vm._s(_vm.statusesCount))]
+                  )
+                ])
+              ])
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column is-centered card-footer" }, [
+        _c("div", { staticClass: "columns" }, [
+          _c("span", { staticClass: "column is-8 title is-size-4" }, [
+            _vm._v(" Followers: ")
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "column is-4" }, [
+            _c("span", { staticClass: "button mb-1" }, [
+              _c(
+                "span",
+                { staticClass: "has-text-success is-link is-size-6" },
+                [_vm._v(_vm._s(_vm.followersCount))]
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column is-centered card-footer" }, [
+        _c("div", { staticClass: "columns" }, [
+          _c("span", { staticClass: "column is-8 title is-size-4" }, [
+            _vm._v(" Following: ")
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "column is-4" }, [
+            _c("span", { staticClass: "button mb-1" }, [
+              _c("span", { staticClass: "has-text-info is-link is-size-6" }, [
+                _vm._v(_vm._s(_vm.followingCount))
+              ])
+            ])
+          ])
         ])
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -38988,7 +39197,7 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("span", { staticClass: "file-label" }, [
             _vm._v(
-              "\n                                    Upload Picture...\n                                "
+              "\n                                Upload Picture...\n                            "
             )
           ])
         ])
@@ -50375,9 +50584,9 @@ if (token) {
 
 Vue.component('followbutton', __webpack_require__("./resources/assets/js/components/Users/FollowButton.vue"));
 Vue.component('userstofollow', __webpack_require__("./resources/assets/js/components/Users/UsersToFollowCard.vue"));
-Vue.component('userinfocard', __webpack_require__("./resources/assets/js/components/Users/UserInfoCard.vue"));
 Vue.component('poststatus', __webpack_require__("./resources/assets/js/components/Status/PostStatus.vue"));
 Vue.component('statusstream', __webpack_require__("./resources/assets/js/components/Status/StatusStream.vue"));
+Vue.component('userinfocard', __webpack_require__("./resources/assets/js/components/Users/UserInfoCard.vue"));
 
 /***/ }),
 

@@ -1,18 +1,20 @@
 <template>
     <div>
-        <div v-for="status in statuses" :key="status.create_at">
+        <div v-for="status in statuses" :key="status.id">
             <div class="box message mb-1" :class="status.mood.color">
                 <article class="media message-body">
                     <div class="media-left">
-                        <figure class="image is-65x65">
-                            <img class="avatar is-circle" :src="imagePath+status.user.profile_image.path" alt="Image">
-                        </figure>
+                        <a :href="decorateUsername(status.user.username)">
+                            <figure class="image is-65x65">
+                                <img class="avatar is-circle" :src="imagePath+status.user.profile_image.path" alt="Image">
+                            </figure>
+                        </a>
                     </div>
         <div class="media-content">
             <div class="content">
                 <p>
                     
-                    <strong><a :href="status.user.username">{{status.user.name}}</a></strong> 
+                    <strong><a :href="decorateUsername(status.user.username)">{{status.user.name}}</a></strong> 
                         <small>{{status.user.username}}</small> <small>{{formatDate(status.created_at)}}</small>
                         <br>
                 {{status.body}}
@@ -30,6 +32,9 @@
                     <span class="icon is-small"><i class="fa fa-heart"></i></span>
                 </a>
             </div>
+            <div class="level-right" v-show="isOwnedBy(status.user.id)">
+                    <button class="button" @click="deleteStatus(status.id) " type="submit">Delete Status</button>
+            </div>
         </nav>
         </div>
     </article>
@@ -41,30 +46,26 @@
 <script>
 import moment from 'moment'
 import {EventBus} from './../../utilities/EventBus'
+import Form from './../../utilities/Form'
     export default {
-        props:['urlpath'],
+        props:['urlpath','currentuserid'],
 
         mounted(){
             this.getStatus()
-            EventBus.$on('status-posted',status=>{
+            EventBus.$on('status_posted',status=>{
                 this.newStatus(status)
             })
-
-
-            //console.log("dddd");
-            //this.getStatus()
-            //console.log(this.profileid)
         }, 
         data(){
             return{
+             form: new Form(),
              statuses:[],
-             imagePath: this.urlpath+"/"
+             imagePath: this.urlpath+"/",
+             status:''
         }
         },
         methods:{
             newStatus(status){
-                /* var formatted = this.formatDate(status.created_at)
-                status['created_at'] = formatted */
                 this.statuses.unshift(status)
             },
             getStatus(){
@@ -74,7 +75,19 @@ import {EventBus} from './../../utilities/EventBus'
             prepareStatus(statuses){
                 this.statuses = statuses
             },
-
+            isOwnedBy(userID){
+                return userID == this.currentuserid
+            },
+            deleteStatus(statusToBeDeleted){
+                if ( confirm("Are you sure you want to delete")){
+                    this.form.delete('delete-status/'+statusToBeDeleted).then(response=>this.statusDeleted(response))
+                }
+            },
+            statusDeleted(statusID){
+                 this.statuses.splice(statusID, 1);
+                 this.getStatus()
+                 EventBus.$emit('status_deleted',"deleted")
+            },
             formatDate(date){
                 var differencesInTime = this.getTimeDifferences(date)
                 return this.formatTimeText(differencesInTime, date)
@@ -104,7 +117,9 @@ import {EventBus} from './../../utilities/EventBus'
                 else if(differencesInTime >= 3600 ){
                     return moment(date).startOf('minutes').fromNow(); 
                 }
-                
+            },
+             decorateUsername(username){
+               return "/user/@"+username
             }
         },
     }

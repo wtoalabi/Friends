@@ -10,7 +10,7 @@
                     {{user.name}}
                 </a> 
                                  
-                <followbutton :following="user.id" :isfollowed="isfollowed" @userFollowed="removeUserFromList"></followbutton>
+                <followbutton :following="user.id" :isfollowed="isfollowed"></followbutton>
             </div>
     </div>
 </span>
@@ -18,11 +18,16 @@
 </template>
 <script>
 import followbutton from '../Users/FollowButton'
+import {EventBus} from './../../utilities/EventBus'
 
     export default {
         props:['following', 'userstofollow','imagepath', 'isfollowed'],
         mounted(){
          this.getAllUsersToFollow()
+         EventBus.$on('userFollowed',id=>{
+                this.removeUserFromList(id)
+         })
+         
         },
         components:{
             'followbutton':followbutton

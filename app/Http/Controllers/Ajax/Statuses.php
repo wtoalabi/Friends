@@ -26,5 +26,10 @@ class Statuses extends Controller
         $allUsers = array_merge($loggedInUserID, $followedUsers);
         return $allUsers;
     }
-
+    
+    public function destroy ($id){
+        $status = Status::findOrFail($id);
+        $status->delete();
+        return response(['message'=> "Status Destroyed!","delete_status"=>$status->id], 200);
+    }
 }

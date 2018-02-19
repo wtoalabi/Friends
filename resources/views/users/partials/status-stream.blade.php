@@ -1,6 +1,7 @@
 
-<statusstream urlpath="{{asset("storage/user")}}">
-
+<statusstream 
+              urlpath="{{asset("storage/user")}}"
+              currentuserid= "{{$currentUser->id}}">
 </statusstream>
 {{--  @foreach($statuses as $status) 
 <div class="box message {{$status->mood->color}} mb-1">

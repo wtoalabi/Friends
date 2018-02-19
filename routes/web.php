@@ -12,6 +12,7 @@
 */
 
 /* Static Pages */
+Route::delete('delete-status/{id}', 'Ajax\Statuses@destroy');
 Route::view('/', 'pages.home');
 Route::resource('accounts', 'User\AccountController');
 
@@ -49,6 +50,7 @@ Route::group([ 'middleware'=>'auth'], function(){
     Route::get('users-to-follow', 'Ajax\UsersToFollow@index');
     Route::get('get-moods', 'Ajax\Moods@index');
     Route::get('get-mood/{id}', 'Ajax\Moods@show');
+    Route::get('get-user/{id}', 'Ajax\GetUser@show');
     Route::get('get-statuses', 'Ajax\Statuses@index');
 });
 /* Users Directory Page*/
