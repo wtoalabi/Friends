@@ -55,6 +55,7 @@ Route::group([ 'middleware'=>'auth'], function(){
     Route::post('post-comment/{status}', 'Ajax\CommentsController@store');
     Route::post('like-status/{status}', 'Ajax\LikesController@store');
     Route::get('like-status/{userID}/{statusID}', 'Ajax\LikesController@likeStatus');
+    Route::post('reshare/{statusID}', 'Ajax\ResharesController@store');
 });
 /* Users Directory Page*/
 

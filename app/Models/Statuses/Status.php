@@ -6,6 +6,7 @@ use App\Models\Users\User;
 use App\Models\Statuses\Mood;
 use App\Models\Statuses\Like;
 use App\Models\Statuses\Comment;
+use App\Models\Statuses\Reshare;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Presenters\StatusPresenter as Presentable;
 
@@ -26,4 +27,7 @@ class Status extends Model
     public function likes (){
         return $this->hasMany(Like::class);
    }
+   public function reshares (){
+    return $this->hasMany(Reshare::class);
+}
 }

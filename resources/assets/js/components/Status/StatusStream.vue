@@ -22,14 +22,9 @@
         <nav class="level is-mobile">
             <div class="level-left">
                <div class="field is-grouped is-grouped-multiline">
-                    <div class="control">
-                        <div class="tags has-addons">
-                        <span class="tag is-dark">npm</span>
-                        <span class="tag is-info">0.5.0</span>
-                        </div>
-                    </div>
+                    <postcomment :count="status.comments_count" :statusid="status.id"></postcomment>
                     <likestatus :statusid="status.id" :count="status.likes_count" :currentuser="currentuserid" ></likestatus>
-                    <sharestatus></sharestatus>
+                    <resharestatus :count="status.reshares_count" :status="status"></resharestatus>
                     </div>
                 </div>
             <div class="level-right" v-show="isOwnedBy(status.user.id)">
@@ -53,13 +48,13 @@ import {EventBus} from './../../utilities/EventBus'
 import Form from './../../utilities/Form'
 import postcomment  from "./PostComment";
 import likestatus  from "./LikeStatus";
-import sharestatus  from "./ShareStatus";
+import resharestatus  from "./ReshareStatus";
     export default {
         props:['urlpath','currentuserid'],
         components:{
             'postcomment': postcomment,
             'likestatus': likestatus,
-            'sharestatus': sharestatus,
+            'resharestatus': resharestatus,
         },
         mounted(){
             this.stream = 'stream'
@@ -68,12 +63,10 @@ import sharestatus  from "./ShareStatus";
         }, 
         data(){
             return{
-             statusIdForComment: '',
              form: new Form(),
              statuses:[],
              imagePath: this.urlpath+"/",
              status:'',
-             activateCommentBox: false,
              nextPage:'',
              previousPage:'',
              onFirstPage: '',
@@ -112,14 +105,6 @@ import sharestatus  from "./ShareStatus";
                  this.getStatus()
                  EventBus.$emit('status_deleted',"deleted")
             },
-            openCommentBox(statusID){
-                this.statusIdForComment = statusID
-                this.activateCommentBox = 'is-active'
-            },
-            closeCommentBox(){
-                this.activateCommentBox = ''
-                this.getStatus()
-            },
             setPagination(data){
                 this.previousPage = data.prev_page_url
                 this.nextPage = data.next_page_url
@@ -152,6 +137,8 @@ import sharestatus  from "./ShareStatus";
                     })
                 EventBus.$on('status-liked',liked=>{this.getStatus()})
                 EventBus.$on('status-unLiked',liked=>{this.getStatus()})
+                EventBus.$on('reply-added',reply=>{this.getStatus()})
+                EventBus.$on('status-shared',shared=>{this.getStatus()})
 
                 EventBus.$on("user_unfollowed", unfollowed=> {this.getUser()})
                 },

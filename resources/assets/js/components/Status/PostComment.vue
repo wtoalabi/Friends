@@ -1,5 +1,14 @@
 <template>
-  <div class ="modal" :class="clickOpen">
+    <div>
+        <div class="control">
+            <div class="tags has-addons" @click="openCommentBox">
+                <span class="tag">{{count}}</span>
+                    <a class="tag mr-1 is-info" title="LikeText">
+                        <i class="fa fa-reply"></i>
+                    </a>
+            </div>
+        </div>
+  <div class ="modal" :class="activateCommentBox">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
@@ -23,31 +32,36 @@
     </footer>
   </div>
 </div>
+</div>
 </template>
 
 <script>
     import Form from "./../../utilities/Form";
+    import {EventBus} from './../../utilities/EventBus'
 export default {
-    props:['clickOpen','statusid'],
+    props:['statusid', 'count'],
     data(){
           return{
+              activateCommentBox: '',
               form: new Form({
                   body:'',
               })
           }
       },
     methods:{
-        
+         openCommentBox(){
+                this.activateCommentBox = 'is-active'
+            },
         hideModal(){
-            this.$emit('hideModalBox')
+            this.activateCommentBox = false
         },
         submit(){
-            //console.log(this.statusid)
             this.form.post('post-comment/'+this.statusid).then(response => this.commentPosted(response.data))
         },
         commentPosted(response){
             //this.setStatusID()
             this.hideModal()
+            EventBus.$emit('reply-added')
 
         }
   }

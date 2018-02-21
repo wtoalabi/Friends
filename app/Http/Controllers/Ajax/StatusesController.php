@@ -14,7 +14,7 @@ class StatusesController extends Controller
         $statuses = Status::with(['user' => function($query){
             $query->with('profile_image');
         },'likes','mood','comments'])
-        ->withCount('comments','likes')
+        ->withCount('comments','likes','reshares')
         ->whereIn('user_id', $userIDs)
         ->latest()->paginate(10);
         return $statuses;

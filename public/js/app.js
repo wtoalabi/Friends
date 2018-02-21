@@ -1846,6 +1846,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_Form__ = __webpack_require__("./resources/assets/js/utilities/Form.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__("./resources/assets/js/utilities/EventBus.js");
 //
 //
 //
@@ -1873,12 +1874,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['clickOpen', 'statusid'],
+    props: ['statusid', 'count'],
     data: function data() {
         return {
+            activateCommentBox: '',
             form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */]({
                 body: ''
             })
@@ -1886,13 +1899,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        openCommentBox: function openCommentBox() {
+            this.activateCommentBox = 'is-active';
+        },
         hideModal: function hideModal() {
-            this.$emit('hideModalBox');
+            this.activateCommentBox = false;
         },
         submit: function submit() {
             var _this = this;
 
-            //console.log(this.statusid)
             this.form.post('post-comment/' + this.statusid).then(function (response) {
                 return _this.commentPosted(response.data);
             });
@@ -1900,6 +1915,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         commentPosted: function commentPosted(response) {
             //this.setStatusID()
             this.hideModal();
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('reply-added');
         }
     }
 });
@@ -2013,11 +2029,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Status/ShareStatus.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Status/ReshareStatus.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_Form__ = __webpack_require__("./resources/assets/js/utilities/Form.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__("./resources/assets/js/utilities/EventBus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2031,7 +2072,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['count', 'status'],
+    mounted: function mounted() {},
+    data: function data() {
+        return {
+            modalStatus: '',
+            form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */]({
+                comment: ''
+            })
+        };
+    },
+
+
+    methods: {
+        clicked: function clicked() {
+            this.modalStatus = 'is-active';
+        },
+        shared: function shared() {
+            var _this = this;
+
+            return this.form.post('/reshare/' + this.status.id).then(function (response) {
+                return _this.statusShared(response.data);
+            });
+        },
+        statusShared: function statusShared(response) {
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status-shared', response);
+            this.closeModal();
+        },
+        closeModal: function closeModal() {
+            this.modalStatus = null;
+        },
+        decorateName: function decorateName(name) {
+            if (name.match(/[s]$/)) {
+                return name + "'";
+            } else {
+                return name + "'s";
+            }
+        },
+        decorateBody: function decorateBody(body) {
+            var body = body.substring(0, 50);
+            return body + "...";
+        }
+    }
+
+});
 
 /***/ }),
 
@@ -2048,13 +2135,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PostComment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__PostComment__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__LikeStatus__ = __webpack_require__("./resources/assets/js/components/Status/LikeStatus.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__LikeStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__LikeStatus__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ShareStatus__ = __webpack_require__("./resources/assets/js/components/Status/ShareStatus.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ShareStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__ShareStatus__);
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ReshareStatus__ = __webpack_require__("./resources/assets/js/components/Status/ReshareStatus.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ReshareStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__ReshareStatus__);
 //
 //
 //
@@ -2111,7 +2193,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         'postcomment': __WEBPACK_IMPORTED_MODULE_3__PostComment___default.a,
         'likestatus': __WEBPACK_IMPORTED_MODULE_4__LikeStatus___default.a,
-        'sharestatus': __WEBPACK_IMPORTED_MODULE_5__ShareStatus___default.a
+        'resharestatus': __WEBPACK_IMPORTED_MODULE_5__ReshareStatus___default.a
     },
     mounted: function mounted() {
         this.stream = 'stream';
@@ -2120,12 +2202,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            statusIdForComment: '',
             form: new __WEBPACK_IMPORTED_MODULE_2__utilities_Form__["a" /* default */](),
             statuses: [],
             imagePath: this.urlpath + "/",
             status: '',
-            activateCommentBox: false,
             nextPage: '',
             previousPage: '',
             onFirstPage: '',
@@ -2171,14 +2251,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.getStatus();
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status_deleted', "deleted");
         },
-        openCommentBox: function openCommentBox(statusID) {
-            this.statusIdForComment = statusID;
-            this.activateCommentBox = 'is-active';
-        },
-        closeCommentBox: function closeCommentBox() {
-            this.activateCommentBox = '';
-            this.getStatus();
-        },
         setPagination: function setPagination(data) {
             this.previousPage = data.prev_page_url;
             this.nextPage = data.next_page_url;
@@ -2220,6 +2292,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this5.getStatus();
             });
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-unLiked', function (liked) {
+                _this5.getStatus();
+            });
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('reply-added', function (reply) {
+                _this5.getStatus();
+            });
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-shared', function (shared) {
                 _this5.getStatus();
             });
 
@@ -38993,7 +39071,12 @@ var render = function() {
                           staticClass: "field is-grouped is-grouped-multiline"
                         },
                         [
-                          _vm._m(0, true),
+                          _c("postcomment", {
+                            attrs: {
+                              count: status.comments_count,
+                              statusid: status.id
+                            }
+                          }),
                           _vm._v(" "),
                           _c("likestatus", {
                             attrs: {
@@ -39003,7 +39086,12 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
-                          _c("sharestatus")
+                          _c("resharestatus", {
+                            attrs: {
+                              count: status.reshares_count,
+                              status: status
+                            }
+                          })
                         ],
                         1
                       )
@@ -39091,20 +39179,7 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "control" }, [
-      _c("div", { staticClass: "tags has-addons" }, [
-        _c("span", { staticClass: "tag is-dark" }, [_vm._v("npm")]),
-        _vm._v(" "),
-        _c("span", { staticClass: "tag is-info" }, [_vm._v("0.5.0")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -39236,84 +39311,111 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "modal", class: _vm.clickOpen }, [
-    _c("div", { staticClass: "modal-background" }),
+  return _c("div", [
+    _c("div", { staticClass: "control" }, [
+      _c(
+        "div",
+        { staticClass: "tags has-addons", on: { click: _vm.openCommentBox } },
+        [
+          _c("span", { staticClass: "tag" }, [_vm._v(_vm._s(_vm.count))]),
+          _vm._v(" "),
+          _vm._m(0)
+        ]
+      )
+    ]),
     _vm._v(" "),
-    _c("div", { staticClass: "modal-card" }, [
-      _c("header", { staticClass: "modal-card-head" }, [
-        _c("p", { staticClass: "modal-card-title" }, [
-          _vm._v("Post A Comment")
+    _c("div", { staticClass: "modal", class: _vm.activateCommentBox }, [
+      _c("div", { staticClass: "modal-background" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal-card" }, [
+        _c("header", { staticClass: "modal-card-head" }, [
+          _c("p", { staticClass: "modal-card-title" }, [
+            _vm._v("Post A Comment")
+          ]),
+          _vm._v(" "),
+          _c("button", {
+            staticClass: "delete",
+            attrs: { "aria-label": "close" },
+            on: { click: _vm.hideModal }
+          })
         ]),
         _vm._v(" "),
-        _c("button", {
-          staticClass: "delete",
-          attrs: { "aria-label": "close" },
-          on: { click: _vm.hideModal }
-        })
-      ]),
-      _vm._v(" "),
-      _c("section", { staticClass: "modal-card-body" }, [
-        _c(
-          "form",
-          {
-            attrs: { method: "post" },
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
+        _c("section", { staticClass: "modal-card-body" }, [
+          _c(
+            "form",
+            {
+              attrs: { method: "post" },
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                }
               }
-            }
-          },
-          [
-            _c("div", { staticClass: "field" }, [
-              _c("div", { staticClass: "control" }, [
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.form.body,
-                      expression: "form.body"
-                    }
-                  ],
-                  staticClass: "textarea",
-                  attrs: {
-                    name: "body",
-                    placeholder: "Post a Comment...",
-                    required: ""
-                  },
-                  domProps: { value: _vm.form.body },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+            },
+            [
+              _c("div", { staticClass: "field" }, [
+                _c("div", { staticClass: "control" }, [
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.body,
+                        expression: "form.body"
                       }
-                      _vm.$set(_vm.form, "body", $event.target.value)
+                    ],
+                    staticClass: "textarea",
+                    attrs: {
+                      name: "body",
+                      placeholder: "Post a Comment...",
+                      required: ""
+                    },
+                    domProps: { value: _vm.form.body },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "body", $event.target.value)
+                      }
                     }
-                  }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "control" })
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("footer", { staticClass: "modal-card-foot" }, [
-        _c(
-          "button",
-          { staticClass: "button is-success", on: { click: _vm.submit } },
-          [_vm._v("Submit...")]
-        ),
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "control" })
+            ]
+          )
+        ]),
         _vm._v(" "),
-        _c("button", { staticClass: "button", on: { click: _vm.hideModal } }, [
-          _vm._v("Cancel")
+        _c("footer", { staticClass: "modal-card-foot" }, [
+          _c(
+            "button",
+            { staticClass: "button is-success", on: { click: _vm.submit } },
+            [_vm._v("Submit...")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "button", on: { click: _vm.hideModal } },
+            [_vm._v("Cancel")]
+          )
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      { staticClass: "tag mr-1 is-info", attrs: { title: "LikeText" } },
+      [_c("i", { staticClass: "fa fa-reply" })]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -39466,39 +39568,117 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7be23844\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Status/ShareStatus.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9afb4fea\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Status/ReshareStatus.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { staticClass: "control" }, [
-        _c("div", { staticClass: "tags has-addons" }, [
-          _c("span", { staticClass: "tag" }, [_vm._v("123")]),
+  return _c("div", [
+    _c("div", { staticClass: "modal", class: _vm.modalStatus }, [
+      _c("div", {
+        staticClass: "modal-background",
+        on: { click: _vm.closeModal }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal-card" }, [
+        _c("article", { staticClass: "message is-medium" }, [
+          _c("div", { staticClass: "message-header" }, [
+            _c("p", [
+              _vm._v(
+                "Reshare " +
+                  _vm._s(_vm.decorateName(_vm.status.user.first_name)) +
+                  " Status?"
+              )
+            ]),
+            _vm._v(" "),
+            _c("button", {
+              staticClass: "delete",
+              attrs: { "aria-label": "delete" },
+              on: { click: _vm.closeModal }
+            })
+          ]),
           _vm._v(" "),
-          _c("a", { staticClass: "tag is-warning mr-1" }, [
-            _c("i", { staticClass: "fa fa-retweet" })
+          _c("div", { staticClass: "message-body" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.comment,
+                  expression: "form.comment"
+                }
+              ],
+              staticClass: "textarea mb-2",
+              attrs: { placeholder: "Add Your Thoughts...?" },
+              domProps: { value: _vm.form.comment },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "comment", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("span", { staticClass: "title is-6 has-text-centered" }, [
+              _c("blockquote", [
+                _c("em", [_vm._v(_vm._s(_vm.decorateBody(_vm.status.body)))])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mt-2 columns" }, [
+              _c("div", { staticClass: "column" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "button is-warning",
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.shared($event)
+                      }
+                    }
+                  },
+                  [_vm._v("Reshare...")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "column is-2" }, [
+                _c(
+                  "button",
+                  { staticClass: "button", on: { click: _vm.closeModal } },
+                  [_vm._v("Cancel")]
+                )
+              ])
+            ])
           ])
         ])
       ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "control" }, [
+      _c("div", { staticClass: "tags has-addons" }, [
+        _c("span", { staticClass: "tag" }, [_vm._v(_vm._s(_vm.count))]),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "tag is-warning mr-1", on: { click: _vm.clicked } },
+          [_c("i", { staticClass: "fa fa-retweet" })]
+        )
+      ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-7be23844", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-9afb4fea", module.exports)
   }
 }
 
@@ -51245,15 +51425,15 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/Status/ShareStatus.vue":
+/***/ "./resources/assets/js/components/Status/ReshareStatus.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Status/ShareStatus.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Status/ReshareStatus.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7be23844\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Status/ShareStatus.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9afb4fea\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Status/ReshareStatus.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -51270,7 +51450,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\Status\\ShareStatus.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Status\\ReshareStatus.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -51279,9 +51459,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7be23844", Component.options)
+    hotAPI.createRecord("data-v-9afb4fea", Component.options)
   } else {
-    hotAPI.reload("data-v-7be23844", Component.options)
+    hotAPI.reload("data-v-9afb4fea", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
