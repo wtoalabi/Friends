@@ -14,7 +14,8 @@ class FollowingController extends Controller
             //dd(request()->all());  
             $users = array_add(request()->all(), 'user', Auth::user());
             //dd($users);
-            $user = (new Following($users))->make();
-            return response(['message'=>'Done'], 200);
+            return (new Following($users))->make();
+
+            //return response(['message'=>'Done'], 200);
     }
 }

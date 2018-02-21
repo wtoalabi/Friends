@@ -58,6 +58,11 @@ import {EventBus} from './../../utilities/EventBus'
                 this.stateClass = "button is-primary"
             },
             submitted(response){
+                if(response[0] == 200){
+                    EventBus.$emit("user_unfollowed");
+                }
+                     else if(response[0] ==300){
+                        EventBus.$emit("user_followed")};
                 },
 
             setUp(){

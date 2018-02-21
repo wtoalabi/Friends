@@ -4,6 +4,7 @@ namespace App\Models\Statuses;
 
 use App\Models\Users\User;
 use App\Models\Statuses\Mood;
+use App\Models\Statuses\Like;
 use App\Models\Statuses\Comment;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Presenters\StatusPresenter as Presentable;
@@ -22,4 +23,7 @@ class Status extends Model
     public function comments (){
          return $this->hasMany(Comment::class);
     }
+    public function likes (){
+        return $this->hasMany(Like::class);
+   }
 }

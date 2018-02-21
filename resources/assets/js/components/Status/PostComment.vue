@@ -29,10 +29,6 @@
     import Form from "./../../utilities/Form";
 export default {
     props:['clickOpen','statusid'],
-    mounted(){
-        //this.setStatusID()
-        //console.log(this.statusID)
-  },
     data(){
           return{
               form: new Form({
@@ -41,9 +37,7 @@ export default {
           }
       },
     methods:{
-        setStatusID(){
-            //this.statusID = this.statusid
-        },
+        
         hideModal(){
             this.$emit('hideModalBox')
         },

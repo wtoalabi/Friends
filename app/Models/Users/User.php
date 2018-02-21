@@ -4,6 +4,7 @@ namespace App\Models\Users;
 
 
 use App\Models\Images\Image;
+use App\Models\Statuses\Like;
 use App\Models\Statuses\Status;
 use App\Models\Statuses\Comment;
 use App\Helpers\Users\Profileable;
@@ -21,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'auth', 'username'
+        'last_name', 'email', 'password', 'auth', 'username', 'first_name'
     ];
 
     /**
@@ -50,6 +51,9 @@ class User extends Authenticatable
    }
     public function comments (){
         return $this->hasMany(Comment::class);
+   }
+    public function likes (){
+        return $this->hasMany(Like::class);
    }
    
    public function getRouteKeyName(){

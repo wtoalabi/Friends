@@ -21,25 +21,17 @@
             </div>
         <nav class="level is-mobile">
             <div class="level-left">
-                <div class="tags has-addons">
-                        
-                        <span class="tag">{{status.comments_count}}</span>
-                        <span class="tag is-primary mr-1" @click="openCommentBox(status.id)"> <i class="fa fa-reply"></i></span>
-                        <postcomment 
-                                    :clickOpen="activateCommentBox" 
-                                    @hideModalBox="closeCommentBox" 
-                                    :statusid="statusIdForComment">
-                        </postcomment>
-                        
-                       <!--  <span class="tag">{{status.comments_count}}</span>
-                        <span class="tag is-warning mr-1" @click="openCommentBox()"> <i class="fa fa-retweet"></i></span> -->
-                        <!-- <postcomment :clickOpen="activateCommentBox" @hideModalBox="closeCommentBox" :statusid="status.id"></postcomment> -->
-                        
-                        <!-- <span class="tag">{{status.comments_count}}</span>
-                        <span class="tag is-danger" @click="openCommentBox()"> <i class="fa fa-heart"></i></span> -->
-                        <!-- <postcomment :clickOpen="activateCommentBox" @hideModalBox="closeCommentBox" :statusid="status.id"></postcomment> -->
+               <div class="field is-grouped is-grouped-multiline">
+                    <div class="control">
+                        <div class="tags has-addons">
+                        <span class="tag is-dark">npm</span>
+                        <span class="tag is-info">0.5.0</span>
+                        </div>
                     </div>
-            </div>
+                    <likestatus :statusid="status.id" :count="status.likes_count" :currentuser="currentuserid" ></likestatus>
+                    <sharestatus></sharestatus>
+                    </div>
+                </div>
             <div class="level-right" v-show="isOwnedBy(status.user.id)">
                     <button class="button" @click="deleteStatus(status.id) " type="submit">Delete Status</button>
             </div>
@@ -57,16 +49,18 @@ import moment from 'moment'
 import {EventBus} from './../../utilities/EventBus'
 import Form from './../../utilities/Form'
 import postcomment  from "./PostComment";
+import likestatus  from "./LikeStatus";
+import sharestatus  from "./ShareStatus";
     export default {
         props:['urlpath','currentuserid'],
         components:{
-            'postcomment': postcomment
+            'postcomment': postcomment,
+            'likestatus': likestatus,
+            'sharestatus': sharestatus,
         },
         mounted(){
             this.getStatus()
-            EventBus.$on('status_posted',status=>{
-                this.newStatus(status)
-            })
+            this.listenForEvents()
         }, 
         data(){
             return{
@@ -94,7 +88,6 @@ import postcomment  from "./PostComment";
                 return userID == this.currentuserid
             },
             deleteStatus(statusToBeDeleted){
-                //console.log(stat)
                 if ( confirm("Are you sure you want to delete")){
                     this.form.delete('delete-status/'+statusToBeDeleted).then(response=>this.statusDeleted(response))
                 }
@@ -112,6 +105,15 @@ import postcomment  from "./PostComment";
                 this.activateCommentBox = ''
                 this.getStatus()
             },
+            listenForEvents(){
+                EventBus.$on('status_posted',status=>{
+                    this.newStatus(status)
+                    })
+                EventBus.$on('status-liked',liked=>{this.getStatus()})
+                EventBus.$on('status-unLiked',liked=>{this.getStatus()})
+
+                EventBus.$on("user_unfollowed", unfollowed=> {this.getUser()})
+                },
             formatDate(date){
                 var differencesInTime = this.getTimeDifferences(date)
                 return this.formatTimeText(differencesInTime, date)

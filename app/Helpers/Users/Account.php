@@ -14,6 +14,7 @@ class Account{
     public $user;
 
     static function persist($data){
+        //dd($data);
         return DB::transaction(function() use($data){
             $user = User::create([
                 'first_name' => $data->first_name,

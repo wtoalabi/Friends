@@ -9,9 +9,9 @@
                     <form class="control" method="POST" action="{{ route('accounts.store') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="field">
-                                <label for="name" class="label">Your First Name</label>
+                                <label for="first_name" class="label">Your First Name</label>
                                 <div class="control has-icons-left has-icons-right">
-                                    <input id="name" placeholder="First Name"type="text" class="input {{ $errors->has('first_name') ? 'is-danger' : '' }}" name="name" value="{{ old('first_name') }}" required autofocus>
+                                    <input id="first_name" placeholder="First Name" type="text" class="input {{ $errors->has('first_name') ? 'is-danger' : '' }}" name="first_name" value="{{ old('first_name') }}" required autofocus>
                                     <span class="icon is-small is-left">
                                         <i class="fa fa-user"></i>
                                     </span>

@@ -1130,6 +1130,10 @@
   margin-left: 6px;
 }
 
+a.tag:hover {
+  text-decoration: none !important;
+}
+
 /*! bulma.io v0.6.1 | MIT License | github.com/jgthms/bulma */
 
 @-webkit-keyframes spinAround {

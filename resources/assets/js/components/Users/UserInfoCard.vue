@@ -60,12 +60,7 @@ export default {
   mounted(){
       this.getUser()
       this.confirmIfProfileUser()
-       EventBus.$on('status_posted',status=>{
-                this.updateStatusCount(status)
-            })
-       EventBus.$on('status_deleted',status=>{
-                this.updateStatusCount(status)
-            })
+      this.listenToEvents()
         },
   data(){
       return{
@@ -112,13 +107,22 @@ export default {
           }
       },
       updateStatusCount(status){
-          console.log(status)
           if(status == "deleted"){
               this.statusesCount --
           }
           else{
               this.statusesCount++
           }
+      },
+      listenToEvents(){
+        EventBus.$on("user_followed", followed=> {this.getUser()})
+          EventBus.$on('status_posted',status=>{
+              this.updateStatusCount(status)
+            })
+       EventBus.$on('status_deleted',status=>{
+           this.updateStatusCount(status)
+            })
+          EventBus.$on("user_unfollowed", unfollowed=> {this.getUser()})
       }
     }
 }

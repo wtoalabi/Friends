@@ -13,8 +13,8 @@ class StatusesController extends Controller
         $userIDs = $this->getIDs();
         $statuses = Status::with(['user' => function($query){
             $query->with('profile_image');
-        },'mood','comments'])
-        ->withCount('comments')
+        },'likes','mood','comments'])
+        ->withCount('comments','likes')
         ->whereIn('user_id', $userIDs)
         ->latest()->paginate(5);
         return $statuses;

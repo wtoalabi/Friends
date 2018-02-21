@@ -1,12 +1,12 @@
 @if(($count= $profileUser->followers()->count()) > 0 )
-<p class="title is-4 has-text-centered mb-1">People Following {{$user->name}}</p>
+<p class="title is-4 has-text-centered mb-1">People Following {{$user->first_name}}</p>
 @foreach($user->followers->take(6)->chunk(3) as $chunkedUsers)
 <div class="columns">
     @foreach($chunkedUsers as $user)
     <div class="column is-4">
         <a href="/user/{{$user->usernameSlug()}}">
         <img class=" image is-64x64 is-circle"src="{{asset("storage/user/".$user->profile_image->path)}}" alt="Image"> 
-            {{$user->name}}
+            {{$user->first_name}}
 
             @if($currentUser->id != $user->id)
                 <followbutton following="{{$user->id}}" isfollowed="{{$currentUser->isFollowing($user->id)}}"></followbutton>
