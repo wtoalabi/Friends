@@ -2096,6 +2096,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2111,6 +2114,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         'sharestatus': __WEBPACK_IMPORTED_MODULE_5__ShareStatus___default.a
     },
     mounted: function mounted() {
+        this.stream = 'stream';
         this.getStatus();
         this.listenForEvents();
     },
@@ -2121,7 +2125,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             statuses: [],
             imagePath: this.urlpath + "/",
             status: '',
-            activateCommentBox: false
+            activateCommentBox: false,
+            nextPage: '',
+            previousPage: '',
+            onFirstPage: '',
+            stream: '',
+            onLastPage: null,
+            paginate: 'false'
         };
     },
 
@@ -2133,12 +2143,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getStatus: function getStatus() {
             var _this = this;
 
-            return axios.get('/get-statuses').then(function (response) {
-                return _this.prepareStatus(response.data.data);
+            return axios.get(this.stream).then(function (response) {
+                return _this.prepareStatus(response.data);
             });
         },
         prepareStatus: function prepareStatus(statuses) {
-            this.statuses = statuses;
+            if (statuses.from != statuses.last_page) {
+                this.setPagination(statuses);
+                this.paginate = true;
+            }
+            this.statuses = statuses.data;
         },
         isOwnedBy: function isOwnedBy(userID) {
             return userID == this.currentuserid;
@@ -2165,21 +2179,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.activateCommentBox = '';
             this.getStatus();
         },
-        listenForEvents: function listenForEvents() {
+        setPagination: function setPagination(data) {
+            this.previousPage = data.prev_page_url;
+            this.nextPage = data.next_page_url;
+            this.disableButtons(data.from, data.to, data.total);
+        },
+        loadNextPage: function loadNextPage() {
             var _this3 = this;
 
+            return axios.get(this.nextPage).then(function (response) {
+                return _this3.prepareStatus(response.data);
+            });
+        },
+        loadPreviousPage: function loadPreviousPage() {
+            var _this4 = this;
+
+            return axios.get(this.previousPage).then(function (response) {
+                return _this4.prepareStatus(response.data);
+            });
+        },
+        disableButtons: function disableButtons(from, to, total) {
+            if (from == 1) {
+                this.onFirstPage = true;
+            } else {
+                this.onFirstPage = false;
+            }
+            if (to == total) {
+                this.onLastPage = true;
+            } else {
+                this.onLastPage = false;
+            }
+        },
+        listenForEvents: function listenForEvents() {
+            var _this5 = this;
+
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status_posted', function (status) {
-                _this3.newStatus(status);
+                _this5.newStatus(status);
             });
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-liked', function (liked) {
-                _this3.getStatus();
+                _this5.getStatus();
             });
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-unLiked', function (liked) {
-                _this3.getStatus();
+                _this5.getStatus();
             });
 
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on("user_unfollowed", function (unfollowed) {
-                _this3.getUser();
+                _this5.getUser();
             });
         },
         formatDate: function formatDate(date) {
@@ -38874,127 +38919,176 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.statuses, function(status) {
-      return _c("div", { key: status.id }, [
-        _c(
-          "div",
-          { staticClass: "box message mb-1", class: status.mood.color },
-          [
-            _c("article", { staticClass: "media message-body" }, [
-              _c("div", { staticClass: "media-left" }, [
-                _c(
-                  "a",
-                  {
-                    attrs: { href: _vm.decorateUsername(status.user.username) }
-                  },
-                  [
-                    _c("figure", { staticClass: "image is-65x65" }, [
-                      _c("img", {
-                        staticClass: "avatar is-circle",
-                        attrs: {
-                          src: _vm.imagePath + status.user.profile_image.path,
-                          alt: "Image"
-                        }
-                      })
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "media-content" }, [
-                _c("div", { staticClass: "content" }, [
-                  _c("p", [
-                    _c("strong", [
-                      _c(
-                        "a",
-                        {
-                          attrs: {
-                            href: _vm.decorateUsername(status.user.username)
-                          }
-                        },
-                        [
-                          _vm._v(
-                            _vm._s(status.user.first_name) +
-                              " " +
-                              _vm._s(status.user.last_name)
-                          )
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("small", [_vm._v(_vm._s(status.user.username))]),
-                    _vm._v(" "),
-                    _c("small", [
-                      _vm._v(_vm._s(_vm.formatDate(status.created_at)))
-                    ]),
-                    _vm._v(" "),
-                    _c("br"),
-                    _vm._v(
-                      "\n                      " +
-                        _vm._s(status.body) +
-                        "\n              "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("nav", { staticClass: "level is-mobile" }, [
-                  _c("div", { staticClass: "level-left" }, [
-                    _c(
-                      "div",
-                      { staticClass: "field is-grouped is-grouped-multiline" },
-                      [
-                        _vm._m(0, true),
-                        _vm._v(" "),
-                        _c("likestatus", {
-                          attrs: {
-                            statusid: status.id,
-                            count: status.likes_count,
-                            currentuser: _vm.currentuserid
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("sharestatus")
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
+    [
+      _vm._l(_vm.statuses, function(status) {
+        return _c("div", { key: status.id }, [
+          _c(
+            "div",
+            { staticClass: "box message mb-1", class: status.mood.color },
+            [
+              _c("article", { staticClass: "media message-body" }, [
+                _c("div", { staticClass: "media-left" }, [
                   _c(
-                    "div",
+                    "a",
                     {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.isOwnedBy(status.user.id),
-                          expression: "isOwnedBy(status.user.id)"
-                        }
-                      ],
-                      staticClass: "level-right"
+                      attrs: {
+                        href: _vm.decorateUsername(status.user.username)
+                      }
                     },
                     [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "button",
-                          attrs: { type: "submit" },
-                          on: {
-                            click: function($event) {
-                              _vm.deleteStatus(status.id)
-                            }
+                      _c("figure", { staticClass: "image is-65x65" }, [
+                        _c("img", {
+                          staticClass: "avatar is-circle",
+                          attrs: {
+                            src: _vm.imagePath + status.user.profile_image.path,
+                            alt: "Image"
                           }
-                        },
-                        [_vm._v("Delete Status")]
-                      )
+                        })
+                      ])
                     ]
                   )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "media-content" }, [
+                  _c("div", { staticClass: "content" }, [
+                    _c("p", [
+                      _c("strong", [
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              href: _vm.decorateUsername(status.user.username)
+                            }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(status.user.first_name) +
+                                " " +
+                                _vm._s(status.user.last_name)
+                            )
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("small", [_vm._v(_vm._s(status.user.username))]),
+                      _vm._v(" "),
+                      _c("small", [
+                        _vm._v(_vm._s(_vm.formatDate(status.created_at)))
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(status.body) +
+                          "\n                "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("nav", { staticClass: "level is-mobile" }, [
+                    _c("div", { staticClass: "level-left" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "field is-grouped is-grouped-multiline"
+                        },
+                        [
+                          _vm._m(0, true),
+                          _vm._v(" "),
+                          _c("likestatus", {
+                            attrs: {
+                              statusid: status.id,
+                              count: status.likes_count,
+                              currentuser: _vm.currentuserid
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("sharestatus")
+                        ],
+                        1
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.isOwnedBy(status.user.id),
+                            expression: "isOwnedBy(status.user.id)"
+                          }
+                        ],
+                        staticClass: "level-right"
+                      },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "button",
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                _vm.deleteStatus(status.id)
+                              }
+                            }
+                          },
+                          [_vm._v("Delete Status")]
+                        )
+                      ]
+                    )
+                  ])
                 ])
               ])
-            ])
-          ]
-        )
-      ])
-    })
+            ]
+          )
+        ])
+      }),
+      _vm._v(" "),
+      _c(
+        "nav",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.paginate,
+              expression: "paginate"
+            }
+          ],
+          staticClass: "pagination is-rounded",
+          attrs: { role: "navigation", "aria-label": "pagination" }
+        },
+        [
+          _c(
+            "a",
+            {
+              staticClass: "pagination-previous",
+              attrs: { disabled: _vm.onFirstPage },
+              on: { click: _vm.loadPreviousPage }
+            },
+            [_vm._v("Previous Set of Statuses")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "pagination-next",
+              attrs: { disabled: _vm.onLastPage },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.loadNextPage($event)
+                }
+              }
+            },
+            [_vm._v("Next Set of Statuses")]
+          )
+        ]
+      )
+    ],
+    2
   )
 }
 var staticRenderFns = [

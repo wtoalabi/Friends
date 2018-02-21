@@ -40,7 +40,10 @@
     </article>
     </div>
     </div>
-
+<nav v-show="paginate" class="pagination is-rounded" role="navigation" aria-label="pagination">
+  <a class="pagination-previous" :disabled="onFirstPage" @click="loadPreviousPage">Previous Set of Statuses</a>
+  <a class="pagination-next" :disabled="onLastPage" @click.prevent="loadNextPage">Next Set of Statuses</a>
+</nav>
   </div>
 </template>
 
@@ -59,6 +62,7 @@ import sharestatus  from "./ShareStatus";
             'sharestatus': sharestatus,
         },
         mounted(){
+            this.stream = 'stream'
             this.getStatus()
             this.listenForEvents()
         }, 
@@ -70,6 +74,12 @@ import sharestatus  from "./ShareStatus";
              imagePath: this.urlpath+"/",
              status:'',
              activateCommentBox: false,
+             nextPage:'',
+             previousPage:'',
+             onFirstPage: '',
+             stream:'',
+             onLastPage: null,
+             paginate: 'false'
         }
         },
         methods:{
@@ -78,11 +88,16 @@ import sharestatus  from "./ShareStatus";
                 this.getStatus()
             },
             getStatus(){
-                return  axios.get('/get-statuses').then(response=>(this.prepareStatus(response.data.data)))
+                return  axios.get(this.stream).then(response=>(this.prepareStatus(response.data)))
             },
 
             prepareStatus(statuses){
-                this.statuses = statuses
+                if(statuses.from != statuses.last_page)
+              {
+                  this.setPagination(statuses)
+                  this.paginate = true
+              }                   
+                this.statuses = statuses.data
             },
             isOwnedBy(userID){
                 return userID == this.currentuserid
@@ -104,6 +119,32 @@ import sharestatus  from "./ShareStatus";
             closeCommentBox(){
                 this.activateCommentBox = ''
                 this.getStatus()
+            },
+            setPagination(data){
+                this.previousPage = data.prev_page_url
+                this.nextPage = data.next_page_url
+                this.disableButtons(data.from, data.to, data.total)
+            },
+            loadNextPage(){
+                return  axios.get(this.nextPage).then(response=>(this.prepareStatus(response.data)))
+
+            },
+            loadPreviousPage(){
+                return  axios.get(this.previousPage).then(response=>(this.prepareStatus(response.data)))
+            },
+            disableButtons(from, to, total){
+                 if(from == 1){
+                    this.onFirstPage = true
+                }
+                else{
+                    this.onFirstPage = false
+                }
+                if(to == total){                    
+                    this.onLastPage = true
+                }
+                else{
+                    this.onLastPage = false
+                }
             },
             listenForEvents(){
                 EventBus.$on('status_posted',status=>{

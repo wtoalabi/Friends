@@ -51,7 +51,7 @@ Route::group([ 'middleware'=>'auth'], function(){
     Route::get('get-moods', 'Ajax\MoodsController@index');
     Route::get('get-mood/{id}', 'Ajax\MoodsController@show');
     Route::get('get-user/{id}', 'Ajax\GetUserController@show');
-    Route::get('get-statuses', 'Ajax\StatusesController@index');
+    Route::get('stream', 'Ajax\StatusesController@index');
     Route::post('post-comment/{status}', 'Ajax\CommentsController@store');
     Route::post('like-status/{status}', 'Ajax\LikesController@store');
     Route::get('like-status/{userID}/{statusID}', 'Ajax\LikesController@likeStatus');

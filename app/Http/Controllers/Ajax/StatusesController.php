@@ -16,7 +16,7 @@ class StatusesController extends Controller
         },'likes','mood','comments'])
         ->withCount('comments','likes')
         ->whereIn('user_id', $userIDs)
-        ->latest()->paginate(5);
+        ->latest()->paginate(10);
         return $statuses;
     }
 
