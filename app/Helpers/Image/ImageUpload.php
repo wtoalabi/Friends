@@ -22,6 +22,7 @@ class ImageUpload{
 
     
     public function __construct (UploadedFile $image, User $user, Album $album, $profile=null){
+        //dd($image);
         $this->image = $image;
         $this->user = $user;
         $this->album = $album;
@@ -33,8 +34,8 @@ class ImageUpload{
              ->generatePaths()
             ->makeDirectory()
             ->makeThumbnail();
-            $this->saveToDB();
-              return $this->thumbUrlOnDB;
+           $image =  $this->saveToDB();
+              return $image;
         }
 
     public function generateName (){
@@ -75,5 +76,12 @@ class ImageUpload{
         $this->thumbUrlOnDB = sprintf("images/%s/thumb-%s", $this->imagePath,$this->fileName);
         return $this;
     } 
+
+    public static function remove ($image){
+         $image = Image::find($image);
+         $image->delete();
+         return;
+
+    }
 
 }

@@ -19,7 +19,7 @@ class CreateImagesTable extends Migration
             $table->integer('album_id')->unsigned();
             $table->string('full');
             $table->string('thumb');
-            $table->boolean('profile')->default(0);
+            $table->boolean('profile')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
             $table->timestamps();

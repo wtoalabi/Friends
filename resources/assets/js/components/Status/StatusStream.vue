@@ -50,14 +50,14 @@ import postcomment  from "./PostComment";
 import likestatus  from "./LikeStatus";
 import resharestatus  from "./ReshareStatus";
     export default {
-        props:['urlpath','currentuserid'],
+        props:['urlpath','currentuserid',],
         components:{
             'postcomment': postcomment,
             'likestatus': likestatus,
             'resharestatus': resharestatus,
         },
         mounted(){
-            this.stream = 'stream'
+            this.stream = '/stream'
             this.getStatus()
             this.listenForEvents()
         }, 
@@ -72,7 +72,7 @@ import resharestatus  from "./ReshareStatus";
              onFirstPage: '',
              stream:'',
              onLastPage: null,
-             paginate: 'false'
+             paginate: null
         }
         },
         methods:{
@@ -85,10 +85,10 @@ import resharestatus  from "./ReshareStatus";
             },
 
             prepareStatus(statuses){
-                if(statuses.from != statuses.last_page)
+                if(statuses.from != statuses.last_page && statuses.from != null)
               {
-                  this.setPagination(statuses)
                   this.paginate = true
+                  this.setPagination(statuses)
               }                   
                 this.statuses = statuses.data
             },
@@ -97,7 +97,7 @@ import resharestatus  from "./ReshareStatus";
             },
             deleteStatus(statusToBeDeleted){
                 if ( confirm("Are you sure you want to delete")){
-                    this.form.delete('delete-status/'+statusToBeDeleted).then(response=>this.statusDeleted(response))
+                    this.form.delete('/delete-status/'+statusToBeDeleted).then(response=>this.statusDeleted(response))
                 }
             },
             statusDeleted(statusID){
@@ -106,6 +106,8 @@ import resharestatus  from "./ReshareStatus";
                  EventBus.$emit('status_deleted',"deleted")
             },
             setPagination(data){
+                //console.log("?page="+data.current_page)
+                this.stream = "/stream/?page="+data.current_page
                 this.previousPage = data.prev_page_url
                 this.nextPage = data.next_page_url
                 this.disableButtons(data.from, data.to, data.total)
@@ -140,7 +142,7 @@ import resharestatus  from "./ReshareStatus";
                 EventBus.$on('reply-added',reply=>{this.getStatus()})
                 EventBus.$on('status-shared',shared=>{this.getStatus()})
 
-                EventBus.$on("user_unfollowed", unfollowed=> {this.getUser()})
+                EventBus.$on("user_unfollowed", unfollowed=> {this.getStatus()})
                 },
             formatDate(date){
                 var differencesInTime = this.getTimeDifferences(date)

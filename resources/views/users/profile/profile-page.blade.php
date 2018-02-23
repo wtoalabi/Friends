@@ -2,7 +2,6 @@
 @slot('title')
  {{$profileUser->pageTitle()}} Profile Page
 @endslot
-
 @slot('user_right_column')
 @include('users.partials.user-info-card',['user'=>$profileUser])
 @endslot

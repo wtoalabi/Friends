@@ -6,27 +6,35 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
 
 class UserAlbum{
-    protected $albumName;
+    protected $name;
     protected $userID;
     protected $folderID;
     
     public static function create($name, $user){
         $album = new static; 
-        $album->albumName = $name;
-        $album->userID = $user->id;
-        $album->folderID = $album->getFolderID();
-        $newAlbum = $album->persistToDB();
-         return $newAlbum;
+        if($albumFound = $album->checkAlbumExistence($name, $user)){
+            return $albumFound;
+        }
+        else{
+            $album->name = $name;
+            $album->userID = $user;
+            $album->folderID = $album->getFolderID();
+            $album = $album->persistToDB();
+            return $album;
+        }
+    }
+    public function checkAlbumExistence ($name, $user){
+         return Album::where([["name", "=", "Wall Picture"],["user_id", "=" , $user]])->first();
     }
     public function getFolderID(){    
         $folderID = $this->generateIDFromRedisKeys();
-        return Redis::HSET("UserAlbums:User$this->userID", $folderID, $this->albumName);
+        return Redis::HSET("UserAlbums:User$this->userID", $folderID, $this->name);
     }
 
     public function persistToDB(){
     
         $newAlbum =  Album::create([
-            'name'=> $this->albumName, 
+            'name'=> $this->name, 
             'folderID'=> $this->folderID, 
             'user_id'=> $this->userID
             ]);

@@ -16,4 +16,15 @@
 /* Font Awesome */
 @import "node_modules/font-awesome/scss/font-awesome.scss";
 
+@media screen and (min-width: 769px), print{
+.modal-content, .modal-card {
+    margin: 0 auto;
+    max-height: calc(100vh - 40px);
+    width: 700px;
+}
+}
+
+.modal-card-body {
+    padding: 5px;
+}
 

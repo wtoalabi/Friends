@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     protected $fillable = [
-        'user_id', 'album_id', 'full', 'thumb','profile'
+        'user_id', 'album_id', 'full', 'thumb','profile','imageUUID'
     ];
     public function user (){
          return $this->belongsTo(User::class);

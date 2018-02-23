@@ -34,9 +34,9 @@ class Account{
     if($data->profileImage){
          $album = UserAlbum::create("Profile", $user);
          
-         $thumbPath = (new ImageUpload($data->profileImage, $user, $album, $profile= true))
+         $image = (new ImageUpload($data->profileImage, $user, $album, $profile= true))
          ->process();
-         ProfileImage::add($thumbPath,$user->id);
+         ProfileImage::add($image->thumb,$user->id);
         }
         else{
             ProfileImage::add("default.jpg",$user->id);

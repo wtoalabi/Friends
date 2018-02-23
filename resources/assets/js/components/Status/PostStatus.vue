@@ -5,24 +5,14 @@
                 <input type="hidden" name="profileID" v-model="profile">
                 <textarea class="textarea mb-1" name="body" placeholder="Whats on your mind...?" v-model="formBody" required></textarea> 
                 <div class="columns">
-                    <div class="file column is-primary  is-4">
-                        <label class="file-label">
-                            <input class="file-input" type="file" name="image">
-                                <span class="file-cta">
-                                    <span class="file-icon">
-                                        <i class="fa fa-upload"></i>
-                                    </span>
-                                <span class="file-label">
-                                    Upload Picture...
-                                </span>
-                            </span>
-                        </label>
+                    <div class="file column is-primary is-4"> 
+                       <picturesupload :token="token"></picturesupload>
                     </div>
                     <div class="column  is-5">
                             <div class="control has-icons-left">
                                     <div class="select">
                                       <select class="is-focused" name="mood" v-model="selectedMood" @change="sendToForm(selectedMood)">
-                                            <option default value="0">Select Your Mood</option>
+                                            <option default value="0">Select Mood</option>
                                             <option v-for="mood in moods" :key="mood.id" :value="mood.id">{{mood.name}} </option>
                                       </select>
                                     </div>
@@ -42,12 +32,16 @@
 <script>
 import Form from './../../utilities/Form'
 import {EventBus} from './../../utilities/EventBus'
+import PicturesUpload from './PicturesUpload'
+
     export default {
-        props:['profileid','posturl'],
+        props:['profileid','posturl','token'],
+        components:{
+            'picturesupload':PicturesUpload
+        },
 
         mounted(){
             this.getMoods()
-            
         }, 
         data(){
             return{
@@ -64,6 +58,7 @@ import {EventBus} from './../../utilities/EventBus'
             }
         },
         methods:{
+            
             onSubmit(){
                 this.setUpFormFields()
                 this.form.post(this.posturl)
