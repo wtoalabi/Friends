@@ -3,11 +3,11 @@
 namespace App\Models\Statuses;
 
 use App\Models\Users\User;
+use App\Models\Images\Image;
 use App\Models\Statuses\Mood;
 use App\Models\Statuses\Like;
 use App\Models\Statuses\Comment;
 use App\Models\Statuses\Reshare;
-use App\Models\Statuses\StatusImage;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Presenters\StatusPresenter as Presentable;
 
@@ -33,6 +33,7 @@ class Status extends Model
         return $this->hasMany(Reshare::class);
     }
     public function status_images (){
-        return $this->hasMany(StatusImage::class);
+        return $this->hasMany(Image::class);
     }
+  
 }

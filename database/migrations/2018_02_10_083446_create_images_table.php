@@ -18,11 +18,13 @@ class CreateImagesTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('album_id')->unsigned()->nullable();
             $table->integer('folderID')->unsigned();
+            $table->integer('status_id')->unsigned()->nullable();
             $table->string('full');
             $table->string('thumb');
             $table->boolean('profile')->default(0);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -11,13 +11,16 @@
                         </a>
                     </div>
         <div class="media-content">
-            <div class="content">
-                <p>                    
-                    <strong><a :href="decorateUsername(status.user.username)">{{status.user.first_name}} {{status.user.last_name}}</a></strong> 
-                        <small>{{status.user.username}}</small> <small>{{formatDate(status.created_at)}}</small>
-                        <br>
-                        {{status.body}}
-                </p>
+            <div class="content">          
+                <strong><a :href="decorateUsername(status.user.username)">{{status.user.first_name}} {{status.user.last_name}}</a></strong> 
+                    <small>{{status.user.username}}</small> <small>{{formatDate(status.created_at)}}</small>
+                    <br>
+                    {{status.body}}
+                <div class="columns is-centered" v-for="chunkedImages in chunkImages(status.status_images)" :key="chunkedImages.id">
+                    <div class="column" v-for="image in chunkedImages" :key="image.id">
+                        <img class="" :src="imagePath +'/' +image.thumb" alt="Image">
+                    </div>
+                </div>
             </div>
         <nav class="level is-mobile">
             <div class="level-left">
@@ -188,7 +191,26 @@ import resharestatus  from "./ReshareStatus";
             },
              decorateUsername(username){
                return "/user/@"+username
+            },
+        chunkImages(images){
+            if(images.length <= 1){
+                
+                return _.chunk(images,1)
+
             }
+            else if(images.length == 2){
+                return _.chunk(images,2)
+
+            }
+            else if(images.length == 3){
+                return _.chunk(images,3)
+
+            }
+            else if(images.length >= 4){
+                return _.chunk(images,4)
+
+            }
+        }
         },
     }
 </script>

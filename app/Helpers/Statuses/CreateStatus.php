@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers\Statuses;
 
+use App\Models\Images\Image;
 use App\Models\Statuses\Status;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Statuses\StatusImage;
@@ -30,8 +31,11 @@ class CreateStatus {
         return $status;
     }
     public static function savePicturesToStatus ($pictures, $status){
+        
         foreach($pictures as $index=>$ID){
-           $status->status_images()->create(['image_id'=>$ID]);
+            $image = Image::find($ID);
+           $status->status_images()->save($image);
         }
+        return;
     }
 }
