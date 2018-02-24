@@ -6,7 +6,7 @@
                     <div class="media-left">
                         <a :href="decorateUsername(status.user.username)">
                             <figure class="image is-65x65">
-                                <img class="avatar is-circle" :src="imagePath+status.user.profile_image.path" alt="Image">
+                                <img class="avatar is-circle" :src="imagePath + imageIfExisting(status.user.images)" alt="Image">
                             </figure>
                         </a>
                     </div>
@@ -22,7 +22,9 @@
         <nav class="level is-mobile">
             <div class="level-left">
                <div class="field is-grouped is-grouped-multiline">
-                    <postcomment :count="status.comments_count" :statusid="status.id"></postcomment>
+                    <postcomment :count="status.comments_count" 
+                                 :statusid="status.id">
+                                 </postcomment>
                     <likestatus :statusid="status.id" :count="status.likes_count" :currentuser="currentuserid" ></likestatus>
                     <resharestatus :count="status.reshares_count" :status="status"></resharestatus>
                     </div>
@@ -63,16 +65,16 @@ import resharestatus  from "./ReshareStatus";
         }, 
         data(){
             return{
-             form: new Form(),
+                form: new Form(),
              statuses:[],
-             imagePath: this.urlpath+"/",
+             imagePath: this.urlpath,
              status:'',
              nextPage:'',
              previousPage:'',
              onFirstPage: '',
              stream:'',
              onLastPage: null,
-             paginate: null
+             paginate: null,
         }
         },
         methods:{
@@ -133,16 +135,26 @@ import resharestatus  from "./ReshareStatus";
                     this.onLastPage = false
                 }
             },
+            addImageIDtoStatus(IDS){
+                },
             listenForEvents(){
                 EventBus.$on('status_posted',status=>{
                     this.newStatus(status)
-                    })
+                })              
                 EventBus.$on('status-liked',liked=>{this.getStatus()})
                 EventBus.$on('status-unLiked',liked=>{this.getStatus()})
                 EventBus.$on('reply-added',reply=>{this.getStatus()})
                 EventBus.$on('status-shared',shared=>{this.getStatus()})
 
                 EventBus.$on("user_unfollowed", unfollowed=> {this.getStatus()})
+                },
+                imageIfExisting(image){
+                    if(image.length == 0){
+                        return "/default.jpg"
+                    }
+                    else{
+                        return "/"+image[0].thumb;
+                    }
                 },
             formatDate(date){
                 var differencesInTime = this.getTimeDifferences(date)

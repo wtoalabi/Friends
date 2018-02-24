@@ -10,14 +10,14 @@ class UserAlbum{
     protected $userID;
     protected $folderID;
     
-    public static function create($name, $user){
+    public static function create($name, $userID){
         $album = new static; 
-        if($albumFound = $album->checkAlbumExistence($name, $user)){
+        if($albumFound = $album->checkAlbumExistence($name, $userID)){
             return $albumFound;
         }
         else{
             $album->name = $name;
-            $album->userID = $user;
+            $album->userID = $userID;            
             $album->folderID = $album->getFolderID();
             $album = $album->persistToDB();
             return $album;

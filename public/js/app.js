@@ -49485,8 +49485,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.thumbPath = this.imagepath;
             this.chunkedUsers = _.chunk(data, 3);
         },
-        linkToThumb: function linkToThumb(username) {
-            return this.thumbPath + "/" + username;
+        linkToThumb: function linkToThumb(image) {
+            if (image == 0) {
+                return this.thumbPath + "/" + "default.jpg";
+            } else {
+                return this.thumbPath + "/" + image[0].thumb;
+            }
         },
         linkToUsername: function linkToUsername(username) {
             return "/user/@" + username;
@@ -49494,6 +49498,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         removeUserFromList: function removeUserFromList(id) {
             this.users.splice(id, 1);
             this.getAllUsersToFollow();
+        },
+        reduceFirstNameCharacters: function reduceFirstNameCharacters(name) {
+            var reducedname = name.substring(0, 6);
+            return reducedname + "...";
         }
     }
 });
@@ -49524,10 +49532,7 @@ var render = function() {
                   [
                     _c("img", {
                       staticClass: "image is-64x64 is-circle",
-                      attrs: {
-                        src: _vm.linkToThumb(user.profile_image["path"]),
-                        alt: "Image"
-                      }
+                      attrs: { src: _vm.linkToThumb(user.images), alt: "Image" }
                     })
                   ]
                 ),
@@ -49538,8 +49543,8 @@ var render = function() {
                   [
                     _vm._v(
                       "\r\n                    " +
-                        _vm._s(user.first_name) +
-                        " \r\n                "
+                        _vm._s(_vm.reduceFirstNameCharacters(user.last_name)) +
+                        "\r\n                "
                     )
                   ]
                 ),
@@ -49667,13 +49672,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     mounted: function mounted() {
         this.getMoods();
+        this.listenForEvents();
     },
     data: function data() {
         return {
             form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */]({
                 profileID: '',
                 body: '',
-                mood: ''
+                mood: '',
+                pictures: []
             }),
             moods: [],
             selectedMood: 0,
@@ -49712,6 +49719,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         resetFormFields: function resetFormFields() {
             this.formBody = '', this.selectedMood = 0;
+        },
+        listenForEvents: function listenForEvents() {
+            var _this3 = this;
+
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('picture-uploaded', function (ids) {
+                _this3.form.pictures = ids;
+            });
         }
     }
 });
@@ -53247,7 +53261,6 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
-              _vm.onSubmit($event)
             }
           }
         },
@@ -53365,7 +53378,17 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(1)
+            _c("div", { staticClass: "column" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "button is-link",
+                  attrs: { type: "submit" },
+                  on: { click: _vm.onSubmit }
+                },
+                [_vm._v("Post Status...")]
+              )
+            ])
           ])
         ]
       )
@@ -53379,18 +53402,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "icon is-medium is-left" }, [
       _c("i", { staticClass: "fa fa-heart" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "column" }, [
-      _c(
-        "button",
-        { staticClass: "button is-link", attrs: { type: "submit" } },
-        [_vm._v("Post Status...")]
-      )
     ])
   }
 ]
@@ -53510,6 +53521,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -53533,7 +53546,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             form: new __WEBPACK_IMPORTED_MODULE_2__utilities_Form__["a" /* default */](),
             statuses: [],
-            imagePath: this.urlpath + "/",
+            imagePath: this.urlpath,
             status: '',
             nextPage: '',
             previousPage: '',
@@ -53613,6 +53626,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.onLastPage = false;
             }
         },
+        addImageIDtoStatus: function addImageIDtoStatus(IDS) {},
         listenForEvents: function listenForEvents() {
             var _this5 = this;
 
@@ -53635,6 +53649,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on("user_unfollowed", function (unfollowed) {
                 _this5.getStatus();
             });
+        },
+        imageIfExisting: function imageIfExisting(image) {
+            if (image.length == 0) {
+                return "/default.jpg";
+            } else {
+                return "/" + image[0].thumb;
+            }
         },
         formatDate: function formatDate(date) {
             var differencesInTime = this.getTimeDifferences(date);
@@ -54636,7 +54657,9 @@ var render = function() {
                         _c("img", {
                           staticClass: "avatar is-circle",
                           attrs: {
-                            src: _vm.imagePath + status.user.profile_image.path,
+                            src:
+                              _vm.imagePath +
+                              _vm.imageIfExisting(status.user.images),
                             alt: "Image"
                           }
                         })
@@ -54949,7 +54972,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         prepareUser: function prepareUser(user) {
             this.user = user;
-            this.imagePath = this.propimagepath + "/" + user.profile_image.path;
+            if (user.images.length == 0) {
+                this.imagePath = this.propimagepath + "/default.jpg";
+            } else {
+                this.imagePath = this.propimagepath + "/" + user.images[0].thumb;
+            }
             this.currentUser = this.propcurrentuserid;
             this.followersCount = user.followers_count;
             this.followingCount = user.following_count;
@@ -59331,6 +59358,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_dropzone__ = __webpack_require__(178);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_dropzone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utilities_dropzone__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__(3);
 var _Dropzone$options$Pho;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -59372,58 +59400,68 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 
-
 __WEBPACK_IMPORTED_MODULE_0__utilities_dropzone___default.a.autoDiscover = false;
+
 __WEBPACK_IMPORTED_MODULE_0__utilities_dropzone___default.a.options.Photos = (_Dropzone$options$Pho = {
     paramName: "picture",
     maxFilesize: 1, // MB,
     createImageThumbnails: true,
     resizeWidth: 200,
-    addRemoveLinks: true,
-    addRemoveAllFiles: true
+    addRemoveLinks: true
 }, _defineProperty(_Dropzone$options$Pho, 'resizeWidth', 200), _defineProperty(_Dropzone$options$Pho, 'maxFiles', 10), _defineProperty(_Dropzone$options$Pho, 'acceptedFiles', '.jpeg, .jpg, .png, .bmp'), _Dropzone$options$Pho);
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['token'],
     mounted: function mounted() {
-        var vm = this;
-        var myDropzone = new __WEBPACK_IMPORTED_MODULE_0__utilities_dropzone___default.a(".dropzone", {
-            url: "/picture-upload",
-            headers: { "X-CSRF-TOKEN": this.token }
-        });
-        /*  myDropzone.on("sending", function(file, xhr, formData) {
-             formData.append("imageUUID", file.lastModified);
-        }); */
-
-        myDropzone.on("success", function (file, response) {
-            //vm.addToPhoto(file.upload.uuid, response.image)
-        });
-        myDropzone.on("maxfilesexceeded", function (file, response) {
-            alert('You cant upload more than 10 pictures at a time...you can remove some of those uploaded or simply make new post...');
-        });
-        myDropzone.on("removedfile", function (file, response) {
-            //console.log(file.xhr.response)
-            vm.removeFileFromDB(file.xhr.response);
-        });
+        this.setForm();
     },
     data: function data() {
         return {
             ModalBox: '',
-            images: []
+            imagesID: [],
+            file: '',
+            myDropzone: ''
         };
     },
 
     methods: {
         openModal: function openModal() {
             this.ModalBox = 'is-active';
+            this.imagesID = [];
+            this.myDropzone.destroy();
+            this.setForm();
         },
         closeModal: function closeModal() {
             this.ModalBox = null;
         },
-        addToPhoto: function addToPhoto(fileID, imageIdOnDB) {
-            this.images = { image: { fileUUID: fileID, imageID: imageIdOnDB } };
+        addToPhotoToStatus: function addToPhotoToStatus(imageID, file) {
+            this.imagesID.push(imageID);
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('picture-uploaded', this.imagesID);
+            this.file = file;
         },
         removeFileFromDB: function removeFileFromDB(id) {
             return axios.delete('remove-picture' + "/" + id);
+        },
+        setForm: function setForm() {
+            var vm = this;
+            this.myDropzone = new __WEBPACK_IMPORTED_MODULE_0__utilities_dropzone___default.a(".dropzone", {
+                autoDiscover: false,
+                url: "/picture-upload",
+                headers: { "X-CSRF-TOKEN": this.token }
+            });
+            /*  myDropzone.on("sending", function(file, xhr, formData) {
+                 formData.append("imageUUID", file.lastModified);
+            }); */
+
+            this.myDropzone.on("success", function (file, response) {
+                vm.addToPhotoToStatus(response, file);
+            });
+
+            this.myDropzone.on("maxfilesexceeded", function (file, response) {
+                alert('You cant upload more than 10 pictures at a time...you can remove some of those uploaded or simply make new post...');
+            });
+            this.myDropzone.on("removedfile", function (file, response) {
+                //vm.removeFileFromDB(file.xhr.response)
+            });
         }
     }
 

@@ -56,8 +56,8 @@ Route::group([ 'middleware'=>'auth'], function(){
     Route::post('like-status/{status}', 'Ajax\LikesController@store');
     Route::get('like-status/{userID}/{statusID}', 'Ajax\LikesController@likeStatus');
     Route::post('reshare/{statusID}', 'Ajax\ResharesController@store');
-    Route::post('picture-upload/', 'Ajax\PictureUploadController@store');
-    Route::delete('remove-picture/{imageUUID}', 'Ajax\PictureUploadController@destroy');
+    Route::post('picture-upload/', 'Ajax\WallPicturesController@store');
+    Route::delete('remove-picture/{imageUUID}', 'Ajax\WallPicturesController@destroy');
 });
 /* Users Directory Page*/
 

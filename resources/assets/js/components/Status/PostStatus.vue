@@ -1,7 +1,7 @@
 <template>
     <div class="message ">                            
         <div class="message-body">
-            <form action="" method="POST" @submit.prevent="onSubmit">
+            <form action="" method="POST" @submit.prevent>
                 <input type="hidden" name="profileID" v-model="profile">
                 <textarea class="textarea mb-1" name="body" placeholder="Whats on your mind...?" v-model="formBody" required></textarea> 
                 <div class="columns">
@@ -22,7 +22,7 @@
                                   </div>
                     </div>
                     <div class="column">
-                        <button type="submit" class="button is-link">Post Status...</button>
+                        <button type="submit" class="button is-link" @click="onSubmit">Post Status...</button>
                     </div>
                 </div>
              </form>
@@ -42,19 +42,21 @@ import PicturesUpload from './PicturesUpload'
 
         mounted(){
             this.getMoods()
+            this.listenForEvents()
         }, 
         data(){
             return{
                 form: new Form({
                     profileID:'',
                     body: '',
-                    mood: ''
+                    mood: '',
+                    pictures:[]
                 }),
                 moods: [],
                 selectedMood: 0,
                 defaultMood: 1,
                 formBody: '',
-                profile: ''
+                profile: '',
             }
         },
         methods:{
@@ -81,8 +83,12 @@ import PicturesUpload from './PicturesUpload'
             resetFormFields(){
                 this.formBody = '',
                 this.selectedMood = 0
+            },
+            listenForEvents(){
+                EventBus.$on('picture-uploaded',ids=>{
+                    this.form.pictures = ids
+                })  
             }
-           
         },
     }
 </script>

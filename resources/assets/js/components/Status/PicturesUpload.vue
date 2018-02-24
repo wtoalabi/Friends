@@ -35,24 +35,53 @@
 </template>
 <script>
 import Dropzone from './../../utilities/dropzone'
-
 Dropzone.autoDiscover = false;
+import {EventBus} from './../../utilities/EventBus'
 Dropzone.options.Photos = {
     paramName: "picture", 
     maxFilesize: 1, // MB,
     createImageThumbnails: true,
     resizeWidth: 200,
     addRemoveLinks: true,
-    addRemoveAllFiles: true,
     resizeWidth: 200,
-    maxFiles: 10,
+    maxFiles: 10,    
     acceptedFiles: '.jpeg, .jpg, .png, .bmp',
 };
 export default {
     props:['token'],
     mounted(){
-        var vm = this;
-        var myDropzone = new Dropzone(".dropzone",{
+    this.setForm()  
+},
+    data(){
+        return{
+            ModalBox: '',
+            imagesID:[],
+            file: '',
+            myDropzone:''
+        }
+    },
+    methods:{
+        openModal(){
+            this.ModalBox = 'is-active'
+            this.imagesID = []
+            this.myDropzone.destroy();
+            this.setForm()
+        },
+        closeModal(){
+            this.ModalBox = null
+        },
+        addToPhotoToStatus(imageID, file){
+            this.imagesID.push(imageID)
+            EventBus.$emit('picture-uploaded', this.imagesID)
+            this.file = file  
+        },
+        removeFileFromDB(id){
+            return axios.delete('remove-picture'+"/" + id);
+        },
+        setForm(){
+            var vm = this
+            this.myDropzone = new Dropzone(".dropzone",{
+            autoDiscover: false,
             url: "/picture-upload",
             headers: { "X-CSRF-TOKEN": this.token}
         });
@@ -60,37 +89,17 @@ export default {
            formData.append("imageUUID", file.lastModified);
     }); */
     
-        myDropzone.on("success", function(file, response) {
-            //vm.addToPhoto(file.upload.uuid, response.image)
-    });
-        myDropzone.on("maxfilesexceeded", function(file, response) {
+        this.myDropzone.on("success", function(file, response) {
+            vm.addToPhotoToStatus(response, file)
+                });
+               
+        this.myDropzone.on("maxfilesexceeded", function(file, response) {
             alert('You cant upload more than 10 pictures at a time...you can remove some of those uploaded or simply make new post...')
-    });
-        myDropzone.on("removedfile", function(file, response) {
-            //console.log(file.xhr.response)
-            vm.removeFileFromDB(file.xhr.response)
-    });
-      
-},
-    data(){
-        return{
-            ModalBox: '',
-            images:[],
+                });
+        this.myDropzone.on("removedfile", function(file, response) {
+            //vm.removeFileFromDB(file.xhr.response)
+            });
         }
-    },
-    methods:{
-        openModal(){
-            this.ModalBox = 'is-active'
-        },
-        closeModal(){
-            this.ModalBox = null
-        },
-        addToPhoto(fileID, imageIdOnDB){
-            this.images = {image: {fileUUID : fileID, imageID: imageIdOnDB}}
-        },
-        removeFileFromDB(id){
-            return axios.delete('remove-picture'+"/" + id);
-        },
     }
   
 }

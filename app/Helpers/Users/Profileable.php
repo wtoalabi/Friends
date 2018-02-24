@@ -20,9 +20,9 @@ Trait Profileable{
          return 'username';
     }
     
-    public function profile_image(){
+    /* public function profile_image(){
         return $this->hasOne(ProfileImage::class);
-    }
+    } */
     public function followers(){
         return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id')->withTimestamps();
     }

@@ -30,14 +30,13 @@ class StatusController extends Controller
      */
     public function store(ValidateStatus $valid)
     {
-        dd(collect($valid->request));
+        //dd(collect($valid->request));
         //dd(request()->all());
         $status = CreateStatus::with($valid->request);
-        //dd($status);
         event(new StatusCreated($status));
         $status = Status::where('id', $status->id)->with([
                     'mood','user'=>function($query){
-                        $query->with('profile_image');
+                        $query->with('images');
                     }])->first();
                     //dd($status);
         return response(["message"=>"Status Posted", "status"=> $status], 200);

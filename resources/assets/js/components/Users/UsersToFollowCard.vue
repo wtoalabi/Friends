@@ -4,10 +4,10 @@
         <div class="columns">
             <div class="column is-4" v-for="(user, index) in chunkedColumn" :key="user.id">
                  <a :href="linkToUsername(user.username)">                    
-                    <img :src="linkToThumb(user.profile_image['path'])" alt="Image" class="image is-64x64 is-circle" > 
+                    <img :src="linkToThumb(user.images)" alt="Image" class="image is-64x64 is-circle" > 
                  </a>
                  <a :href="linkToUsername(user.username)">
-                    {{user.first_name}} 
+                    {{reduceFirstNameCharacters(user.last_name)}}
                 </a> 
                                  
                 <followbutton :following="user.id" :isfollowed="isfollowed"></followbutton>
@@ -22,7 +22,7 @@ import {EventBus} from './../../utilities/EventBus'
 
     export default {
         props:['following', 'userstofollow','imagepath', 'isfollowed'],
-        mounted(){
+        mounted(){            
          this.getAllUsersToFollow()
          EventBus.$on('userFollowed',id=>{
                 this.removeUserFromList(id)
@@ -49,8 +49,13 @@ import {EventBus} from './../../utilities/EventBus'
                 this.thumbPath = this.imagepath
                 this.chunkedUsers = _.chunk(data, 3)
             },
-            linkToThumb(username){
-                return this.thumbPath+"/"+username
+            linkToThumb(image){
+                if(image == 0){
+                    return this.thumbPath+ "/" +"default.jpg"
+                }
+                else{
+                return this.thumbPath + "/" +image[0].thumb
+                }
             },
             linkToUsername(username){
                 return "/user/@"+username
@@ -58,6 +63,10 @@ import {EventBus} from './../../utilities/EventBus'
             removeUserFromList(id){
                 this.users.splice(id, 1);
                 this.getAllUsersToFollow()
+            },
+            reduceFirstNameCharacters(name){
+                var reducedname = name.substring(0,6)
+                return reducedname + "..."
             }
             
         },

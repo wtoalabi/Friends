@@ -5,7 +5,7 @@
     @foreach($chunkedUsers as $user)
     <div class="column is-4">
         <a href="/user/{{$user->usernameSlug()}}">
-        <img class=" image is-64x64 is-circle"src="{{asset("storage/user/".$user->profile_image->path)}}" alt="Image"> 
+        <img class=" image is-64x64 is-circle"src="{{asset("storage/user/".$user->profile_image())}}" alt="Image"> 
             {{$user->first_name}}
 
             @if($currentUser->id != $user->id)

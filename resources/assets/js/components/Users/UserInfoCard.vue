@@ -79,7 +79,11 @@ export default {
       },
       prepareUser(user){
           this.user = user
-          this.imagePath = this.propimagepath+"/"+user.profile_image.path
+          if(user.images.length == 0){
+              this.imagePath = this.propimagepath+"/default.jpg"
+          }else{
+            this.imagePath = this.propimagepath+"/"+ user.images[0].thumb
+          }
           this.currentUser = this.propcurrentuserid
           this.followersCount = user.followers_count
           this.followingCount = user.following_count

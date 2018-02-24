@@ -16,10 +16,11 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->integer('album_id')->unsigned();
+            $table->integer('album_id')->unsigned()->nullable();
+            $table->integer('folderID')->unsigned();
             $table->string('full');
             $table->string('thumb');
-            $table->boolean('profile')->nullable();
+            $table->boolean('profile')->default(0);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
             $table->timestamps();

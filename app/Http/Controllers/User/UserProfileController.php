@@ -16,7 +16,7 @@ class UserProfileController extends Controller
         
         $profileStatuses = Status::where('profile_id', $profileUser->id)
         ->with(['mood','user'=>function($query){
-            $query->with('profile_image');
+            $query->with('images');
         }])        
         ->latest()
         ->paginate(5);

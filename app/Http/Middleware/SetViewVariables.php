@@ -17,18 +17,18 @@ class SetViewVariables
        { $currentUser = User::where('id', Auth::user()->id)
         ->with(['statuses',
             'following'=>function($query){
-                $query->with('profile_image');
+                $query->with('images');
             },
             'followers'=> function($query){
-                $query->with('profile_image');
+                $query->with('images');
         }
-            ,'profile_image'])
+            ,'images'])
         ->first();
 
         $usersToFollow = $currentUser->following()->pluck('follow_id');
         $usersToFollow[] = $currentUser->id;
         $usersToFollow =  User::whereNotIn('id', $usersToFollow)
-                            ->with('profile_image','following','followers')
+                            ->with('images','following','followers')
                             ->inRandomOrder()
                             ->take(2)->get();
         view()->share(['currentUser'=>$currentUser, 'usersToFollow'=>$usersToFollow]);

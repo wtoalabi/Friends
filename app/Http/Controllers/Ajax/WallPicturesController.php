@@ -8,16 +8,14 @@ use App\Helpers\Image\ImageUpload;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class PictureUploadController extends Controller
+class WallPicturesController extends Controller
 {
     public function store (){
         //return true;
         //dd(request(['picture','imageUUID']));
         //dd(request()->all());
         $user = Auth::user();
-        $album = UserAlbum::create("Wall Picture", $user->id);
-        //dd($album);
-        $image = (new ImageUpload(request('picture') ,$user, $album, $profile=0))
+        $image = (new ImageUpload(request('picture') ,$user, $folderID=2, $album = null, $profile=0))
          ->process();
         return response($image->id);
     }

@@ -28,7 +28,7 @@ class StreamController extends Controller
     {
         $userIDs = $this->getIDs();
         $statuses = Status::with(['user'=> function($query){
-            $query->with('profile_image');
+            $query->with('images');
         },'mood'])
         ->whereIn('user_id', $userIDs)
         ->latest()->paginate(5);

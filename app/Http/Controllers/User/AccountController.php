@@ -25,7 +25,6 @@ class AccountController extends Controller
     public function store(ValidatesUser $validated)
     {
         $user = Account::persist(request());
-        //dd($user);
 
         event(new UserRegistered($user));
 

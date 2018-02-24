@@ -12,7 +12,9 @@ class StatusesController extends Controller
     public function index (){
         $userIDs = $this->getIDs();
         $statuses = Status::with(['user' => function($query){
-            $query->with('profile_image');
+            $query->with(['images'=>function($query){
+                $query->where('profile', 1)->first();
+            }]);
         },'likes','mood','comments'])
         ->withCount('comments','likes','reshares')
         ->whereIn('user_id', $userIDs)
