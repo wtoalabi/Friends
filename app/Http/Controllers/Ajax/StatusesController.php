@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Statuses\Status;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class StatusesController extends Controller
 {
@@ -32,6 +33,9 @@ class StatusesController extends Controller
     
     public function destroy ($id){
         $status = Status::findOrFail($id);
+        foreach($status->status_images as $image){
+            Storage::delete(["public/user/$image->full","public/user/$image->thumb"]);
+        }
         $status->delete();
         return response(['message'=> "Status Destroyed!","delete_status"=>$status->id], 200);
     }

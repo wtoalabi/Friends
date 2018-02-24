@@ -49887,7 +49887,7 @@ __WEBPACK_IMPORTED_MODULE_0__utilities_dropzone___default.a.options.Photos = (_D
                 alert('You cant upload more than 10 pictures at a time...you can remove some of those uploaded or simply make new post...');
             });
             this.myDropzone.on("removedfile", function (file, response) {
-                //vm.removeFileFromDB(file.xhr.response)
+                vm.removeFileFromDB(file.xhr.response);
             });
         }
     }
