@@ -3,7 +3,7 @@
         <div class="control">
             <div class="tags has-addons" @click="openCommentBox">
                 <span class="tag">{{count}}</span>
-                    <a class="tag mr-1 is-info" title="LikeText">
+                    <a class="tag mr-1 is-info" title="Post a Comment">
                         <i class="fa fa-reply"></i>
                     </a>
             </div>

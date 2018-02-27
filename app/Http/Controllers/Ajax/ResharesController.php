@@ -20,4 +20,7 @@ class ResharesController extends Controller
         return $reshared;
 
     }
+    public function show ($id){
+         return Status::find($id);
+    }
 }

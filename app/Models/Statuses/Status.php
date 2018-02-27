@@ -15,7 +15,7 @@ class Status extends Model
 {
     use Presentable;
     
-    protected $fillable = ['user_id', 'body', 'mood_id','profile_id'];
+    protected $fillable = ['user_id', 'body', 'mood_id','profile_id','slug'];
 
     public function mood (){
          return $this->belongsTo(Mood::class);

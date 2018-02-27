@@ -42,7 +42,7 @@ import {EventBus} from './../../utilities/EventBus'
                 },
         methods:{
             getAllUsersToFollow(){
-                return axios.get('users-to-follow').then(response=>this.getUsers(response.data))          
+                return axios.get('/users-to-follow').then(response=>this.getUsers(response.data))          
             },
             getUsers(data){
                 this.users = data

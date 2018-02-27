@@ -12,7 +12,6 @@ class SetViewVariables
 
     public function handle($request, Closure $next)
     {
-        
        if(Auth::check())
        { $currentUser = User::where('id', Auth::user()->id)
         ->with(['statuses',

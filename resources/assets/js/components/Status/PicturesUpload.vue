@@ -41,9 +41,6 @@ Dropzone.options.Photos = {
     paramName: "picture", 
     maxFilesize: 1, // MB,
     createImageThumbnails: true,
-    resizeWidth: 200,
-    addRemoveLinks: true,
-    resizeWidth: 200,
     maxFiles: 10,    
     acceptedFiles: '.jpeg, .jpg, .png, .bmp',
 };
@@ -96,9 +93,6 @@ export default {
         this.myDropzone.on("maxfilesexceeded", function(file, response) {
             alert('You cant upload more than 10 pictures at a time...you can remove some of those uploaded or simply make new post...')
                 });
-        this.myDropzone.on("removedfile", function(file, response) {
-            vm.removeFileFromDB(file.xhr.response)
-            });
         }
     }
   

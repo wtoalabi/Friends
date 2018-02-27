@@ -25,23 +25,19 @@ Route::group(['middleware'=>'auth', 'prefix'=>''], function(){
     //Route::resource('user','User\UserProfile');
 });
 
-/* Statuses */
-    Route::resource('statuses', 'Statuses\StatusController')
-            ->middleware('auth')
-            ->only('store');
 
 /* ProfilePage */
 
 Route::get('user/@{username}', 'User\UserProfileController@show')
-        ->name('profile')
-        ->middleware('auth');
+->name('profile')
+->middleware('auth');
 
-        
+
 /* Following */
 
 Route::resource('following', 'User\FollowingController')
-        ->only(['store', 'destroy'])
-        ->middleware('auth');
+->only(['store', 'destroy'])
+->middleware('auth');
 
 
 /* Ajax Requests */
@@ -62,5 +58,14 @@ Route::group([ 'middleware'=>'auth'], function(){
 /* Users Directory Page*/
 
 Route::get('users', 'User\UsersDirectoryController@index')
-        ->name('users_directory')
-        ->middleware('auth');
+->name('users_directory')
+->middleware('auth');
+
+/* Statuses */
+Route::group(['middleware'=>'auth'],function(){
+
+    Route::resource('statuses', 'Statuses\StatusController')
+    ->middleware('auth')
+    ->only('store');
+    Route::get('{username}/{slug}', "Statuses\StatusController@show");
+});

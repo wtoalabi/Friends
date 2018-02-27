@@ -25,7 +25,7 @@
             </div>
     <div class="control">
         <div class="tags has-addons">
-            <span class="tag">{{count}}</span>
+            <span class="tag">{{reShareCount}}</span>
             <a class="tag is-warning mr-1" @click="clicked">
                 <i class="fa fa-retweet"></i>
             </a>
@@ -39,13 +39,15 @@ import {EventBus} from "./../../utilities/EventBus";
 export default {
   props:['count', 'status'],
   mounted(){
+      this.reShareCount = this.count
   },
   data(){
       return{
           modalStatus: '',
           form: new Form({
               comment: '',
-          })
+          }),
+          reShareCount: ''
       }
 
   },
@@ -60,6 +62,7 @@ export default {
       statusShared(response){
           EventBus.$emit('status-shared', response)
           this.closeModal()
+          this.reShareCount ++
       },
       closeModal(){
           this.modalStatus = null

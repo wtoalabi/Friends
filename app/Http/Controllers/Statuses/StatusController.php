@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Statuses;
 
 use Alert;
+use App\Models\Users\User;
 use Illuminate\Http\Request;
 use App\Models\Statuses\Status;
 use App\Http\Controllers\Controller;
@@ -48,9 +49,17 @@ class StatusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show($username, $slug)
+    {   
+        $slug = $username . "/". $slug;
+        //return Status::where('slug', $slug)
+        $status = Status::where('slug', $slug)
+                ->with(['status_images','user' => function($query){
+                    $query->with('images');
+                },'mood','likes','comments','reshares'])
+                ->withCount('likes','comments', 'reshares')
+                ->first();
+        return view('users.statuses.status-details', compact('status'));
     }
 
     /**

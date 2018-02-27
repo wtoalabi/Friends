@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers\Statuses;
 
+use Carbon\Carbon;
 use App\Models\Images\Image;
 use App\Models\Statuses\Status;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +20,11 @@ class CreateStatus {
         if($request['mood'] == 0){
             $request['mood'] = 1;
         }
+        $slug = static::generateSlug($request['body']);
         $status = Status::create([
             'user_id'=> Auth::user()->id,
             'body'=> $request['body'],
+            'slug'=> $slug,
             'mood_id'=> $request['mood'],
             'profile_id'=> $request['profileID'],
             ]);
@@ -37,5 +40,12 @@ class CreateStatus {
            $status->status_images()->save($image);
         }
         return;
+    }
+
+    public static function generateSlug ($body){
+        $name = Auth::user()->username;
+        
+        $slug = str_slug(str_limit($body, 20));
+        return sprintf("%s/%s", $name, str_random(30).time());
     }
 }

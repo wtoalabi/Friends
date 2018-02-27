@@ -3,7 +3,9 @@ window._ = require('lodash');
 import Vue from 'vue'
 import axios from 'axios'
 import swal from 'sweetalert2';
+import VueImg from 'v-img';
 
+Vue.use(VueImg);
 window.swal = swal;
 
 window.axios = axios;

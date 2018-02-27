@@ -2,7 +2,7 @@
 <div>
     <div class="control">
         <div class="tags has-addons" @click="processClick(statusid)">
-            <span class="tag">{{count}}</span>
+            <span class="tag">{{likesCount}}</span>
             <a class="tag mr-1" :class="LikeClass" :title="LikeText">
                 <i class="fa fa-heart"></i>
             </a>
@@ -15,14 +15,15 @@ import {EventBus} from './../../utilities/EventBus'
 export default {
     props:['statusid', 'count','currentuser'],
     mounted(){
-        //console.log(this.statusid)
+        this.likesCount = this.count
           this.checkLikeStatus(this.currentuser,this.statusid)  
         },
     data(){
         return{
             LikeText:'',
             statusID: '',
-            LikeClass: ''
+            LikeClass: '',
+            likesCount: ''
 
         }
     },
@@ -35,10 +36,12 @@ export default {
         setResponse(response){
             if(response == 200){
                 this.liked()
+                this.likesCount ++
                 EventBus.$emit('status-liked')
                 }
                 if(response == 300){
                     this.unLiked()
+                    this.likesCount --
                     EventBus.$emit('status-unLiked')
                 }
             },

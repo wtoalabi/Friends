@@ -2,6 +2,7 @@
     <div>
         <div v-for="status in statuses" :key="status.id">
             <div class="box message mb-1" :class="status.mood.color">
+            <a :href="'/'+status.slug" @click.self.prevent>
                 <article class="media message-body">
                     <div class="media-left">
                         <a :href="decorateUsername(status.user.username)">
@@ -24,20 +25,21 @@
             </div>
         <nav class="level is-mobile">
             <div class="level-left">
-               <div class="field is-grouped is-grouped-multiline">
+               <div class="field is-grouped is-grouped-multiline" @click.prevent.self>
                     <postcomment :count="status.comments_count" 
                                  :statusid="status.id">
                                  </postcomment>
                     <likestatus :statusid="status.id" :count="status.likes_count" :currentuser="currentuserid" ></likestatus>
                     <resharestatus :count="status.reshares_count" :status="status"></resharestatus>
-                    </div>
+                </div>
                 </div>
             <div class="level-right" v-show="isOwnedBy(status.user.id)">
-                    <button class="button" @click="deleteStatus(status.id) " type="submit">Delete Status</button>
+                <button class="button" @click.prevent.self @click="deleteStatus(status.id) " type="submit">Delete Status</button>
             </div>
         </nav>
         </div>
     </article>
+    </a>
     </div>
     </div>
 <nav v-show="paginate" class="pagination is-rounded" role="navigation" aria-label="pagination">
@@ -77,7 +79,7 @@ import resharestatus  from "./ReshareStatus";
              onFirstPage: '',
              stream:'',
              onLastPage: null,
-             paginate: null,
+             paginate: false,
         }
         },
         methods:{
@@ -95,7 +97,10 @@ import resharestatus  from "./ReshareStatus";
                   this.paginate = true
                   this.setPagination(statuses)
               }                   
-                this.statuses = statuses.data
+                else{
+                    this.paginate = false
+                }
+                    this.statuses = statuses.data
             },
             isOwnedBy(userID){
                 return userID == this.currentuserid
@@ -142,13 +147,8 @@ import resharestatus  from "./ReshareStatus";
                 },
             listenForEvents(){
                 EventBus.$on('status_posted',status=>{
-                    this.newStatus(status)
-                })              
-                EventBus.$on('status-liked',liked=>{this.getStatus()})
-                EventBus.$on('status-unLiked',liked=>{this.getStatus()})
+                    this.newStatus(status)})              
                 EventBus.$on('reply-added',reply=>{this.getStatus()})
-                EventBus.$on('status-shared',shared=>{this.getStatus()})
-
                 EventBus.$on("user_unfollowed", unfollowed=> {this.getStatus()})
                 },
                 imageIfExisting(image){
@@ -193,23 +193,25 @@ import resharestatus  from "./ReshareStatus";
                return "/user/@"+username
             },
         chunkImages(images){
-            if(images.length <= 1){
-                
-                return _.chunk(images,1)
-
-            }
-            else if(images.length == 2){
-                return _.chunk(images,2)
-
-            }
-            else if(images.length == 3){
-                return _.chunk(images,3)
-
-            }
-            else if(images.length >= 4){
-                return _.chunk(images,4)
-
-            }
+             var $length = images.length
+             if(images.length == 2 || images.length == 4){  
+                 return _.chunk(images, 2)
+             }
+             else if(images.length == 3 || images.length == 5 || images.length == 8){  
+                 return _.chunk(images, 3)
+             }
+             else if(images.length == 6 || images.length == 7 || images.length == 10){  
+                 return _.chunk(images, 4)
+             }
+             else if(images.length == 9){
+                 return _.chunk(images, 5)
+             }
+             else{
+                 return _.chunk(images, 1)
+             }
+        },
+        reduceBody(body){
+            return body.substring(0,50) + "..."
         }
         },
     }

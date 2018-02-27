@@ -4,35 +4,31 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStatusesTable extends Migration
+class CreateProfileImagesTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+   /*  public function up()
     {
-        Schema::create('statuses', function (Blueprint $table) {
+        Schema::create('profile_images', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->integer('mood_id')->unsigned();
-            $table->integer('profile_id');
-            $table->string('slug');
-            $table->text('body');
+            $table->string('path')->default('default.jpg');            
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('mood_id')->references('id')->on('moods')->onDelete('cascade');
             $table->timestamps();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
+    /* public function down()
     {
-        Schema::dropIfExists('statuses');
-    }
+        Schema::dropIfExists('profile_images');
+    } */
 }
