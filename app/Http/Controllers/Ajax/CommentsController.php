@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
+    public function index ($id){
+         return Comment::where('status_id', $id)
+            ->with(['user'=>function($query){
+                $query->with(['images'=>function($query){
+                    $query->where('profile', 1)->first();
+                }]);
+            }])
+            ->latest()
+            ->paginate(2);
+    }
     public function store (Status $status){
         //dd(request()->all());
         $comment = request() ->validate([
@@ -19,10 +29,16 @@ class CommentsController extends Controller
         $comment = Comment::create([
             'user_id'=> Auth::user()->id,
             'status_id'=> $status->id,
-            'body'=> request('body')
+            'body'=> request('body'),
+            'parent_id'=> request('parentID')
         ]);
-
-        return response(['message'=>"Comment Posted!", 'comment'=>$comment], 200);
-        //dd($comment);
+        
+        return $comment->where('id', $comment->id)
+            ->with(['user'=>function($query){
+                $query->with(['images'=>function($query){
+                    $query->where('profile', 1)->first();
+            }]);
+        }])
+        ->first();
     }
 }

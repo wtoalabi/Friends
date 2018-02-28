@@ -13,8 +13,7 @@
                     </div>
         <div class="media-content">
             <div class="content">          
-                <strong><a :href="decorateUsername(status.user.username)">{{status.user.first_name}} {{status.user.last_name}}</a></strong> 
-                    <small>{{status.user.username}}</small> <small>{{formatDate(status.created_at)}}</small>
+                <nameandtimeheader :user="status.user" :time="status.created_at"></nameandtimeheader>
                     <br>
                     {{status.body}}
                 <div class="columns is-centered" v-for="chunkedImages in chunkImages(status.status_images)" :key="chunkedImages.id">
@@ -50,18 +49,20 @@
 </template>
 
 <script>
-import moment from 'moment'
 import {EventBus} from './../../utilities/EventBus'
 import Form from './../../utilities/Form'
 import postcomment  from "./PostComment";
 import likestatus  from "./LikeStatus";
 import resharestatus  from "./ReshareStatus";
+import NameAndTimeHeader  from "./../Users/NameAndTimeHeader";
     export default {
         props:['urlpath','currentuserid',],
         components:{
             'postcomment': postcomment,
             'likestatus': likestatus,
             'resharestatus': resharestatus,
+            'nameandtimeheader': NameAndTimeHeader
+
         },
         mounted(){
             this.stream = '/stream'
@@ -159,36 +160,6 @@ import resharestatus  from "./ReshareStatus";
                         return "/"+image[0].thumb;
                     }
                 },
-            formatDate(date){
-                var differencesInTime = this.getTimeDifferences(date)
-                return this.formatTimeText(differencesInTime, date)
-            },
-
-            getTimeDifferences(date){
-                var created_at = moment(date).format()
-                var timeNow = moment().format()
-                var createdInSeconds = moment(created_at);
-                var nowInSeconds = moment(timeNow);
-                var differencesInTime= nowInSeconds.diff(createdInSeconds, 'seconds')
-                return differencesInTime - 3600
-            },
-            formatTimeText(differencesInTime, date){
-                if(differencesInTime <= 10){
-                    return "few seconds ago"
-                }
-                else if(differencesInTime <= 59){
-                    return "about a minutes ago"
-                }
-                else if(differencesInTime <= 600 ){
-                    return "few minutes ago"
-                }
-                else if(differencesInTime <= 2000 ){
-                    return "less than an hour ago"
-                }
-                else if(differencesInTime >= 3600 ){
-                    return moment(date).startOf('minutes').fromNow(); 
-                }
-            },
              decorateUsername(username){
                return "/user/@"+username
             },

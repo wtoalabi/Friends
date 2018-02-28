@@ -8,10 +8,7 @@ use App\Models\Images\ProfileImage;
 
 Trait Profileable{
 
-    /* public function getUsernameAttribute ($username){    
-    
-        return str_replace($username, $username, "<a href='/user/$username'>@$username</a>");           
-    } */
+   
     public function setUsernameAttribute($username){
         $this->attributes['username'] = str_slug($username);
    }

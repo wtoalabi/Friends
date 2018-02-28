@@ -1,9 +1,8 @@
 <template>
-  <div>
-      <article class="media">
+  <article class="media">
   <figure class="media-left">
     <p class="image is-64x64">
-      <img :src="userImage" class="avatar is-circle">
+      <img :src="ImagePath+'/'+userImage" class="avatar is-circle">
     </p>
   </figure>
   <div class="media-content">
@@ -28,14 +27,16 @@
     </nav>
   </div>
 </article>
-  </div>
 </template>
+
 <script>
 import Form from "./../../../utilities/Form";
+import {EventBus} from "./../../../utilities/EventBus"
 export default {
-  props:['avatar', 'statusid'],
+      props:['avatar', 'statusid','path'],
 mounted(){
-    this.userImage= this.avatar    
+    this.userImage= this.avatar
+    this.ImagePath = this.path    
     },
 data(){
     return{
@@ -43,15 +44,16 @@ data(){
         form: new Form({
             body: '',
         }),
-        enterKey: ''
+        enterKey: '',
+        ImagePath: ''
     }
 },
-methods:{
+  methods:{
     saveComment(){
-        return this.form.post("/post-comment/" + this.statusid).then(response=>(this.prepareComment(response)))
+        return this.form.post("/post-comment/" + this.statusid).then(response=>(this.AnnounceComment(response)))
     },
-    prepareComment(response){
-        console.log(response)
+    AnnounceComment(response){
+        EventBus.$emit('comment-added', response)
     },
     keyUpEnter(){
         if(this.enterKey == true){

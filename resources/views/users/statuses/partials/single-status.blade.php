@@ -1,7 +1,7 @@
 <div class="box message mb-1 {{$status->mood->color}}">
     <article class="media message-body">
         <div class="media-left">
-            <a href="/{{$status->user->username}}">
+            <a href="/user/{{$status->user->usernameSlug()}}">
                 <figure class="image is-65x65">
                     <img class="avatar is-circle" src="{{asset("storage/user/".$status->user->profile_image())}}" alt="Image">
                 </figure>
@@ -9,8 +9,7 @@
         </div>
         <div class="media-content">
             <div class="content">          
-                <strong><a href="/{{$status->user->username}}"> {{$status->user->first_name}} {{$status->user->last_name}}</a></strong> 
-                <small>{{$status->user->username}}</small> <small>{{$status->created_at->diffForHumans()}}</small>
+                <nameandtimeheader :user="{{$status->user}}" time="{{$status->created_at}}"></nameandtimeheader>
                 <br>
             @if($count = $status->status_images->count())
             @foreach($status->status_images->chunk($status->getSize($count)) as $chunked)
@@ -48,7 +47,11 @@
 </div>
 </article>
 </div>
-<statusdetailedcomments 
-    statusid = {{$status->id}}
-    avatar="{{asset("storage/user/" . $status->user->profile_image())}}">
-</statusdetailedcomments>
+<hr>
+<h1 class="title is-5">Comments:</h1>
+<hr>
+<commentssection
+        statusid = {{$status->id}}
+        avatar="{{$status->user->profile_image()}}"
+        path="{{asset("storage/user/")}}">b
+</commentssection>
