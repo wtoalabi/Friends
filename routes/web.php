@@ -68,6 +68,7 @@ Route::group(['middleware'=>'auth'],function(){
 
     Route::resource('statuses', 'Statuses\StatusController')
     ->middleware('auth')
-    ->only('store');
-    Route::get('{username}/{slug}', "Statuses\StatusController@show");
+    ->only('store','destroy');
+    Route::get('{username}/status/{slug}', "Statuses\StatusController@show");
+    //Route::delete('status/{slug}', "Statuses\StatusController@show");
 });

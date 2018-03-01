@@ -37,9 +37,18 @@
             </resharestatus>
         </div>
         </div>
-    <div class="level-right">
-        <button class="button" type="submit">Delete Status</button>
-    </div>
+        @if($currentUser->id == $status->user->id)
+            <div class="level-right">
+                <form action="{{route('statuses.destroy', $status->id)}}"
+                        method="POST">
+                    {{csrf_field()}}
+                    {{method_field('DELETE')}}
+                    <button class="button is-danger" type="submit"
+                    onclick="return confirm('Are you sure?')">
+                    Delete Status</button>
+                </form>
+            </div>
+        @endif
 </nav>
 </div>
 </article>

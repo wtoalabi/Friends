@@ -42,7 +42,8 @@ class CommentsController extends Controller
     }
 
     public function destroy ($statusID, $commentID){
-         $comment = Comment::where([['id', $commentID],['status_id', $statusID]])
+        $userid = Auth::user()->id;
+         $comment = Comment::where([['id', $commentID],['status_id', $statusID],['user_id', $userid]])
                             ->first();
          $comment->delete();
          return response("Comment Deleted", 200);

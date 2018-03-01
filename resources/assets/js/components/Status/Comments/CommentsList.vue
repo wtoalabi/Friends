@@ -86,11 +86,9 @@ export default {
             }
         },
         removeComment(){
+            this.comments = null
             this.getCommentsPath = this.defaultPath
-            console.log(this.comments)
             this.getComments()
-            console.log(this.comments)
-
         },
         listenToEvents(){
             EventBus.$on('comment-added', comment=>{this.addComment(comment)})

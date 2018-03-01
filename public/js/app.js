@@ -55825,10 +55825,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         removeComment: function removeComment() {
+            this.comments = null;
             this.getCommentsPath = this.defaultPath;
-            console.log(this.comments);
             this.getComments();
-            console.log(this.comments);
         },
         listenToEvents: function listenToEvents() {
             var _this2 = this;

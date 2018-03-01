@@ -46,6 +46,6 @@ class CreateStatus {
         $name = Auth::user()->username;
         
         $slug = str_slug(str_limit($body, 20));
-        return sprintf("%s/%s", $name, str_random(30).time());
+        return sprintf("%s/%s/%s", $name, 'status', str_random(30).time());
     }
 }

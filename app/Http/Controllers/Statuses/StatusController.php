@@ -51,7 +51,8 @@ class StatusController extends Controller
      */
     public function show($username, $slug)
     {   
-        $slug = $username . "/". $slug;
+        $slug = $username . "/status/". $slug;
+        //dd($slug);
         //return Status::where('slug', $slug)
         $status = Status::where('slug', $slug)
                 ->with(['status_images','user' => function($query){
@@ -93,6 +94,10 @@ class StatusController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $status = Status::find($id);
+        $status->delete();
+
+        return redirect('home');
+
     }
 }
