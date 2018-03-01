@@ -54000,7 +54000,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['urlpath', 'currentuserid'],
+    props: ['urlpath', 'currentuserid', 'profileuser'],
     components: {
         'postcomment': __WEBPACK_IMPORTED_MODULE_2__PostComment___default.a,
         'likestatus': __WEBPACK_IMPORTED_MODULE_3__LikeStatus___default.a,
@@ -54037,9 +54037,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getStatus: function getStatus() {
             var _this = this;
 
-            return axios.get(this.stream).then(function (response) {
-                return _this.prepareStatus(response.data);
-            });
+            if (this.profileuser != null) {
+                return axios.get(this.stream + '?User=' + this.profileuser).then(function (response) {
+                    return _this.prepareStatus(response.data);
+                });
+            } else {
+                return axios.get(this.stream).then(function (response) {
+                    return _this.prepareStatus(response.data);
+                });
+            }
         },
         prepareStatus: function prepareStatus(statuses) {
             if (statuses.from != statuses.last_page && statuses.from != null) {

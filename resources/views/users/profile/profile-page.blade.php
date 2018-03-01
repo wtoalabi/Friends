@@ -11,5 +11,9 @@
 @endslot
   
 @include('users.partials.status-post',['profileID'=> $profileUser->id])
-@include('users.partials.status-stream',['statuses'=>$profileStatuses, 'user'=>$profileUser,'sharedBy'=> 'Shared By: '])
+<statusstream 
+    urlpath="{{asset("storage/user")}}"
+    currentuserid= "{{$currentUser->id}}"
+    profileuser={{$profileUser->id}}>
+</statusstream>
 @endcomponent

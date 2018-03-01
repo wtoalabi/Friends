@@ -57,7 +57,7 @@ import resharestatus  from "./ReshareStatus";
 import NameAndTimeHeader  from "./../Users/NameAndTimeHeader";
 import imagegallery  from "./../Status/ImageGallery";
     export default {
-        props:['urlpath','currentuserid',],
+        props:['urlpath','currentuserid','profileuser'],
         components:{
             'postcomment': postcomment,
             'likestatus': likestatus,
@@ -91,7 +91,12 @@ import imagegallery  from "./../Status/ImageGallery";
                 this.getStatus()
             },
             getStatus(){
-                return  axios.get(this.stream).then(response=>(this.prepareStatus(response.data)))
+                if(this.profileuser != null){
+                    return  axios.get(this.stream+'?User='+this.profileuser).then(response=>(this.prepareStatus(response.data)))
+                }
+                else{
+                return  axios.get(this.stream).then(response=>(this.prepareStatus(response.data)))    
+                }
             },
 
             prepareStatus(statuses){
