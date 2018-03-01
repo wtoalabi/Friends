@@ -48,10 +48,10 @@
 </article>
 </div>
 <hr>
-<h1 class="title is-5">Comments:</h1>
-<hr>
+
 <commentssection
         statusid = {{$status->id}}
         avatar="{{$status->user->profile_image()}}"
-        path="{{asset("storage/user/")}}">b
+        path="{{asset("storage/user/")}}"
+        commentscount="{{$status->comments_count}}">b
 </commentssection>

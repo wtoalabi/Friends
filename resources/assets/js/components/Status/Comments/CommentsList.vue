@@ -20,7 +20,7 @@ import SingleComment from './SingleComment'
 export default {
     props:['statusid', 'ImagePath'],
     mounted(){
-        this.getCommentsPath = '/get-comments/' + this.statusid
+        this.getCommentsPath = this.defaultPath
         this.getComments()
         this.listenToEvents()
     },
@@ -32,7 +32,8 @@ export default {
             comments: null,
             paginate: false,
             isLoading: '',
-            getCommentsPath: ''
+            defaultPath:  '/get-comments/' + this.statusid,
+            getCommentsPath:''
         }
     },
 
@@ -42,35 +43,48 @@ export default {
             return axios.get(this.getCommentsPath).then(response=>(this.prepareComments(response.data)))
         },
         prepareComments(response){   
-            console.log(response)
             this.isLoading = ''
-            if(response.from != response.last_page){
-                this.setPagination(response)    
+            //Does Pagination Exists?
+            if(response.total > response.current_page){
+                return this.setPagination(response)                
             }
-            else if(response.from == response.last_page){
-                this.comments = this.comments.concat(response.data)
-                this.paginate = false
+            else if(response.total == 0){ 
+                this.paginate = false                
             }
-            else{
-                this.paginate = false
-                return this.comments = response.data
-            }
+            return this.comments = response.data
         },
         setPagination(response){
             this.paginate =true
-                if(this.comments == null){
-                    this.comments = response.data
-                }
-                else{
-                    this.comments = this.comments.concat(response.data)
-                }
-                this.getCommentsPath = response.next_page_url
+            if(this.comments == null){
+                this.comments = response.data
+            }
+            else{
+                var current = this.comments
+                var incoming = response.data
+                var newcomments = _.concat(current,incoming)
+                this.comments = _.uniqBy(newcomments,'id')            
+            }
+            if(response.current_page == response.last_page){
+                this.paginate = false
+            }
+            this.getCommentsPath = response.next_page_url
         },
         loadMore(){
             this.getComments()
         },
         addComment(comment){
-            this.comments.unshift(comment)
+            if(this.getCommentsPath != this.defaultPath){
+                
+                return this.comments.unshift(comment)
+
+            }
+            else{
+            this.comments = null
+            this.getCommentsPath = this.defaultPath
+            console.log(this.comments)
+            this.getComments()
+            console.log(this.comments)
+            }
         },
         listenToEvents(){
             EventBus.$on('comment-added', comment=>{this.addComment(comment)})

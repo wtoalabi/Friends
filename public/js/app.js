@@ -55636,6 +55636,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CommentsList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__CommentsList__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__CommentsBox__ = __webpack_require__(212);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__CommentsBox___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__CommentsBox__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__ = __webpack_require__(3);
 //
 //
 //
@@ -55652,14 +55653,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['avatar', 'statusid', 'path'],
+    props: ['avatar', 'statusid', 'path', 'commentscount'],
     mounted: function mounted() {
         this.ImagePath = this.path;
+        this.commentsCount = this.commentscount;
+        this.listenForEvents();
     },
 
     components: {
@@ -55668,11 +55674,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            ImagePath: ''
+            ImagePath: '',
+            commentsCount: ''
         };
     },
 
-    methods: {}
+    methods: {
+        format: function format(count) {
+            if (count == 0) {
+                return "There are no comments yet...Add one!";
+            } else if (count == 1) {
+                return "1 Comment";
+            }
+            return count + " Comments";
+        },
+        listenForEvents: function listenForEvents() {
+            var _this = this;
+
+            __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__["a" /* EventBus */].$on('comment-added', function (comment) {
+                _this.increaseCount(comment);
+            });
+        },
+        increaseCount: function increaseCount() {
+            this.commentsCount++;
+            console.log(this.commentsCount);
+        }
+    }
 });
 
 /***/ }),
@@ -55753,7 +55780,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['statusid', 'ImagePath'],
     mounted: function mounted() {
-        this.getCommentsPath = '/get-comments/' + this.statusid;
+        this.getCommentsPath = this.defaultPath;
         this.getComments();
         this.listenToEvents();
     },
@@ -55766,6 +55793,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             comments: null,
             paginate: false,
             isLoading: '',
+            defaultPath: '/get-comments/' + this.statusid,
             getCommentsPath: ''
         };
     },
@@ -55781,24 +55809,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         prepareComments: function prepareComments(response) {
-            console.log(response);
             this.isLoading = '';
-            if (response.from != response.last_page) {
-                this.setPagination(response);
-            } else if (response.from == response.last_page) {
-                this.comments = this.comments.concat(response.data);
+            //Does Pagination Exists?
+            if (response.total > response.current_page) {
+                return this.setPagination(response);
+            } else if (response.total == 0) {
                 this.paginate = false;
-            } else {
-                this.paginate = false;
-                return this.comments = response.data;
             }
+            return this.comments = response.data;
         },
         setPagination: function setPagination(response) {
             this.paginate = true;
             if (this.comments == null) {
                 this.comments = response.data;
             } else {
-                this.comments = this.comments.concat(response.data);
+                var current = this.comments;
+                var incoming = response.data;
+                var newcomments = _.concat(current, incoming);
+                this.comments = _.uniqBy(newcomments, 'id');
+            }
+            if (response.current_page == response.last_page) {
+                this.paginate = false;
             }
             this.getCommentsPath = response.next_page_url;
         },
@@ -55806,7 +55837,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.getComments();
         },
         addComment: function addComment(comment) {
-            this.comments.unshift(comment);
+            if (this.getCommentsPath != this.defaultPath) {
+
+                return this.comments.unshift(comment);
+            } else {
+                this.comments = null;
+                this.getCommentsPath = this.defaultPath;
+                console.log(this.comments);
+                this.getComments();
+                console.log(this.comments);
+            }
         },
         listenToEvents: function listenToEvents() {
             var _this2 = this;
@@ -56591,6 +56631,12 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("h1", { staticClass: "title is-5" }, [
+        _vm._v(_vm._s(_vm.format(_vm.commentsCount)))
+      ]),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
       _c("commentsbox", {
         attrs: { avatar: _vm.avatar, statusid: _vm.statusid, path: _vm.path }
       }),
