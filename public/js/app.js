@@ -55626,13 +55626,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['avatar', 'statusid', 'path', 'commentscount'],
+    props: ['avatar', 'statusid', 'path', 'commentscount', 'currentuser'],
     mounted: function mounted() {
         this.ImagePath = this.path;
         this.commentsCount = this.commentscount;
@@ -55665,10 +55666,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__["a" /* EventBus */].$on('comment-added', function (comment) {
                 _this.increaseCount(comment);
             });
+            __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__["a" /* EventBus */].$on('comment-deleted', function (comment) {
+                _this.decreaseCount(comment);
+            });
         },
         increaseCount: function increaseCount() {
             this.commentsCount++;
-            console.log(this.commentsCount);
+        },
+        decreaseCount: function decreaseCount() {
+            this.commentsCount--;
         }
     }
 });
@@ -55744,12 +55750,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['statusid', 'ImagePath'],
+    props: ['statusid', 'ImagePath', 'currentuser'],
     mounted: function mounted() {
         this.getCommentsPath = this.defaultPath;
         this.getComments();
@@ -55814,16 +55821,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.comments = null;
                 this.getCommentsPath = this.defaultPath;
-                console.log(this.comments);
                 this.getComments();
-                console.log(this.comments);
             }
+        },
+        removeComment: function removeComment() {
+            this.getCommentsPath = this.defaultPath;
+            console.log(this.comments);
+            this.getComments();
+            console.log(this.comments);
         },
         listenToEvents: function listenToEvents() {
             var _this2 = this;
 
             __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on('comment-added', function (comment) {
                 _this2.addComment(comment);
+            });
+            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on('comment-deleted', function (comment) {
+                _this2.removeComment();
             });
         }
     }
@@ -55842,6 +55856,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SingleComment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__SingleComment__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Users_NameAndTimeHeader__ = __webpack_require__(225);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Users_NameAndTimeHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Users_NameAndTimeHeader__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utilities_EventBus__ = __webpack_require__(3);
 //
 //
 //
@@ -55864,21 +55879,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'singlecomment',
-    props: ['ImagePath', 'comment', 'statusid'],
+    props: ['ImagePath', 'comment', 'statusid', 'currentuser'],
     components: {
         'replytocomment': __WEBPACK_IMPORTED_MODULE_0__ReplyToComment___default.a,
         'singlecomment': __WEBPACK_IMPORTED_MODULE_1__SingleComment___default.a,
         'nameandtimeheader': __WEBPACK_IMPORTED_MODULE_2__Users_NameAndTimeHeader___default.a
     },
-    mounted: function mounted() {},
+    mounted: function mounted() {
+        this.checkOwner();
+    },
     data: function data() {
-        return {};
+        return {
+            isOwner: false
+
+        };
     },
 
     methods: {
@@ -55892,6 +55919,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         formatUrl: function formatUrl(username) {
             return '/user/@' + username;
+        },
+        checkOwner: function checkOwner() {
+            if (this.currentuser == this.comment.user.id) {
+                return this.isOwner = true;
+            }
+        },
+        onDelete: function onDelete(status, comment) {
+            var _this = this;
+
+            if (confirm("Are you sure?")) {
+                return axios.delete('/delete-comment/' + this.statusid + '/' + this.comment.id).then(function (response) {
+                    return _this.commentDeleted(response);
+                });
+            }
+        },
+        commentDeleted: function commentDeleted(response) {
+            __WEBPACK_IMPORTED_MODULE_3__utilities_EventBus__["a" /* EventBus */].$emit('comment-deleted', response);
         }
     }
 });
@@ -56249,22 +56293,39 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "media-content" }, [
-        _c(
-          "div",
-          { staticClass: "content" },
-          [
-            _c("nameandtimeheader", {
-              attrs: { user: _vm.comment.user, time: _vm.comment.created_at }
-            }),
-            _vm._v(
-              "\r\n                " +
-                _vm._s(_vm.comment.body) +
-                "\r\n            "
+        _c("div", { staticClass: "content" }, [
+          _c("div", { staticClass: "columns" }, [
+            _c(
+              "span",
+              { staticClass: "column" },
+              [
+                _c("nameandtimeheader", {
+                  attrs: {
+                    user: _vm.comment.user,
+                    time: _vm.comment.created_at
+                  }
+                })
+              ],
+              1
             ),
-            _c("br")
-          ],
-          1
-        )
+            _vm._v(" "),
+            _vm.isOwner
+              ? _c("span", { staticClass: "column is-2" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "button is-danger",
+                      on: { click: _vm.onDelete }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(
+            "\r\n                    " + _vm._s(_vm.comment.body) + "\r\n  "
+          )
+        ])
       ])
     ]),
     _vm._v(" "),
@@ -56301,7 +56362,8 @@ var render = function() {
               attrs: {
                 ImagePath: _vm.ImagePath,
                 comment: comment,
-                statusid: _vm.statusid
+                statusid: _vm.statusid,
+                currentuser: _vm.currentuser
               }
             })
           ],
@@ -56619,7 +56681,11 @@ var render = function() {
         { staticClass: "mt-3" },
         [
           _c("commentslist", {
-            attrs: { statusid: this.statusid, ImagePath: this.ImagePath }
+            attrs: {
+              statusid: this.statusid,
+              ImagePath: this.ImagePath,
+              currentuser: this.currentuser
+            }
           })
         ],
         1
@@ -56844,14 +56910,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['images', 'path', 'lightbox', 'title'],
-    mounted: function mounted() {
-        console.log(this.lightbox);
-    },
+    mounted: function mounted() {},
     data: function data() {
         return {
             galleryImages: this.images,

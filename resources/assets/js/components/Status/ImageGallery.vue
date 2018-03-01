@@ -13,15 +13,12 @@
             </div>
             </div>
         </div>
-    </div>
-</div>
 </template>
 
 <script>
 export default {
     props:['images','path','lightbox', 'title'],
     mounted(){
-        console.log(this.lightbox)
     },
     data(){
         return {

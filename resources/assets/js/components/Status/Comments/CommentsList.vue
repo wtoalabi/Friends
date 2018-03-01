@@ -4,7 +4,8 @@
             <singlecomment 
                 :ImagePath="ImagePath"
                 :comment="comment"
-                :statusid="statusid">
+                :statusid="statusid"
+                :currentuser="currentuser">
             </singlecomment>
         </div>
             <div v-if="paginate">
@@ -18,7 +19,7 @@
 import {EventBus} from './../../../utilities/EventBus'
 import SingleComment from './SingleComment'
 export default {
-    props:['statusid', 'ImagePath'],
+    props:['statusid', 'ImagePath','currentuser'],
     mounted(){
         this.getCommentsPath = this.defaultPath
         this.getComments()
@@ -81,13 +82,19 @@ export default {
             else{
             this.comments = null
             this.getCommentsPath = this.defaultPath
+            this.getComments()
+            }
+        },
+        removeComment(){
+            this.getCommentsPath = this.defaultPath
             console.log(this.comments)
             this.getComments()
             console.log(this.comments)
-            }
+
         },
         listenToEvents(){
             EventBus.$on('comment-added', comment=>{this.addComment(comment)})
+            EventBus.$on('comment-deleted', comment=>{this.removeComment()})
         },
       
     },

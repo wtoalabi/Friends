@@ -50,5 +50,8 @@
         statusid = {{$status->id}}
         avatar="{{$status->user->profile_image()}}"
         path="{{asset("storage/user/")}}"
-        commentscount="{{$status->comments_count}}">b
+        commentscount="{{$status->comments_count}}"
+        currentuser="{{$currentUser->id}}"
+        >
 </commentssection>
+

@@ -21,7 +21,6 @@ class CommentsController extends Controller
             ->paginate(2);
     }
     public function store (Status $status){
-        //dd(request()->all());
         $comment = request() ->validate([
             'body' => 'required'
         ]);
@@ -40,5 +39,12 @@ class CommentsController extends Controller
             }]);
         }])
         ->first();
+    }
+
+    public function destroy ($statusID, $commentID){
+         $comment = Comment::where([['id', $commentID],['status_id', $statusID]])
+                            ->first();
+         $comment->delete();
+         return response("Comment Deleted", 200);
     }
 }

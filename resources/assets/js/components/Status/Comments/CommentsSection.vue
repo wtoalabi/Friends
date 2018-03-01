@@ -11,7 +11,8 @@
         <div class="mt-3">
             <commentslist
                 :statusid="this.statusid" 
-                :ImagePath="this.ImagePath">
+                :ImagePath="this.ImagePath"
+                :currentuser="this.currentuser">
             </commentslist>
         </div>
     </div>
@@ -22,7 +23,7 @@ import CommentsList from './CommentsList'
 import CommentsBox from './CommentsBox'
 import {EventBus} from './../../../utilities/EventBus'
 export default {
-  props:['avatar', 'statusid','path','commentscount'],
+  props:['avatar', 'statusid','path','commentscount','currentuser'],
 mounted(){
        this.ImagePath = this.path
        this.commentsCount = this.commentscount
@@ -50,11 +51,14 @@ methods:{
 },
 listenForEvents(){
     EventBus.$on('comment-added', comment=>{this.increaseCount(comment)})
+    EventBus.$on('comment-deleted', comment=>{this.decreaseCount(comment)})
 },
 increaseCount(){
     this.commentsCount ++
-    console.log(this.commentsCount)
-}
+},
+decreaseCount(){
+    this.commentsCount --
+    }
 }
 }
 </script>
