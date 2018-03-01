@@ -12,15 +12,12 @@
                 <nameandtimeheader :user="{{$status->user}}" time="{{$status->created_at}}"></nameandtimeheader>
                 <br>
             @if($count = $status->status_images->count())
-            @foreach($status->status_images->chunk($status->getSize($count)) as $chunked)
-            <div class="columns is-centered">
-                @foreach($chunked as $image)                    
-                        <div class="column">
-                                <img class="" src="{{asset("storage/user/".$image->thumb)}}" alt="Image">
-                            </div>
-                            @endforeach
-            </div>
-            @endforeach
+            <imagegallery 
+                :images="{{$status->status_images}}"
+                path="{{asset('storage/user/')}}"
+                title="{{str_limit($status->body, 20)}}"
+                :lightbox="true">
+            </imagegallery>
             @endif
         {{$status->body}}
     </div>

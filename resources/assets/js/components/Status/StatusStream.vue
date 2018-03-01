@@ -16,11 +16,11 @@
                 <nameandtimeheader :user="status.user" :time="status.created_at"></nameandtimeheader>
                     <br>
                     {{status.body}}
-                <div class="columns is-centered" v-for="chunkedImages in chunkImages(status.status_images)" :key="chunkedImages.id">
-                    <div class="column" v-for="image in chunkedImages" :key="image.id">
-                        <img class="" :src="imagePath +'/' +image.thumb" alt="Image">
-                    </div>
-                </div>
+                <imagegallery 
+                    :images="status.status_images"
+                    :path="imagePath"
+                    :lightbox="false">
+                </imagegallery>
             </div>
         <nav class="level is-mobile">
             <div class="level-left">
@@ -55,13 +55,15 @@ import postcomment  from "./PostComment";
 import likestatus  from "./LikeStatus";
 import resharestatus  from "./ReshareStatus";
 import NameAndTimeHeader  from "./../Users/NameAndTimeHeader";
+import imagegallery  from "./../Status/ImageGallery";
     export default {
         props:['urlpath','currentuserid',],
         components:{
             'postcomment': postcomment,
             'likestatus': likestatus,
             'resharestatus': resharestatus,
-            'nameandtimeheader': NameAndTimeHeader
+            'nameandtimeheader': NameAndTimeHeader,
+            'imagegallery': imagegallery
 
         },
         mounted(){
@@ -163,24 +165,6 @@ import NameAndTimeHeader  from "./../Users/NameAndTimeHeader";
              decorateUsername(username){
                return "/user/@"+username
             },
-        chunkImages(images){
-             var $length = images.length
-             if(images.length == 2 || images.length == 4){  
-                 return _.chunk(images, 2)
-             }
-             else if(images.length == 3 || images.length == 5 || images.length == 8){  
-                 return _.chunk(images, 3)
-             }
-             else if(images.length == 6 || images.length == 7 || images.length == 10){  
-                 return _.chunk(images, 4)
-             }
-             else if(images.length == 9){
-                 return _.chunk(images, 5)
-             }
-             else{
-                 return _.chunk(images, 1)
-             }
-        },
         reduceBody(body){
             return body.substring(0,50) + "..."
         }

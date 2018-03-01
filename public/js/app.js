@@ -49375,6 +49375,7 @@ Vue.component('userinfocard', __webpack_require__(199));
 Vue.component('likestatus', __webpack_require__(17));
 Vue.component('resharestatus', __webpack_require__(18));
 Vue.component('commentssection', __webpack_require__(202));
+Vue.component('imagegallery', __webpack_require__(228));
 
 /***/ }),
 /* 175 */
@@ -53938,6 +53939,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ReshareStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__ReshareStatus__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader__ = __webpack_require__(225);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Status_ImageGallery__ = __webpack_require__(228);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Status_ImageGallery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__Status_ImageGallery__);
 //
 //
 //
@@ -53988,6 +53991,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -54001,7 +54005,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         'postcomment': __WEBPACK_IMPORTED_MODULE_2__PostComment___default.a,
         'likestatus': __WEBPACK_IMPORTED_MODULE_3__LikeStatus___default.a,
         'resharestatus': __WEBPACK_IMPORTED_MODULE_4__ReshareStatus___default.a,
-        'nameandtimeheader': __WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader___default.a
+        'nameandtimeheader': __WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader___default.a,
+        'imagegallery': __WEBPACK_IMPORTED_MODULE_6__Status_ImageGallery___default.a
 
     },
     mounted: function mounted() {
@@ -54118,20 +54123,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         decorateUsername: function decorateUsername(username) {
             return "/user/@" + username;
-        },
-        chunkImages: function chunkImages(images) {
-            var $length = images.length;
-            if (images.length == 2 || images.length == 4) {
-                return _.chunk(images, 2);
-            } else if (images.length == 3 || images.length == 5 || images.length == 8) {
-                return _.chunk(images, 3);
-            } else if (images.length == 6 || images.length == 7 || images.length == 10) {
-                return _.chunk(images, 4);
-            } else if (images.length == 9) {
-                return _.chunk(images, 5);
-            } else {
-                return _.chunk(images, 1);
-            }
         },
         reduceBody: function reduceBody(body) {
             return body.substring(0, 50) + "...";
@@ -55064,35 +55055,15 @@ var render = function() {
                               _vm._s(status.body) +
                               "\n                "
                           ),
-                          _vm._l(
-                            _vm.chunkImages(status.status_images),
-                            function(chunkedImages) {
-                              return _c(
-                                "div",
-                                {
-                                  key: chunkedImages.id,
-                                  staticClass: "columns is-centered"
-                                },
-                                _vm._l(chunkedImages, function(image) {
-                                  return _c(
-                                    "div",
-                                    { key: image.id, staticClass: "column" },
-                                    [
-                                      _c("img", {
-                                        attrs: {
-                                          src:
-                                            _vm.imagePath + "/" + image.thumb,
-                                          alt: "Image"
-                                        }
-                                      })
-                                    ]
-                                  )
-                                })
-                              )
+                          _c("imagegallery", {
+                            attrs: {
+                              images: status.status_images,
+                              path: _vm.imagePath,
+                              lightbox: false
                             }
-                          )
+                          })
                         ],
-                        2
+                        1
                       ),
                       _vm._v(" "),
                       _c("nav", { staticClass: "level is-mobile" }, [
@@ -56800,6 +56771,169 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-1732930b", module.exports)
+  }
+}
+
+/***/ }),
+/* 228 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(229)
+/* template */
+var __vue_template__ = __webpack_require__(230)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Status\\ImageGallery.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2d341bcc", Component.options)
+  } else {
+    hotAPI.reload("data-v-2d341bcc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 229 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['images', 'path', 'lightbox', 'title'],
+    mounted: function mounted() {
+        console.log(this.lightbox);
+    },
+    data: function data() {
+        return {
+            galleryImages: this.images,
+            ImagePath: this.path
+        };
+    },
+
+    methods: {
+        chunkImages: function chunkImages(images) {
+            var $length = images.length;
+            if (images.length == 2 || images.length == 4) {
+                return _.chunk(images, 2);
+            } else if (images.length == 3 || images.length == 5 || images.length == 8) {
+                return _.chunk(images, 3);
+            } else if (images.length == 6 || images.length == 7 || images.length == 10) {
+                return _.chunk(images, 4);
+            } else if (images.length == 9) {
+                return _.chunk(images, 5);
+            } else {
+                return _.chunk(images, 1);
+            }
+        }
+    }
+
+});
+
+/***/ }),
+/* 230 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.chunkImages(_vm.galleryImages), function(chunkedImages) {
+      return _c(
+        "div",
+        { key: chunkedImages.id, staticClass: "columns is-centered" },
+        _vm._l(chunkedImages, function(image) {
+          return _c("div", { key: image.id, staticClass: "column" }, [
+            _vm.lightbox
+              ? _c("img", {
+                  directives: [
+                    {
+                      name: "img",
+                      rawName: "v-img",
+                      value: {
+                        title: _vm.title,
+                        group: chunkedImages,
+                        src: _vm.ImagePath + "/" + image.full,
+                        sourceButton: true
+                      },
+                      expression:
+                        "{ \r\n                    title: title, \r\n                    group: chunkedImages, \r\n                    src: ImagePath + '/' + image.full,\r\n                    sourceButton: true}"
+                    }
+                  ],
+                  attrs: {
+                    src: _vm.ImagePath + "/" + image.thumb,
+                    alt: "Image"
+                  }
+                })
+              : _c("img", {
+                  attrs: {
+                    src: _vm.ImagePath + "/" + image.thumb,
+                    alt: "Image"
+                  }
+                })
+          ])
+        })
+      )
+    })
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2d341bcc", module.exports)
   }
 }
 
