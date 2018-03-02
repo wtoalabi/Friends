@@ -53991,6 +53991,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -55051,11 +55053,10 @@ var render = function() {
                           _c("nameandtimeheader", {
                             attrs: {
                               user: status.user,
-                              time: status.created_at
+                              time: status.created_at,
+                              profileowner: status.profile_owner
                             }
                           }),
-                          _vm._v(" "),
-                          _c("br"),
                           _vm._v(
                             "\n                    " +
                               _vm._s(status.body) +
@@ -56784,11 +56785,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['user', 'time'],
-    mounted: function mounted() {},
+    props: ['user', 'time', 'profileowner'],
+    mounted: function mounted() {
+        console.log(this.profileowner);
+    },
     data: function data() {
         return {};
     },
@@ -56802,6 +56808,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         formatTime: function formatTime(time) {
             return new __WEBPACK_IMPORTED_MODULE_0__utilities_formatTime__["a" /* default */]().formatTimeAgo(time);
+        },
+        decorateName: function decorateName(name) {
+            if (name.match(/[s]$/)) {
+                return name + "'";
+            } else {
+                return name + "'s";
+            }
+        },
+        decorateUsername: function decorateUsername(username) {
+            return "/user/@" + username;
         }
     }
 });
@@ -56832,7 +56848,24 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("small", [_vm._v(_vm._s(_vm.formatTime(_vm.time)))])
+    _c("small", [_vm._v(_vm._s(_vm.formatTime(_vm.time)))]),
+    _vm._v(" "),
+    _vm.profileowner.id != _vm.user.id
+      ? _c("div", { staticClass: "mb-1" }, [
+          _c("span", [
+            _vm._v("Shared on "),
+            _c(
+              "a",
+              {
+                staticClass: "has-text-info",
+                attrs: { href: _vm.decorateUsername(_vm.profileowner.username) }
+              },
+              [_vm._v(_vm._s(_vm.decorateName(_vm.profileowner.first_name)))]
+            ),
+            _vm._v(" Page.")
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []

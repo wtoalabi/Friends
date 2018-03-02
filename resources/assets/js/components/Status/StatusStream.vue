@@ -13,8 +13,10 @@
                     </div>
         <div class="media-content">
             <div class="content">          
-                <nameandtimeheader :user="status.user" :time="status.created_at"></nameandtimeheader>
-                    <br>
+                <nameandtimeheader :user="status.user" 
+                        :time="status.created_at"
+                        :profileowner="status.profile_owner">
+                </nameandtimeheader>
                     {{status.body}}
                 <imagegallery 
                     :images="status.status_images"

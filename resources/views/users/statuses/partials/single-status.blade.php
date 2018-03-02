@@ -9,7 +9,11 @@
         </div>
         <div class="media-content">
             <div class="content">          
-                <nameandtimeheader :user="{{$status->user}}" time="{{$status->created_at}}"></nameandtimeheader>
+                <nameandtimeheader 
+                    :user="{{$status->user}}" 
+                    time="{{$status->created_at}}"
+                    :profileowner="{{$status->profileOwner}}">
+                </nameandtimeheader>
                 <br>
             @if($count = $status->status_images->count())
             <imagegallery 

@@ -35,5 +35,9 @@ class Status extends Model
     public function status_images (){
         return $this->hasMany(Image::class);
     }
+
+    public function profileOwner (){
+         return $this->belongsTo(User::class, 'profile_id', 'id');
+    }
   
 }

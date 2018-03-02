@@ -30,7 +30,7 @@ class GetStream{
             $query->with(['images'=>function($query){
                 $query->where('profile', 1)->first();
             }]);
-        },'likes','mood','comments','status_images'])
+        },'likes','mood','comments','status_images','profileOwner'])
         ->withCount('comments','likes','reshares')
         ->$command($column, $user)
         ->latest()->paginate(10);

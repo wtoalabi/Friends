@@ -57,7 +57,7 @@ class StatusController extends Controller
         $status = Status::where('slug', $slug)
                 ->with(['status_images','user' => function($query){
                     $query->with('images');
-                },'mood','likes','comments','reshares'])
+                },'mood','likes','comments','reshares','profileOwner'])
                 ->withCount('likes','comments', 'reshares')
                 ->first();
         return view('users.statuses.status-details', compact('status'));
