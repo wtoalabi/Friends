@@ -68,7 +68,7 @@ import PicturesUpload from './PicturesUpload'
             },
             shout(postedStatus){
                 this.resetFormFields()
-                EventBus.$emit('status_posted', postedStatus)
+                EventBus.$emit('status-posted', postedStatus)
             },
             getMoods(){
                 return axios.get('/get-moods').then(response =>this.moods=response.data)

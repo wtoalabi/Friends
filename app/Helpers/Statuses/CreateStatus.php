@@ -20,7 +20,7 @@ class CreateStatus {
         if($request['mood'] == 0){
             $request['mood'] = 1;
         }
-        $slug = static::generateSlug($request['body']);
+        $slug = static::generateSlug();
         $status = Status::create([
             'user_id'=> Auth::user()->id,
             'body'=> $request['body'],
@@ -42,10 +42,9 @@ class CreateStatus {
         return;
     }
 
-    public static function generateSlug ($body){
+    public static function generateSlug (){
         $name = Auth::user()->username;
-        
-        $slug = str_slug(str_limit($body, 20));
+        //$slug = str_slug(str_limit($body, 20));
         return sprintf("%s/%s/%s", $name, 'status', str_random(30).time());
     }
 }

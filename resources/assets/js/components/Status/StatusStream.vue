@@ -1,47 +1,12 @@
 <template>
     <div>
         <div v-for="status in statuses" :key="status.id">
-            <div class="box message mb-1" :class="status.mood.color">
-            <a :href="'/'+status.slug" @click.self.prevent>
-                <article class="media message-body">
-                    <div class="media-left">
-                        <a :href="decorateUsername(status.user.username)">
-                            <figure class="image is-65x65">
-                                <img class="avatar is-circle" :src="imagePath + imageIfExisting(status.user.images)" alt="Image">
-                            </figure>
-                        </a>
-                    </div>
-        <div class="media-content">
-            <div class="content">          
-                <nameandtimeheader :user="status.user" 
-                        :time="status.created_at"
-                        :profileowner="status.profile_owner">
-                </nameandtimeheader>
-                    {{status.body}}
-                <imagegallery 
-                    :images="status.status_images"
-                    :path="imagePath"
-                    :lightbox="false">
-                </imagegallery>
-            </div>
-        <nav class="level is-mobile">
-            <div class="level-left">
-               <div class="field is-grouped is-grouped-multiline" @click.prevent.self>
-                    <postcomment :count="status.comments_count" 
-                                 :statusid="status.id">
-                                 </postcomment>
-                    <likestatus :statusid="status.id" :count="status.likes_count" :currentuser="currentuserid" ></likestatus>
-                    <resharestatus :count="status.reshares_count" :status="status"></resharestatus>
-                </div>
-                </div>
-            <div class="level-right" v-show="isOwnedBy(status.user.id)">
-                <button class="button" @click.prevent.self @click="deleteStatus(status.id) " type="submit">Delete Status</button>
-            </div>
-        </nav>
-        </div>
-    </article>
-    </a>
-    </div>
+            <singlestatus 
+                :status="status"
+                :imagePath="urlpath"
+                :lightbox="false"
+                :currentuserid="currentuserid">
+            </singlestatus>
     </div>
 <nav v-show="paginate" class="pagination is-rounded" role="navigation" aria-label="pagination">
   <a class="pagination-previous" :disabled="onFirstPage" @click="loadPreviousPage">Previous Set of Statuses</a>
@@ -52,21 +17,11 @@
 
 <script>
 import {EventBus} from './../../utilities/EventBus'
-import Form from './../../utilities/Form'
-import postcomment  from "./PostComment";
-import likestatus  from "./LikeStatus";
-import resharestatus  from "./ReshareStatus";
-import NameAndTimeHeader  from "./../Users/NameAndTimeHeader";
-import imagegallery  from "./../Status/ImageGallery";
+import SingleStatus from "./SingleStatus"
     export default {
         props:['urlpath','currentuserid','profileuser'],
         components:{
-            'postcomment': postcomment,
-            'likestatus': likestatus,
-            'resharestatus': resharestatus,
-            'nameandtimeheader': NameAndTimeHeader,
-            'imagegallery': imagegallery
-
+            'singlestatus' : SingleStatus
         },
         mounted(){
             this.stream = '/stream'
@@ -75,9 +30,7 @@ import imagegallery  from "./../Status/ImageGallery";
         }, 
         data(){
             return{
-                form: new Form(),
              statuses:[],
-             imagePath: this.urlpath,
              status:'',
              nextPage:'',
              previousPage:'',
@@ -88,13 +41,13 @@ import imagegallery  from "./../Status/ImageGallery";
         }
         },
         methods:{
-            newStatus(status){
+            newStatus(status){                
                 this.statuses.unshift(status)
                 this.getStatus()
             },
             getStatus(){
                 if(this.profileuser != null){
-                    return  axios.get(this.stream+'?User='+this.profileuser).then(response=>(this.prepareStatus(response.data)))
+                    return  axios.get(this.stream+'/'+this.profileuser).then(response=>(this.prepareStatus(response.data)))
                 }
                 else{
                 return  axios.get(this.stream).then(response=>(this.prepareStatus(response.data)))    
@@ -111,22 +64,8 @@ import imagegallery  from "./../Status/ImageGallery";
                     this.paginate = false
                 }
                     this.statuses = statuses.data
-            },
-            isOwnedBy(userID){
-                return userID == this.currentuserid
-            },
-            deleteStatus(statusToBeDeleted){
-                if ( confirm("Are you sure you want to delete")){
-                    this.form.delete('/delete-status/'+statusToBeDeleted).then(response=>this.statusDeleted(response))
-                }
-            },
-            statusDeleted(statusID){
-                 this.statuses.splice(statusID, 1);
-                 this.getStatus()
-                 EventBus.$emit('status_deleted',"deleted")
-            },
+            }, 
             setPagination(data){
-                //console.log("?page="+data.current_page)
                 this.stream = "/stream/?page="+data.current_page
                 this.previousPage = data.prev_page_url
                 this.nextPage = data.next_page_url
@@ -153,25 +92,13 @@ import imagegallery  from "./../Status/ImageGallery";
                     this.onLastPage = false
                 }
             },
-            addImageIDtoStatus(IDS){
-                },
             listenForEvents(){
-                EventBus.$on('status_posted',status=>{
+                EventBus.$on('status-posted',status=>{
                     this.newStatus(status)})              
-                EventBus.$on('reply-added',reply=>{this.getStatus()})
-                EventBus.$on("user_unfollowed", unfollowed=> {this.getStatus()})
-                },
-                imageIfExisting(image){
-                    if(image.length == 0){
-                        return "/default.jpg"
-                    }
-                    else{
-                        return "/"+image[0].thumb;
-                    }
-                },
-             decorateUsername(username){
-               return "/user/@"+username
-            },
+                EventBus.$on("status-shared", status=> {this.newStatus(status)})
+                EventBus.$on("status-deleted", status=> {this.getStatus()})
+                EventBus.$on("user-unfollowed", unfollowed=> {this.getStatus()})
+                },        
         reduceBody(body){
             return body.substring(0,50) + "..."
         }

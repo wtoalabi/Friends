@@ -25,15 +25,19 @@ class GetStream{
         return $statuses;
     }
 
-    public function runQueryWith($column, $user, $command){
+    public function runQueryWith($columnName, $userIDs, $command){
         $statuses = Status::with(['user' => function($query){
             $query->with(['images'=>function($query){
                 $query->where('profile', 1)->first();
             }]);
-        },'likes','mood','comments','status_images','profileOwner'])
+        }, 
+        'resharedFrom'=>function($query){
+            $query->with(['user','profileOwner']);
+        },
+        'likes','mood','comments','status_images','profileOwner'])
         ->withCount('comments','likes','reshares')
-        ->$command($column, $user)
-        ->latest()->paginate(10);
+        ->$command($columnName, $userIDs)
+        ->latest()->paginate(5);
         return $statuses;
     }
 

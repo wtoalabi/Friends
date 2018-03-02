@@ -38,7 +38,9 @@ class StatusController extends Controller
         $status = Status::where('id', $status->id)->with([
                     'mood','user'=>function($query){
                         $query->with('images');
-                    }])->first();
+                    }])
+                    ->withCount(['likes','comments','reshares'])
+                    ->first();
                     //dd($status);
         return response(["message"=>"Status Posted", "status"=> $status], 200);
     }
@@ -57,9 +59,14 @@ class StatusController extends Controller
         $status = Status::where('slug', $slug)
                 ->with(['status_images','user' => function($query){
                     $query->with('images');
-                },'mood','likes','comments','reshares','profileOwner'])
-                ->withCount('likes','comments', 'reshares')
+                },
+                'resharedFrom'=>function($query){
+                    $query->with('user');
+                },
+                'likes','mood','comments','status_images','profileOwner'])
+                ->withCount('likes','comments','reshares')
                 ->first();
+                //dd($status);
         return view('users.statuses.status-details', compact('status'));
     }
 

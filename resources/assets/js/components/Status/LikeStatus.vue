@@ -2,7 +2,7 @@
 <div>
     <div class="control">
         <div class="tags has-addons" @click="processClick(statusid)">
-            <span class="tag">{{likesCount}}</span>
+            <span class="tag">{{count}}</span>
             <a class="tag mr-1" :class="LikeClass" :title="LikeText">
                 <i class="fa fa-heart"></i>
             </a>
@@ -13,17 +13,17 @@
 <script>
 import {EventBus} from './../../utilities/EventBus'
 export default {
-    props:['statusid', 'count','currentuser'],
-    mounted(){
-        this.likesCount = this.count
-          this.checkLikeStatus(this.currentuser,this.statusid)  
+    props:['statusid','currentuser'],
+    mounted(){        
+        this.getCount()
+        this.getLikeStatus((this.currentuser,this.statusid)  )
         },
     data(){
         return{
             LikeText:'',
             statusID: '',
             LikeClass: '',
-            likesCount: ''
+            count:''
 
         }
     },
@@ -34,14 +34,13 @@ export default {
         },
 
         setResponse(response){
+            this.getCount()
             if(response == 200){
                 this.liked()
-                this.likesCount ++
                 EventBus.$emit('status-liked')
                 }
                 if(response == 300){
                     this.unLiked()
-                    this.likesCount --
                     EventBus.$emit('status-unLiked')
                 }
             },
@@ -54,7 +53,7 @@ export default {
             this.LikeText = "Click to Like!"
             this.LikeClass = "is-primary"
         },
-        checkLikeStatus(user,status){
+        getLikeStatus(user,status){
             return axios.get("/like-status/"+user+"/"+status).then(response=>this.mountLikes(response.data))
         },
         mountLikes(likeStatus){
@@ -64,6 +63,9 @@ export default {
             else if(likeStatus ==0){
                 this.unLiked()
             }
+        },
+        getCount(){
+            return axios.get('counts/likes/'+this.statusid).then(response=>(this.count=response.data))
         }
 }
 }

@@ -15,7 +15,7 @@ class Status extends Model
 {
     use Presentable;
     
-    protected $fillable = ['user_id', 'body', 'mood_id','profile_id','slug'];
+    protected $fillable = ['user_id', 'body', 'mood_id','profile_id','slug', 'original_id','reshared_comment'];
 
     public function mood (){
          return $this->belongsTo(Mood::class);
@@ -29,8 +29,11 @@ class Status extends Model
     public function likes (){
         return $this->hasMany(Like::class);
     }
+    public function resharedFrom (){
+        return $this->belongsTo(Status::class,'original_id', 'id');
+    }
     public function reshares (){
-        return $this->hasMany(Reshare::class);
+        return $this->HasMany(Status::class,'original_id', 'id');
     }
     public function status_images (){
         return $this->hasMany(Image::class);
@@ -39,5 +42,5 @@ class Status extends Model
     public function profileOwner (){
          return $this->belongsTo(User::class, 'profile_id', 'id');
     }
-  
+    
 }

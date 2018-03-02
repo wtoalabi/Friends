@@ -39,13 +39,19 @@
     import Form from "./../../utilities/Form";
     import {EventBus} from './../../utilities/EventBus'
 export default {
-    props:['statusid', 'count'],
+    props:['statusid'],
+    mounted(){
+        this.getCount()
+        console.log(this.count);
+        
+    },
     data(){
           return{
               activateCommentBox: '',
               form: new Form({
                   body:'',
-              })
+              }),
+              count: ''
           }
       },
     methods:{
@@ -59,10 +65,13 @@ export default {
             this.form.post('post-comment/'+this.statusid).then(response => this.commentPosted(response.data))
         },
         commentPosted(response){
-            //this.setStatusID()
             this.hideModal()
+            this.getCount()
             EventBus.$emit('reply-added')
 
+        },
+        getCount(){
+            return axios.get('counts/replies/'+this.statusid).then(response=>(this.count = response.data))
         }
   }
 }

@@ -25,7 +25,7 @@
             </div>
     <div class="control">
         <div class="tags has-addons">
-            <span class="tag">{{reShareCount}}</span>
+            <span class="tag">{{count}}</span>
             <a class="tag is-warning mr-1" @click="clicked">
                 <i class="fa fa-retweet"></i>
             </a>
@@ -37,9 +37,9 @@
 import Form from "./../../utilities/Form"
 import {EventBus} from "./../../utilities/EventBus";
 export default {
-  props:['count', 'status'],
+  props:['status'],
   mounted(){
-      this.reShareCount = this.count
+      this.getCount()
   },
   data(){
       return{
@@ -47,7 +47,7 @@ export default {
           form: new Form({
               comment: '',
           }),
-          reShareCount: ''
+          count: ''
       }
 
   },
@@ -57,11 +57,12 @@ export default {
           this.modalStatus = 'is-active'
       },
       shared(){
-          return this.form.post('/reshare/'+this.status.id).then(response=>(this.statusShared(response.data)))
+          return this.form.post('/reshare/'+this.status.id).then(response=>(this.statusShared(response)))
       },
       statusShared(response){
-          EventBus.$emit('status-shared', response)
+          this.getCount()
           this.closeModal()
+          EventBus.$emit('status-shared', response)
           this.reShareCount ++
       },
       closeModal(){
@@ -79,8 +80,11 @@ export default {
           var body = body.substring(0,50)
           return body + "..."
 
-      }
-  },
+      },
+  getCount(){
+      return axios.get('counts/reshares/'+this.status.id).then(response=>(this.count = response.data))
+  }
+  }
 
 }
 </script>

@@ -110,23 +110,12 @@ export default {
               return "Statuses:"
           }
       },
-      updateStatusCount(status){
-          if(status == "deleted"){
-              this.statusesCount --
-          }
-          else{
-              this.statusesCount++
-          }
-      },
       listenToEvents(){
-        EventBus.$on("user_followed", followed=> {this.getUser()})
-          EventBus.$on('status_posted',status=>{
-              this.updateStatusCount(status)
-            })
-       EventBus.$on('status_deleted',status=>{
-           this.updateStatusCount(status)
-            })
-          EventBus.$on("user_unfollowed", unfollowed=> {this.getUser()})
+        EventBus.$on('user-followed', followed=> {this.getUser()})
+        EventBus.$on('status-shared',status=>{this.getUser()})
+        EventBus.$on('status-posted',status=>{this.getUser()})
+        EventBus.$on('status-deleted',status=>{this.getUser()})
+        EventBus.$on('user-unfollowed', unfollowed=> {this.getUser()})
       }
     }
 }

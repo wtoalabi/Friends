@@ -49448,9 +49448,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         submitted: function submitted(response) {
             if (response[0] == 200) {
-                __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit("user_unfollowed");
+                __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit("user-unfollowed");
             } else if (response[0] == 300) {
-                __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit("user_followed");
+                __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit("user-followed");
             };
         },
         setUp: function setUp() {
@@ -49669,7 +49669,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         this.getAllUsersToFollow();
-        __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('userFollowed', function (id) {
+        __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('user-unfollowed', function (id) {
             _this.removeUserFromList(id);
         });
     },
@@ -49915,7 +49915,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         shout: function shout(postedStatus) {
             this.resetFormFields();
-            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status_posted', postedStatus);
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status-posted', postedStatus);
         },
         getMoods: function getMoods() {
             var _this2 = this;
@@ -53930,17 +53930,8 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_Form__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PostComment__ = __webpack_require__(190);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PostComment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__PostComment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LikeStatus__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LikeStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__LikeStatus__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ReshareStatus__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ReshareStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__ReshareStatus__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader__ = __webpack_require__(225);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Status_ImageGallery__ = __webpack_require__(228);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Status_ImageGallery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__Status_ImageGallery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SingleStatus__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SingleStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__SingleStatus__);
 //
 //
 //
@@ -53958,58 +53949,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['urlpath', 'currentuserid', 'profileuser'],
     components: {
-        'postcomment': __WEBPACK_IMPORTED_MODULE_2__PostComment___default.a,
-        'likestatus': __WEBPACK_IMPORTED_MODULE_3__LikeStatus___default.a,
-        'resharestatus': __WEBPACK_IMPORTED_MODULE_4__ReshareStatus___default.a,
-        'nameandtimeheader': __WEBPACK_IMPORTED_MODULE_5__Users_NameAndTimeHeader___default.a,
-        'imagegallery': __WEBPACK_IMPORTED_MODULE_6__Status_ImageGallery___default.a
-
+        'singlestatus': __WEBPACK_IMPORTED_MODULE_1__SingleStatus___default.a
     },
     mounted: function mounted() {
         this.stream = '/stream';
@@ -54018,9 +53964,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            form: new __WEBPACK_IMPORTED_MODULE_1__utilities_Form__["a" /* default */](),
             statuses: [],
-            imagePath: this.urlpath,
             status: '',
             nextPage: '',
             previousPage: '',
@@ -54040,7 +53984,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             if (this.profileuser != null) {
-                return axios.get(this.stream + '?User=' + this.profileuser).then(function (response) {
+                return axios.get(this.stream + '/' + this.profileuser).then(function (response) {
                     return _this.prepareStatus(response.data);
                 });
             } else {
@@ -54058,42 +54002,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             this.statuses = statuses.data;
         },
-        isOwnedBy: function isOwnedBy(userID) {
-            return userID == this.currentuserid;
-        },
-        deleteStatus: function deleteStatus(statusToBeDeleted) {
-            var _this2 = this;
-
-            if (confirm("Are you sure you want to delete")) {
-                this.form.delete('/delete-status/' + statusToBeDeleted).then(function (response) {
-                    return _this2.statusDeleted(response);
-                });
-            }
-        },
-        statusDeleted: function statusDeleted(statusID) {
-            this.statuses.splice(statusID, 1);
-            this.getStatus();
-            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$emit('status_deleted', "deleted");
-        },
         setPagination: function setPagination(data) {
-            //console.log("?page="+data.current_page)
             this.stream = "/stream/?page=" + data.current_page;
             this.previousPage = data.prev_page_url;
             this.nextPage = data.next_page_url;
             this.disableButtons(data.from, data.to, data.total);
         },
         loadNextPage: function loadNextPage() {
-            var _this3 = this;
+            var _this2 = this;
 
             return axios.get(this.nextPage).then(function (response) {
-                return _this3.prepareStatus(response.data);
+                return _this2.prepareStatus(response.data);
             });
         },
         loadPreviousPage: function loadPreviousPage() {
-            var _this4 = this;
+            var _this3 = this;
 
             return axios.get(this.previousPage).then(function (response) {
-                return _this4.prepareStatus(response.data);
+                return _this3.prepareStatus(response.data);
             });
         },
         disableButtons: function disableButtons(from, to, total) {
@@ -54108,29 +54034,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.onLastPage = false;
             }
         },
-        addImageIDtoStatus: function addImageIDtoStatus(IDS) {},
         listenForEvents: function listenForEvents() {
-            var _this5 = this;
+            var _this4 = this;
 
-            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on('status_posted', function (status) {
-                _this5.newStatus(status);
+            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on('status-posted', function (status) {
+                _this4.newStatus(status);
             });
-            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on('reply-added', function (reply) {
-                _this5.getStatus();
+            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on("status-shared", function (status) {
+                _this4.newStatus(status);
             });
-            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on("user_unfollowed", function (unfollowed) {
-                _this5.getStatus();
+            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on("status-deleted", function (status) {
+                _this4.getStatus();
             });
-        },
-        imageIfExisting: function imageIfExisting(image) {
-            if (image.length == 0) {
-                return "/default.jpg";
-            } else {
-                return "/" + image[0].thumb;
-            }
-        },
-        decorateUsername: function decorateUsername(username) {
-            return "/user/@" + username;
+            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on("user-unfollowed", function (unfollowed) {
+                _this4.getStatus();
+            });
         },
         reduceBody: function reduceBody(body) {
             return body.substring(0, 50) + "...";
@@ -54234,13 +54152,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['statusid', 'count'],
+    props: ['statusid'],
+    mounted: function mounted() {
+        this.getCount();
+        console.log(this.count);
+    },
     data: function data() {
         return {
             activateCommentBox: '',
             form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */]({
                 body: ''
-            })
+            }),
+            count: ''
         };
     },
 
@@ -54259,9 +54182,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         commentPosted: function commentPosted(response) {
-            //this.setStatusID()
             this.hideModal();
+            this.getCount();
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('reply-added');
+        },
+        getCount: function getCount() {
+            var _this2 = this;
+
+            return axios.get('counts/replies/' + this.statusid).then(function (response) {
+                return _this2.count = response.data;
+            });
         }
     }
 });
@@ -54410,17 +54340,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['statusid', 'count', 'currentuser'],
+    props: ['statusid', 'currentuser'],
     mounted: function mounted() {
-        this.likesCount = this.count;
-        this.checkLikeStatus(this.currentuser, this.statusid);
+        this.getCount();
+        this.getLikeStatus((this.currentuser, this.statusid));
     },
     data: function data() {
         return {
             LikeText: '',
             statusID: '',
             LikeClass: '',
-            likesCount: ''
+            count: ''
 
         };
     },
@@ -54435,14 +54365,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         setResponse: function setResponse(response) {
+            this.getCount();
             if (response == 200) {
                 this.liked();
-                this.likesCount++;
                 __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$emit('status-liked');
             }
             if (response == 300) {
                 this.unLiked();
-                this.likesCount--;
                 __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$emit('status-unLiked');
             }
         },
@@ -54454,7 +54383,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.LikeText = "Click to Like!";
             this.LikeClass = "is-primary";
         },
-        checkLikeStatus: function checkLikeStatus(user, status) {
+        getLikeStatus: function getLikeStatus(user, status) {
             var _this2 = this;
 
             return axios.get("/like-status/" + user + "/" + status).then(function (response) {
@@ -54467,6 +54396,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else if (likeStatus == 0) {
                 this.unLiked();
             }
+        },
+        getCount: function getCount() {
+            var _this3 = this;
+
+            return axios.get('counts/likes/' + this.statusid).then(function (response) {
+                return _this3.count = response.data;
+            });
         }
     }
 });
@@ -54492,7 +54428,7 @@ var render = function() {
           }
         },
         [
-          _c("span", { staticClass: "tag" }, [_vm._v(_vm._s(_vm.likesCount))]),
+          _c("span", { staticClass: "tag" }, [_vm._v(_vm._s(_vm.count))]),
           _vm._v(" "),
           _c(
             "a",
@@ -54565,9 +54501,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['count', 'status'],
+    props: ['status'],
     mounted: function mounted() {
-        this.reShareCount = this.count;
+        this.getCount();
     },
     data: function data() {
         return {
@@ -54575,7 +54511,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */]({
                 comment: ''
             }),
-            reShareCount: ''
+            count: ''
         };
     },
 
@@ -54588,12 +54524,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             return this.form.post('/reshare/' + this.status.id).then(function (response) {
-                return _this.statusShared(response.data);
+                return _this.statusShared(response);
             });
         },
         statusShared: function statusShared(response) {
-            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status-shared', response);
+            this.getCount();
             this.closeModal();
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit('status-shared', response);
             this.reShareCount++;
         },
         closeModal: function closeModal() {
@@ -54609,6 +54546,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         decorateBody: function decorateBody(body) {
             var body = body.substring(0, 50);
             return body + "...";
+        },
+        getCount: function getCount() {
+            var _this2 = this;
+
+            return axios.get('counts/reshares/' + this.status.id).then(function (response) {
+                return _this2.count = response.data;
+            });
         }
     }
 
@@ -54708,7 +54652,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "control" }, [
       _c("div", { staticClass: "tags has-addons" }, [
-        _c("span", { staticClass: "tag" }, [_vm._v(_vm._s(_vm.reShareCount))]),
+        _c("span", { staticClass: "tag" }, [_vm._v(_vm._s(_vm.count))]),
         _vm._v(" "),
         _c(
           "a",
@@ -55001,168 +54945,21 @@ var render = function() {
     "div",
     [
       _vm._l(_vm.statuses, function(status) {
-        return _c("div", { key: status.id }, [
-          _c(
-            "div",
-            { staticClass: "box message mb-1", class: status.mood.color },
-            [
-              _c(
-                "a",
-                {
-                  attrs: { href: "/" + status.slug },
-                  on: {
-                    click: function($event) {
-                      if ($event.target !== $event.currentTarget) {
-                        return null
-                      }
-                      $event.preventDefault()
-                    }
-                  }
-                },
-                [
-                  _c("article", { staticClass: "media message-body" }, [
-                    _c("div", { staticClass: "media-left" }, [
-                      _c(
-                        "a",
-                        {
-                          attrs: {
-                            href: _vm.decorateUsername(status.user.username)
-                          }
-                        },
-                        [
-                          _c("figure", { staticClass: "image is-65x65" }, [
-                            _c("img", {
-                              staticClass: "avatar is-circle",
-                              attrs: {
-                                src:
-                                  _vm.imagePath +
-                                  _vm.imageIfExisting(status.user.images),
-                                alt: "Image"
-                              }
-                            })
-                          ])
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "media-content" }, [
-                      _c(
-                        "div",
-                        { staticClass: "content" },
-                        [
-                          _c("nameandtimeheader", {
-                            attrs: {
-                              user: status.user,
-                              time: status.created_at,
-                              profileowner: status.profile_owner
-                            }
-                          }),
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(status.body) +
-                              "\n                "
-                          ),
-                          _c("imagegallery", {
-                            attrs: {
-                              images: status.status_images,
-                              path: _vm.imagePath,
-                              lightbox: false
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("nav", { staticClass: "level is-mobile" }, [
-                        _c("div", { staticClass: "level-left" }, [
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "field is-grouped is-grouped-multiline",
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  if ($event.target !== $event.currentTarget) {
-                                    return null
-                                  }
-                                }
-                              }
-                            },
-                            [
-                              _c("postcomment", {
-                                attrs: {
-                                  count: status.comments_count,
-                                  statusid: status.id
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("likestatus", {
-                                attrs: {
-                                  statusid: status.id,
-                                  count: status.likes_count,
-                                  currentuser: _vm.currentuserid
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("resharestatus", {
-                                attrs: {
-                                  count: status.reshares_count,
-                                  status: status
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.isOwnedBy(status.user.id),
-                                expression: "isOwnedBy(status.user.id)"
-                              }
-                            ],
-                            staticClass: "level-right"
-                          },
-                          [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "button",
-                                attrs: { type: "submit" },
-                                on: {
-                                  click: [
-                                    function($event) {
-                                      $event.preventDefault()
-                                      if (
-                                        $event.target !== $event.currentTarget
-                                      ) {
-                                        return null
-                                      }
-                                    },
-                                    function($event) {
-                                      _vm.deleteStatus(status.id)
-                                    }
-                                  ]
-                                }
-                              },
-                              [_vm._v("Delete Status")]
-                            )
-                          ]
-                        )
-                      ])
-                    ])
-                  ])
-                ]
-              )
-            ]
-          )
-        ])
+        return _c(
+          "div",
+          { key: status.id },
+          [
+            _c("singlestatus", {
+              attrs: {
+                status: status,
+                imagePath: _vm.urlpath,
+                lightbox: false,
+                currentuserid: _vm.currentuserid
+              }
+            })
+          ],
+          1
+        )
       }),
       _vm._v(" "),
       _c(
@@ -55391,26 +55188,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return "Statuses:";
             }
         },
-        updateStatusCount: function updateStatusCount(status) {
-            if (status == "deleted") {
-                this.statusesCount--;
-            } else {
-                this.statusesCount++;
-            }
-        },
         listenToEvents: function listenToEvents() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on("user_followed", function (followed) {
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('user-followed', function (followed) {
                 _this2.getUser();
             });
-            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status_posted', function (status) {
-                _this2.updateStatusCount(status);
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-shared', function (status) {
+                _this2.getUser();
             });
-            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status_deleted', function (status) {
-                _this2.updateStatusCount(status);
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-posted', function (status) {
+                _this2.getUser();
             });
-            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on("user_unfollowed", function (unfollowed) {
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('status-deleted', function (status) {
+                _this2.getUser();
+            });
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('user-unfollowed', function (unfollowed) {
                 _this2.getUser();
             });
         }
@@ -55891,6 +55684,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -56307,7 +56103,7 @@ var render = function() {
               [
                 _c("nameandtimeheader", {
                   attrs: {
-                    user: _vm.comment.user,
+                    statusowner: _vm.comment.user,
                     time: _vm.comment.created_at
                   }
                 })
@@ -56788,18 +56584,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['user', 'time', 'profileowner'],
+    props: ['statusowner', 'time', 'resharedfrom', 'statusoriginalid'],
     mounted: function mounted() {
-        console.log(this.profileowner);
+        this.getOwners();
     },
     data: function data() {
-        return {};
+        return {
+            OriginallyPostedBy: '',
+            OriginalProfilePostedOn: '',
+            OriginalStatusSlug: ''
+
+        };
     },
 
     methods: {
+        getTextFor: function getTextFor(sharedFrom, profileOwner) {
+            //console.log(sharedFrom)
+            //console.log(profileOwner)
+        },
         formatUrl: function formatUrl(username) {
             return '/user/@' + username;
         },
@@ -56810,14 +56638,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return new __WEBPACK_IMPORTED_MODULE_0__utilities_formatTime__["a" /* default */]().formatTimeAgo(time);
         },
         decorateName: function decorateName(name) {
-            if (name.match(/[s]$/)) {
-                return name + "'";
+            if (name != null) {
+                if (name.match(/[s]$/)) {
+                    return name + "'";
+                } else {
+                    return name + "'s";
+                }
             } else {
-                return name + "'s";
+                return;
             }
         },
         decorateUsername: function decorateUsername(username) {
             return "/user/@" + username;
+        },
+        getOwners: function getOwners() {
+            if (this.resharedfrom != null) {
+                this.OriginallyPostedBy = this.resharedfrom.user;
+                this.OriginalProfilePostedOn = this.resharedfrom.profile_owner;
+                this.OriginalStatusSlug = this.resharedfrom.slug;
+            }
         }
     }
 });
@@ -56832,8 +56671,8 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("strong", [
-      _c("a", { attrs: { href: _vm.formatUrl(_vm.user.username) } }, [
-        _vm._v(" " + _vm._s(_vm.formatFullName(_vm.user)))
+      _c("a", { attrs: { href: _vm.formatUrl(_vm.statusowner.username) } }, [
+        _vm._v(" " + _vm._s(_vm.formatFullName(_vm.statusowner)))
       ])
     ]),
     _vm._v(" "),
@@ -56842,28 +56681,134 @@ var render = function() {
         "a",
         {
           staticClass: "has-text-black",
-          attrs: { href: _vm.formatUrl(_vm.user.username) }
+          attrs: { href: _vm.formatUrl(_vm.statusowner.username) }
         },
-        [_vm._v("@" + _vm._s(_vm.user.username))]
+        [_vm._v("@" + _vm._s(_vm.statusowner.username))]
       )
     ]),
     _vm._v(" "),
     _c("small", [_vm._v(_vm._s(_vm.formatTime(_vm.time)))]),
     _vm._v(" "),
-    _vm.profileowner.id != _vm.user.id
-      ? _c("div", { staticClass: "mb-1" }, [
-          _c("span", [
-            _vm._v("Shared on "),
-            _c(
-              "a",
-              {
-                staticClass: "has-text-info",
-                attrs: { href: _vm.decorateUsername(_vm.profileowner.username) }
-              },
-              [_vm._v(_vm._s(_vm.decorateName(_vm.profileowner.first_name)))]
-            ),
-            _vm._v(" Page.")
-          ])
+    _vm.resharedfrom != null
+      ? _c("div", { staticClass: "mb-0" }, [
+          _vm.OriginallyPostedBy.id != _vm.statusowner.id &&
+          _vm.statusoriginalid != null
+            ? _c("div", { staticClass: "mb-1" }, [
+                _vm.OriginallyPostedBy.id == _vm.OriginalProfilePostedOn.id
+                  ? _c("div", [
+                      _c("span", [
+                        _vm._v("Shared by"),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "has-text-info",
+                            attrs: {
+                              href: _vm.decorateUsername(
+                                _vm.statusowner.username
+                              )
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                    " +
+                                _vm._s(_vm.statusowner.first_name)
+                            )
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("span", [
+                        _vm._v("from "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "has-text-info",
+                            attrs: {
+                              href: _vm.decorateUsername(
+                                _vm.OriginallyPostedBy.username
+                              )
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                    " +
+                                _vm._s(
+                                  _vm.decorateName(
+                                    _vm.OriginallyPostedBy.first_name
+                                  )
+                                )
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "has-text-primary",
+                            attrs: { href: "/" + _vm.OriginalStatusSlug }
+                          },
+                          [_vm._v(" Wall")]
+                        )
+                      ])
+                    ])
+                  : _c("div", [
+                      _c("span", [
+                        _vm._v("Shared from "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "has-text-info",
+                            attrs: {
+                              href: _vm.decorateUsername(
+                                _vm.OriginalProfilePostedOn.username
+                              )
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                    " +
+                                _vm._s(
+                                  _vm.decorateName(
+                                    _vm.OriginalProfilePostedOn.first_name
+                                  )
+                                )
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "has-text-primary",
+                            attrs: { href: "/" + _vm.OriginalStatusSlug }
+                          },
+                          [_vm._v(" Wall")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("span", [
+                        _vm._v("...written by"),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "has-text-info",
+                            attrs: {
+                              href: _vm.decorateUsername(
+                                _vm.OriginallyPostedBy.username
+                              )
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                    " +
+                                _vm._s(_vm.OriginallyPostedBy.first_name)
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+              ])
+            : _vm._e()
         ])
       : _vm._e()
   ])
@@ -57034,6 +56979,471 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-2d341bcc", module.exports)
+  }
+}
+
+/***/ }),
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(232)
+/* template */
+var __vue_template__ = __webpack_require__(233)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Status\\SingleStatus.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6050797d", Component.options)
+  } else {
+    hotAPI.reload("data-v-6050797d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 232 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_NameAndTimeHeader__ = __webpack_require__(225);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_NameAndTimeHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Users_NameAndTimeHeader__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Status_ImageGallery__ = __webpack_require__(228);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Status_ImageGallery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Status_ImageGallery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__StatusFooterLinks__ = __webpack_require__(234);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__StatusFooterLinks___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__StatusFooterLinks__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['status', 'imagePath', 'lightbox', 'currentuserid'],
+    components: {
+        'nameandtimeheader': __WEBPACK_IMPORTED_MODULE_0__Users_NameAndTimeHeader___default.a,
+        'imagegallery': __WEBPACK_IMPORTED_MODULE_1__Status_ImageGallery___default.a,
+        'statusfooterlinks': __WEBPACK_IMPORTED_MODULE_2__StatusFooterLinks___default.a
+    },
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        decorateUsername: function decorateUsername(username) {
+            return "/user/@" + username;
+        },
+        imageIfExisting: function imageIfExisting(user) {
+            if (user.images == 0) {
+                return "/default.jpg";
+            } else {
+                return "/" + image[0].thumb;
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "box message mb-1", class: _vm.status.mood.color },
+      [
+        _c(
+          "a",
+          {
+            attrs: { href: "/" + _vm.status.slug },
+            on: {
+              click: function($event) {
+                if ($event.target !== $event.currentTarget) {
+                  return null
+                }
+                $event.preventDefault()
+              }
+            }
+          },
+          [
+            _c("article", { staticClass: "media message-body" }, [
+              _c("div", { staticClass: "media-left" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: {
+                      href: _vm.decorateUsername(_vm.status.user.username)
+                    }
+                  },
+                  [
+                    _c("figure", { staticClass: "image is-65x65" }, [
+                      _c("img", {
+                        staticClass: "avatar is-circle",
+                        attrs: {
+                          src:
+                            _vm.imagePath +
+                            _vm.imageIfExisting(_vm.status.user),
+                          alt: "Image"
+                        }
+                      })
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "media-content" },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "content" },
+                    [
+                      _c("nameandtimeheader", {
+                        attrs: {
+                          time: _vm.status.created_at,
+                          resharedfrom: _vm.status.reshared_from,
+                          statusowner: _vm.status.user,
+                          statusoriginalid: _vm.status.original_id
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("div", [
+                        _vm._v(
+                          "\n                      " +
+                            _vm._s(_vm.status.body) +
+                            "\n                  "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm.status.status_images
+                        ? _c("imagegallery", {
+                            attrs: {
+                              images: _vm.status.status_images,
+                              path: _vm.imagePath,
+                              lightbox: _vm.lightbox
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("statusfooterlinks", {
+                    attrs: {
+                      status: _vm.status,
+                      currentuserid: _vm.currentuserid
+                    }
+                  })
+                ],
+                1
+              )
+            ])
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6050797d", module.exports)
+  }
+}
+
+/***/ }),
+/* 234 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(235)
+/* template */
+var __vue_template__ = __webpack_require__(236)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Status\\StatusFooterLinks.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5bcf1d0e", Component.options)
+  } else {
+    hotAPI.reload("data-v-5bcf1d0e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 235 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PostComment__ = __webpack_require__(190);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PostComment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__PostComment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__LikeStatus__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__LikeStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__LikeStatus__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ReshareStatus__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ReshareStatus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ReshareStatus__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utilities_EventBus__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utilities_Form__ = __webpack_require__(4);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['status', 'currentuserid'],
+    components: {
+        'postcomment': __WEBPACK_IMPORTED_MODULE_0__PostComment___default.a,
+        'likestatus': __WEBPACK_IMPORTED_MODULE_1__LikeStatus___default.a,
+        'resharestatus': __WEBPACK_IMPORTED_MODULE_2__ReshareStatus___default.a
+    },
+    data: function data() {
+        return {
+            form: new __WEBPACK_IMPORTED_MODULE_4__utilities_Form__["a" /* default */](),
+            deleting: ''
+        };
+    },
+
+    methods: {
+        deleteStatus: function deleteStatus(statusToBeDeleted) {
+            var _this = this;
+
+            if (confirm("Are you sure you want to delete")) {
+                this.deleting = 'is-loading';
+                this.form.delete('/delete-status/' + statusToBeDeleted).then(function (response) {
+                    return _this.statusDeleted(response);
+                });
+            }
+        },
+        statusDeleted: function statusDeleted(statusID) {
+            this.deleting = '';
+            __WEBPACK_IMPORTED_MODULE_3__utilities_EventBus__["a" /* EventBus */].$emit('status-deleted', "deleted");
+        },
+        isOwnedBy: function isOwnedBy(userID) {
+            return userID == this.currentuserid;
+        }
+    }
+});
+
+/***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("nav", { staticClass: "level is-mobile" }, [
+      _c("div", { staticClass: "level-left" }, [
+        _c(
+          "div",
+          {
+            staticClass: "field is-grouped is-grouped-multiline",
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                if ($event.target !== $event.currentTarget) {
+                  return null
+                }
+              }
+            }
+          },
+          [
+            _c("postcomment", {
+              attrs: {
+                count: _vm.status.comments_count,
+                statusid: _vm.status.id
+              }
+            }),
+            _vm._v(" "),
+            _c("likestatus", {
+              attrs: {
+                statusid: _vm.status.id,
+                count: _vm.status.likes_count,
+                currentuser: _vm.currentuserid
+              }
+            }),
+            _vm._v(" "),
+            _c("resharestatus", {
+              attrs: { count: _vm.status.reshares_count, status: _vm.status }
+            })
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.isOwnedBy(_vm.status.user.id),
+              expression: "isOwnedBy(status.user.id)"
+            }
+          ],
+          staticClass: "level-right"
+        },
+        [
+          _c(
+            "button",
+            {
+              staticClass: "button",
+              class: _vm.deleting,
+              attrs: { type: "submit" },
+              on: {
+                click: [
+                  function($event) {
+                    $event.preventDefault()
+                    if ($event.target !== $event.currentTarget) {
+                      return null
+                    }
+                  },
+                  function($event) {
+                    _vm.deleteStatus(_vm.status.id)
+                  }
+                ]
+              }
+            },
+            [_vm._v("Delete Status")]
+          )
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5bcf1d0e", module.exports)
   }
 }
 

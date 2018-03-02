@@ -10,6 +10,6 @@ $factory->define(Status::class, function (Faker $faker) {
     'profile_id'  => 1,
     'slug'  => str_slug($faker->sentence($nbWords = 4)),
     'created_at'=>$faker->dateTimeThisMonth(),
-    'body' => $faker->sentence
+    'body' => $faker->paragraph($nbSentences = 3)
     ];
 });

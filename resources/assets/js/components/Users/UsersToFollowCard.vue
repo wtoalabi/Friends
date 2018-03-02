@@ -24,7 +24,7 @@ import {EventBus} from './../../utilities/EventBus'
         props:['following', 'userstofollow','imagepath', 'isfollowed'],
         mounted(){            
          this.getAllUsersToFollow()
-         EventBus.$on('userFollowed',id=>{
+         EventBus.$on('user-unfollowed',id=>{
                 this.removeUserFromList(id)
          })
          

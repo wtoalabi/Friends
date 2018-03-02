@@ -10,7 +10,10 @@
             <div class="content">
                 <div class="columns">
                     <span class="column">
-                        <nameandtimeheader :user="comment.user" :time="comment.created_at"></nameandtimeheader>
+                        <nameandtimeheader 
+                            :statusowner="comment.user" 
+                            :time="comment.created_at">
+                        </nameandtimeheader>
                     </span>
                 <span class="column is-2" v-if="isOwner">
                     <button class="button is-danger" @click="onDelete">Delete</button>

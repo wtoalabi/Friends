@@ -59,10 +59,10 @@ import {EventBus} from './../../utilities/EventBus'
             },
             submitted(response){
                 if(response[0] == 200){
-                    EventBus.$emit("user_unfollowed");
+                    EventBus.$emit("user-unfollowed");
                 }
                      else if(response[0] ==300){
-                        EventBus.$emit("user_followed")};
+                        EventBus.$emit("user-followed")};
                 },
 
             setUp(){

@@ -10,11 +10,10 @@
         <div class="media-content">
             <div class="content">          
                 <nameandtimeheader 
-                    :user="{{$status->user}}" 
                     time="{{$status->created_at}}"
-                    :profileowner="{{$status->profileOwner}}">
+                    :statusowner="{{$status->user}}" 
+                    statusoriginalid="{{$status->original_id}}">
                 </nameandtimeheader>
-                <br>
             @if($count = $status->status_images->count())
             <imagegallery 
                 :images="{{$status->status_images}}"
@@ -28,9 +27,6 @@
 <nav class="level is-mobile">
     <div class="level-left">
        <div class="field is-grouped is-grouped-multiline">
-            {{--  <postcomment count="{{$status->comments_count}}" 
-                         statusid="{{$status->id}}"> 
-            </postcomment>  --}}
             <likestatus 
                 statusid="{{$status->id}}" 
                 count="{{$status->likes_count}}" 

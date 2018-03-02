@@ -47,7 +47,8 @@ Route::group([ 'middleware'=>'auth'], function(){
     Route::get('get-moods', 'Ajax\MoodsController@index');
     Route::get('get-mood/{id}', 'Ajax\MoodsController@show');
     Route::get('get-user/{id}', 'Ajax\GetUserController@show');
-    Route::get('stream', 'Ajax\StatusesController@index');
+    Route::get('stream/', 'Ajax\StatusesController@home');
+    Route::get('stream/{profileUserID}', 'Ajax\StatusesController@profile');
     Route::post('post-comment/{status}', 'Ajax\CommentsController@store');
     Route::delete('delete-comment/{status}/{comment}', 'Ajax\CommentsController@destroy');
     Route::get('get-comments/{status}', 'Ajax\CommentsController@index');
@@ -71,4 +72,9 @@ Route::group(['middleware'=>'auth'],function(){
     ->only('store','destroy');
     Route::get('{username}/status/{slug}', "Statuses\StatusController@show");
     //Route::delete('status/{slug}', "Statuses\StatusController@show");
+});
+Route::group(['middleware'=>'auth', 'prefix'=>'counts'], function(){
+    Route::get('replies/{id}', 'Ajax\GetCountsController@replies');
+    Route::get('likes/{id}', 'Ajax\GetCountsController@likes');
+    Route::get('reshares/{id}', 'Ajax\GetCountsController@reshares');
 });

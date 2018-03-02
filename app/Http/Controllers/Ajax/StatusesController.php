@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Storage;
 
 class StatusesController extends Controller
 {
-    public function index (){
-        if(request('User')){
-            return GetStream::forProfile(request('User'));
-        }
-            return GetStream::forHome();            
+    public function home (){
+        return GetStream::forHome();  
+    }
+
+    public function profile ($userID){
+        return GetStream::forProfile($userID);
     }
 
     public function destroy ($id){
