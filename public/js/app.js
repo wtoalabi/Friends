@@ -54183,7 +54183,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getCount: function getCount() {
             var _this2 = this;
 
-            return axios.get('counts/replies/' + this.statusid).then(function (response) {
+            return axios.get('/counts/replies/' + this.statusid).then(function (response) {
                 return _this2.count = response.data;
             });
         }
@@ -54394,7 +54394,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getCount: function getCount() {
             var _this3 = this;
 
-            return axios.get('counts/likes/' + this.statusid).then(function (response) {
+            return axios.get('/counts/likes/' + this.statusid).then(function (response) {
                 return _this3.count = response.data;
             });
         }
@@ -54544,7 +54544,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getCount: function getCount() {
             var _this2 = this;
 
-            return axios.get('counts/reshares/' + this.status.id).then(function (response) {
+            return axios.get('/counts/reshares/' + this.status.id).then(function (response) {
                 return _this2.count = response.data;
             });
         }

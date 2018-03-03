@@ -82,7 +82,7 @@ export default {
 
       },
   getCount(){
-      return axios.get('counts/reshares/'+this.status.id).then(response=>(this.count = response.data))
+      return axios.get('/counts/reshares/'+this.status.id).then(response=>(this.count = response.data))
   }
   }
 

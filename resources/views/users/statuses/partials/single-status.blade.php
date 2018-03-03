@@ -22,7 +22,14 @@
                 :lightbox="true">
             </imagegallery>
             @endif
-        {{$status->body}}
+        <div>
+            @if($status->reshared_comment)
+                <div class="mt-2 mb-1">
+                    <em> <strong>{{$status->reshared_comment}}</strong></em>
+                </div>
+                @endif
+            {{$status->body}}
+        </div>
     </div>
 <nav class="level is-mobile">
     <div class="level-left">

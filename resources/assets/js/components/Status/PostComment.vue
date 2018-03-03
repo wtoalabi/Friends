@@ -69,7 +69,7 @@ export default {
 
         },
         getCount(){
-            return axios.get('counts/replies/'+this.statusid).then(response=>(this.count = response.data))
+            return axios.get('/counts/replies/'+this.statusid).then(response=>(this.count = response.data))
         }
   }
 }

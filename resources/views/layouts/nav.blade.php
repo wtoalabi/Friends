@@ -22,7 +22,7 @@
             <div class="navbar-start ">
                     @auth
                         <a class="navbar-item" href="/home">
-                            <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>My Pictures
+                            <span class="icon"><i class="fa fa-book" aria-hidden="true"></i></span>Get in Touch
                         </a>
                     @endauth
                 {{--  <div class="navbar-item has-dropdown is-hoverable">
