@@ -49402,10 +49402,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['following', 'isfollowed'],
     mounted: function mounted() {
-        this.setUp();
-        if (this.isFollowing == true) {
+
+        if (this.isfollowed == true) {
             this.followed();
-        } else if (this.isFollowing == false) {
+        } else if (this.isfollowed == false) {
             this.unFollowed();
         }
     },
@@ -49452,9 +49452,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else if (response[0] == 300) {
                 __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit("user-followed");
             };
-        },
-        setUp: function setUp() {
-            this.isFollowing = this.isfollowed;
         }
     }
 });
@@ -49664,7 +49661,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['following', 'userstofollow', 'imagepath', 'isfollowed'],
+    props: ['following', 'imagepath', 'isfollowed'],
     mounted: function mounted() {
         var _this = this;
 
@@ -49735,7 +49732,7 @@ var render = function() {
         _c(
           "div",
           { staticClass: "columns" },
-          _vm._l(chunkedColumn, function(user, index) {
+          _vm._l(chunkedColumn, function(user) {
             return _c(
               "div",
               { key: user.id, staticClass: "column is-4" },
@@ -49757,7 +49754,7 @@ var render = function() {
                   [
                     _vm._v(
                       "\r\n                    " +
-                        _vm._s(_vm.reduceFirstNameCharacters(user.last_name)) +
+                        _vm._s(_vm.reduceFirstNameCharacters(user.first_name)) +
                         "\r\n                "
                     )
                   ]
@@ -54046,9 +54043,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on("status-deleted", function (status) {
                 _this4.getStatus();
             });
-            __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on("user-unfollowed", function (unfollowed) {
-                _this4.getStatus();
-            });
+            //EventBus.$on("user-unfollowed", unfollowed=> {this.getStatus()})
         },
         reduceBody: function reduceBody(body) {
             return body.substring(0, 50) + "...";
@@ -54155,7 +54150,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['statusid'],
     mounted: function mounted() {
         this.getCount();
-        console.log(this.count);
     },
     data: function data() {
         return {
@@ -56624,10 +56618,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
-        getTextFor: function getTextFor(sharedFrom, profileOwner) {
-            //console.log(sharedFrom)
-            //console.log(profileOwner)
-        },
+        getTextFor: function getTextFor(sharedFrom, profileOwner) {},
         formatUrl: function formatUrl(username) {
             return '/user/@' + username;
         },
@@ -57081,6 +57072,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -57088,6 +57082,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['status', 'imagePath', 'lightbox', 'currentuserid'],
+    mounted: function mounted() {},
+
     components: {
         'nameandtimeheader': __WEBPACK_IMPORTED_MODULE_0__Users_NameAndTimeHeader___default.a,
         'imagegallery': __WEBPACK_IMPORTED_MODULE_1__Status_ImageGallery___default.a,
@@ -57105,7 +57101,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (user.images == 0) {
                 return "/default.jpg";
             } else {
-                return "/" + image[0].thumb;
+                return "/" + user.images[0].thumb;
             }
         }
     }
@@ -57181,6 +57177,15 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("div", [
+                        _vm.status.reshared_comment
+                          ? _c("div", [
+                              _c("em", [
+                                _c("strong", [
+                                  _vm._v(_vm._s(_vm.status.reshared_comment))
+                                ])
+                              ])
+                            ])
+                          : _vm._e(),
                         _vm._v(
                           "\n                      " +
                             _vm._s(_vm.status.body) +
@@ -57339,8 +57344,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         statusDeleted: function statusDeleted(statusID) {
-            this.deleting = '';
             __WEBPACK_IMPORTED_MODULE_3__utilities_EventBus__["a" /* EventBus */].$emit('status-deleted', "deleted");
+            this.deleting = '';
         },
         isOwnedBy: function isOwnedBy(userID) {
             return userID == this.currentuserid;

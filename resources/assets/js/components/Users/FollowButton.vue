@@ -15,10 +15,10 @@ import {EventBus} from './../../utilities/EventBus'
     export default {
         props:['following', 'isfollowed'],
            mounted() {
-               this.setUp()
-               if(this.isFollowing == true){
+               
+               if(this.isfollowed == true){
                    this.followed()
-               }else if(this.isFollowing == false){
+               }else if(this.isfollowed == false){
                    this.unFollowed()
                }
         },
@@ -64,10 +64,6 @@ import {EventBus} from './../../utilities/EventBus'
                      else if(response[0] ==300){
                         EventBus.$emit("user-followed")};
                 },
-
-            setUp(){
-                this.isFollowing =  this.isfollowed;
             }
-        }
     }
 </script>

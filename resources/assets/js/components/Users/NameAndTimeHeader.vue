@@ -48,8 +48,6 @@ export default {
     },
     methods:{
         getTextFor(sharedFrom, profileOwner){
-            //console.log(sharedFrom)
-            //console.log(profileOwner)
         },
         formatUrl(username){
             return '/user/@'+username

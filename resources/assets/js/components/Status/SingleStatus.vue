@@ -19,6 +19,9 @@
                         :statusoriginalid="status.original_id">
                 </nameandtimeheader>
                     <div>
+                        <div v-if="status.reshared_comment">
+                            <em> <strong>{{status.reshared_comment}}</strong></em>
+                        </div>
                         {{status.body}}
                     </div>
                 <imagegallery v-if="status.status_images"
@@ -45,6 +48,8 @@ import StatusFooterLinks from "./StatusFooterLinks"
 
 export default {
     props: ['status', 'imagePath','lightbox','currentuserid'],
+    mounted(){                
+    },
     components:{
         'nameandtimeheader':NameAndTimeHeader,
         'imagegallery': imagegallery,
@@ -63,7 +68,7 @@ export default {
                 return "/default.jpg"
             }
             else{
-                return "/"+image[0].thumb;
+                return "/"+user.images[0].thumb;
             }
         },
     }

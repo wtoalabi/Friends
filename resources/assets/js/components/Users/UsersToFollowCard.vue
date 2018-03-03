@@ -2,12 +2,12 @@
 <div>
     <span class="" v-for="chunkedColumn in chunkedUsers" :key="chunkedColumn.id">
         <div class="columns">
-            <div class="column is-4" v-for="(user, index) in chunkedColumn" :key="user.id">
+            <div class="column is-4" v-for="user in chunkedColumn" :key="user.id">
                  <a :href="linkToUsername(user.username)">                    
                     <img :src="linkToThumb(user.images)" alt="Image" class="image is-64x64 is-circle" > 
                  </a>
                  <a :href="linkToUsername(user.username)">
-                    {{reduceFirstNameCharacters(user.last_name)}}
+                    {{reduceFirstNameCharacters(user.first_name)}}
                 </a> 
                                  
                 <followbutton :following="user.id" :isfollowed="isfollowed"></followbutton>
@@ -21,8 +21,8 @@ import followbutton from '../Users/FollowButton'
 import {EventBus} from './../../utilities/EventBus'
 
     export default {
-        props:['following', 'userstofollow','imagepath', 'isfollowed'],
-        mounted(){            
+        props:['following','imagepath', 'isfollowed'],
+        mounted(){     
          this.getAllUsersToFollow()
          EventBus.$on('user-unfollowed',id=>{
                 this.removeUserFromList(id)

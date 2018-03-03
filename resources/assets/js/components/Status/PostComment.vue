@@ -41,9 +41,7 @@
 export default {
     props:['statusid'],
     mounted(){
-        this.getCount()
-        console.log(this.count);
-        
+        this.getCount()        
     },
     data(){
           return{

@@ -44,8 +44,8 @@ export default {
             }
         },
        statusDeleted(statusID){
+           EventBus.$emit('status-deleted',"deleted")
             this.deleting = ''
-            EventBus.$emit('status-deleted',"deleted")
             },
         isOwnedBy(userID){
             return userID == this.currentuserid

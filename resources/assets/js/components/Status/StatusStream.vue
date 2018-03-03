@@ -97,7 +97,7 @@ import SingleStatus from "./SingleStatus"
                     this.newStatus(status)})              
                 EventBus.$on("status-shared", status=> {this.newStatus(status)})
                 EventBus.$on("status-deleted", status=> {this.getStatus()})
-                EventBus.$on("user-unfollowed", unfollowed=> {this.getStatus()})
+                //EventBus.$on("user-unfollowed", unfollowed=> {this.getStatus()})
                 },        
         reduceBody(body){
             return body.substring(0,50) + "..."

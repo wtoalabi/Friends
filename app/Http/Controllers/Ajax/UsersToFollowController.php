@@ -13,13 +13,13 @@ class UsersToFollowController extends Controller
         $usersToFollow = Auth::user()->following()->pluck('follow_id');
         $usersToFollow[] = Auth::user()->id;
         return User::whereNotIn('id', $usersToFollow)
-                            ->with(
-                                ['images'=>function($query){
-                                    $query->where('folderID', 1);
-                                }]
-                                )
-                            ->inRandomOrder()
-                            ->take(6)->get();
+            ->with(
+                ['images'=>function($query){
+                    $query->where('folderID', 1);
+                }]
+                )
+            ->inRandomOrder()
+            ->take(6)->get();
          ;
     }
 }
