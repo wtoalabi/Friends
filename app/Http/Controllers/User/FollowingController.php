@@ -11,11 +11,7 @@ class FollowingController extends Controller
 {
     
     public function store (){
-            //dd(request()->all());  
-            $users = array_add(request()->all(), 'user', Auth::user());
-            //dd($users);
+        $users = array_add(request()->all(), 'user', Auth::user());
             return (new Following($users))->make();
-
-            //return response(['message'=>'Done'], 200);
     }
 }

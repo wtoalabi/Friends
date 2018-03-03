@@ -9,3 +9,4 @@ Vue.component('likestatus', require('./Status/LikeStatus'));
 Vue.component('resharestatus', require('./Status/ReshareStatus'));
 Vue.component('commentssection', require('./Status/Comments/CommentsSection'));
 Vue.component('imagegallery', require('./Status/ImageGallery'));
+Vue.component('friendslist', require('./Friends/FriendsList'));

@@ -34,16 +34,20 @@
             </div>
         </div>
         <div class="column is-centered card-footer">
-            <div class="columns">
-                <span class="column is-8 title is-size-4"> Followers: </span> 
-                <span class="column is-4"> <span class="button mb-1"> <span class="has-text-success is-link is-size-6">{{followersCount}}</span></span></span> 
-            </div>
+            <a :href="'/friends/list/@'+propusername">
+                <div class="columns">
+                    <span class="column is-8 title is-size-4"> Followers: </span> 
+                    <span class="column is-4"> <span class="button mb-1"> <span class="has-text-success is-link is-size-6">{{followersCount}}</span></span></span> 
+                </div>
+            </a>
         </div>
         <div class="column is-centered card-footer">
-            <div class="columns">
-                <span class="column is-8 title is-size-4"> Following: </span> 
-                <span class="column is-4"> <span class="button mb-1"><span class="has-text-info is-link is-size-6">{{followingCount}}</span></span></span>
-            </div>
+            <a :href="'/friends/list/@'+propusername">
+                <div class="columns">
+                    <span class="column is-8 title is-size-4"> Following: </span> 
+                    <span class="column is-4"> <span class="button mb-1"><span class="has-text-info is-link is-size-6">{{followingCount}}</span></span></span>
+                </div>
+            </a>
         </div>
   </div>
   </div>
@@ -53,7 +57,7 @@
 import followbutton from './../Users/FollowButton'
 import {EventBus} from './../../utilities/EventBus'
 export default {
-    props:['propuserid', 'propimagepath', 'propcurrentuserid','propisfollowed'],
+    props:['propuserid', 'propimagepath', 'propcurrentuserid','propisfollowed','propusername'],
     components:{
         'followbutton': followbutton
     },

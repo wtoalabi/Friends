@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 class GetUserController extends Controller
 {
     public function show ($id){
-        return User::where('id',$id)->withCount(['following','followers','statuses'])->with(['images'=>function($query){
+        return User::where('id',$id)
+                ->withCount(['following','followers','statuses'])
+                ->with(['images'=>function($query){
             $query->where('profile', 1);
         }])->first();
    }

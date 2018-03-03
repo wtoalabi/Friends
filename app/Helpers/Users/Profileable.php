@@ -21,7 +21,11 @@ Trait Profileable{
         return $this->hasOne(ProfileImage::class);
     } */
     public function followers(){
-        return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'follows', 'follow_id', 'user_id')
+                ->withTimestamps()
+                ->with(['images'=>function($query){
+                    $query->where('profile', 1)->first();
+                }]);
     }
     public function following(){
         return $this->belongsToMany(User::class, 'follows', 'user_id', 'follow_id')->withTimestamps();

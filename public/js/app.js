@@ -49376,6 +49376,7 @@ Vue.component('likestatus', __webpack_require__(17));
 Vue.component('resharestatus', __webpack_require__(18));
 Vue.component('commentssection', __webpack_require__(202));
 Vue.component('imagegallery', __webpack_require__(228));
+Vue.component('friendslist', __webpack_require__(237));
 
 /***/ }),
 /* 175 */
@@ -49635,8 +49636,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Users_FollowButton__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UserCard__ = __webpack_require__(246);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UserCard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__UserCard__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__(3);
 //
 //
@@ -49647,17 +49648,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
-
+//import followbutton from '../Users/FollowButton'
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -49666,20 +49658,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         this.getAllUsersToFollow();
+
         __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('user-unfollowed', function (id) {
             _this.removeUserFromList(id);
         });
     },
 
     components: {
-        'followbutton': __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton___default.a
+        /*  'followbutton':followbutton, */
+        'usercard': __WEBPACK_IMPORTED_MODULE_0__UserCard___default.a
     },
     data: function data() {
         return {
             followID: this.following,
-            users: [],
-            chunkedUsers: [],
-            thumbPath: ''
+            users: '',
+            usersToFollow: ''
         };
     },
 
@@ -49688,31 +49681,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             return axios.get('/users-to-follow').then(function (response) {
-                return _this2.getUsers(response.data);
+                return _this2.allUsers(response.data);
             });
         },
-        getUsers: function getUsers(data) {
-            this.users = data;
-            this.thumbPath = this.imagepath;
-            this.chunkedUsers = _.chunk(data, 3);
-        },
-        linkToThumb: function linkToThumb(image) {
-            if (image == 0) {
-                return this.thumbPath + "/" + "default.jpg";
-            } else {
-                return this.thumbPath + "/" + image[0].thumb;
-            }
-        },
-        linkToUsername: function linkToUsername(username) {
-            return "/user/@" + username;
+        allUsers: function allUsers(users) {
+            this.usersToFollow = users;
         },
         removeUserFromList: function removeUserFromList(id) {
             this.users.splice(id, 1);
             this.getAllUsersToFollow();
-        },
-        reduceFirstNameCharacters: function reduceFirstNameCharacters(name) {
-            var reducedname = name.substring(0, 6);
-            return reducedname + "...";
         }
     }
 });
@@ -49727,49 +49704,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.chunkedUsers, function(chunkedColumn) {
-      return _c("span", { key: chunkedColumn.id }, [
-        _c(
-          "div",
-          { staticClass: "columns" },
-          _vm._l(chunkedColumn, function(user) {
-            return _c(
-              "div",
-              { key: user.id, staticClass: "column is-4" },
-              [
-                _c(
-                  "a",
-                  { attrs: { href: _vm.linkToUsername(user.username) } },
-                  [
-                    _c("img", {
-                      staticClass: "image is-64x64 is-circle",
-                      attrs: { src: _vm.linkToThumb(user.images), alt: "Image" }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  { attrs: { href: _vm.linkToUsername(user.username) } },
-                  [
-                    _vm._v(
-                      "\r\n                    " +
-                        _vm._s(_vm.reduceFirstNameCharacters(user.first_name)) +
-                        "\r\n                "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("followbutton", {
-                  attrs: { following: user.id, isfollowed: _vm.isfollowed }
-                })
-              ],
-              1
-            )
-          })
-        )
-      ])
-    })
+    [
+      _c("usercard", {
+        attrs: { usersdata: _vm.usersToFollow, imagepath: _vm.imagepath }
+      })
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -54043,7 +53983,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0__utilities_EventBus__["a" /* EventBus */].$on("status-deleted", function (status) {
                 _this4.getStatus();
             });
-            //EventBus.$on("user-unfollowed", unfollowed=> {this.getStatus()})
         },
         reduceBody: function reduceBody(body) {
             return body.substring(0, 50) + "...";
@@ -55118,11 +55057,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['propuserid', 'propimagepath', 'propcurrentuserid', 'propisfollowed'],
+    props: ['propuserid', 'propimagepath', 'propcurrentuserid', 'propisfollowed', 'propusername'],
     components: {
         'followbutton': __WEBPACK_IMPORTED_MODULE_0__Users_FollowButton___default.a
     },
@@ -55299,33 +55242,37 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "column is-centered card-footer" }, [
-        _c("div", { staticClass: "columns" }, [
-          _c("span", { staticClass: "column is-8 title is-size-4" }, [
-            _vm._v(" Followers: ")
-          ]),
-          _vm._v(" "),
-          _c("span", { staticClass: "column is-4" }, [
-            _c("span", { staticClass: "button mb-1" }, [
-              _c(
-                "span",
-                { staticClass: "has-text-success is-link is-size-6" },
-                [_vm._v(_vm._s(_vm.followersCount))]
-              )
+        _c("a", { attrs: { href: "/friends/list/@" + _vm.propusername } }, [
+          _c("div", { staticClass: "columns" }, [
+            _c("span", { staticClass: "column is-8 title is-size-4" }, [
+              _vm._v(" Followers: ")
+            ]),
+            _vm._v(" "),
+            _c("span", { staticClass: "column is-4" }, [
+              _c("span", { staticClass: "button mb-1" }, [
+                _c(
+                  "span",
+                  { staticClass: "has-text-success is-link is-size-6" },
+                  [_vm._v(_vm._s(_vm.followersCount))]
+                )
+              ])
             ])
           ])
         ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "column is-centered card-footer" }, [
-        _c("div", { staticClass: "columns" }, [
-          _c("span", { staticClass: "column is-8 title is-size-4" }, [
-            _vm._v(" Following: ")
-          ]),
-          _vm._v(" "),
-          _c("span", { staticClass: "column is-4" }, [
-            _c("span", { staticClass: "button mb-1" }, [
-              _c("span", { staticClass: "has-text-info is-link is-size-6" }, [
-                _vm._v(_vm._s(_vm.followingCount))
+        _c("a", { attrs: { href: "/friends/list/@" + _vm.propusername } }, [
+          _c("div", { staticClass: "columns" }, [
+            _c("span", { staticClass: "column is-8 title is-size-4" }, [
+              _vm._v(" Following: ")
+            ]),
+            _vm._v(" "),
+            _c("span", { staticClass: "column is-4" }, [
+              _c("span", { staticClass: "button mb-1" }, [
+                _c("span", { staticClass: "has-text-info is-link is-size-6" }, [
+                  _vm._v(_vm._s(_vm.followingCount))
+                ])
               ])
             ])
           ])
@@ -57449,6 +57396,643 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-5bcf1d0e", module.exports)
+  }
+}
+
+/***/ }),
+/* 237 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(238)
+/* template */
+var __vue_template__ = __webpack_require__(239)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Friends\\FriendsList.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-61cadb45", Component.options)
+  } else {
+    hotAPI.reload("data-v-61cadb45", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 238 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Following__ = __webpack_require__(240);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Following___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Following__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Followers__ = __webpack_require__(241);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Followers___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Followers__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['userid', 'imagepath'],
+    mounted: function mounted() {},
+
+    components: {
+        'following': __WEBPACK_IMPORTED_MODULE_0__Following___default.a,
+        'followers': __WEBPACK_IMPORTED_MODULE_1__Followers___default.a
+    },
+    data: function data() {
+        return {
+            followers: 'has-text-black',
+            following: ''
+        };
+    },
+
+
+    methods: {
+        followingClicked: function followingClicked() {
+            this.show;
+            this.following = 'has-text-black';
+            this.followers = null;
+        },
+        followersClicked: function followersClicked() {
+            this.followers = 'has-text-black';
+            this.following = null;
+        }
+    }
+
+});
+
+/***/ }),
+/* 239 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "nav",
+        {
+          staticClass:
+            "breadcrumb is-centered is-medium has-succeeds-separator",
+          attrs: { "aria-label": "breadcrumbs" }
+        },
+        [
+          _c("ul", [
+            _c("li", [
+              _c(
+                "a",
+                {
+                  class: _vm.followers,
+                  attrs: { href: "#" },
+                  on: {
+                    click: [
+                      function($event) {
+                        $event.preventDefault()
+                      },
+                      function($event) {
+                        _vm.followersClicked()
+                      }
+                    ]
+                  }
+                },
+                [_vm._m(0), _c("span", [_vm._v("Followers")])]
+              )
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c(
+                "a",
+                {
+                  class: _vm.following,
+                  attrs: { href: "#" },
+                  on: {
+                    click: [
+                      function($event) {
+                        $event.preventDefault()
+                      },
+                      function($event) {
+                        _vm.followingClicked()
+                      }
+                    ]
+                  }
+                },
+                [_vm._m(1), _c("span", [_vm._v("Following")])]
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm.following
+        ? _c("following", { attrs: { userid: _vm.userid } })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.followers
+        ? _c("followers", {
+            attrs: { userid: _vm.userid, imagepath: _vm.imagepath }
+          })
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon is-small" }, [
+      _c("i", { staticClass: "fa fa-eye" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon is-small" }, [
+      _c("i", { staticClass: "fa fa-eye-slash" })
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-61cadb45", module.exports)
+  }
+}
+
+/***/ }),
+/* 240 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(244)
+/* template */
+var __vue_template__ = __webpack_require__(245)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Friends\\Following.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-271d1cfa", Component.options)
+  } else {
+    hotAPI.reload("data-v-271d1cfa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 241 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(242)
+/* template */
+var __vue_template__ = __webpack_require__(243)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Friends\\Followers.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-20550107", Component.options)
+  } else {
+    hotAPI.reload("data-v-20550107", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 242 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_UserCard__ = __webpack_require__(246);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_UserCard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Users_UserCard__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['userid', 'imagepath'],
+    mounted: function mounted() {
+        this.getFollowers();
+    },
+
+    components: {
+        'usercard': __WEBPACK_IMPORTED_MODULE_0__Users_UserCard___default.a
+    },
+    data: function data() {
+        return {
+            followers: ''
+        };
+    },
+
+    methods: {
+        getFollowers: function getFollowers() {
+            var _this = this;
+
+            return axios.get('/friends/followers/' + this.userid).then(function (response) {
+                return _this.followers = response.data;
+            });
+        },
+        processFollowers: function processFollowers(users) {
+            this.followers = users;
+        },
+        chunkUsers: function chunkUsers(users) {
+            return users;
+        }
+    }
+});
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      [
+        _c("usercard", {
+          attrs: { usersdata: _vm.followers, imagepath: _vm.imagepath }
+        })
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-20550107", module.exports)
+  }
+}
+
+/***/ }),
+/* 244 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 245 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("h1", { staticClass: "title is-1" }, [_vm._v("Following")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-271d1cfa", module.exports)
+  }
+}
+
+/***/ }),
+/* 246 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(247)
+/* template */
+var __vue_template__ = __webpack_require__(248)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Users\\UserCard.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-659074a6", Component.options)
+  } else {
+    hotAPI.reload("data-v-659074a6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 247 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['usersdata', 'imagepath'],
+    mounted: function mounted() {
+        console.log(this.usersdata);
+    },
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        chunkUsers: function chunkUsers(users) {
+            return _.chunk(users, 4);
+        },
+        linkToThumb: function linkToThumb(image) {
+            if (image == 0) {
+                return this.imagepath + "/" + "default.jpg";
+            } else {
+                return this.imagepath + "/" + image[0].thumb;
+            }
+        },
+        linkToUsername: function linkToUsername(username) {
+            return "/user/@" + username;
+        },
+        reduceFirstNameCharacters: function reduceFirstNameCharacters(name) {
+            var reducedname = name.substring(0, 6);
+            return reducedname + "...";
+        }
+    }
+});
+
+/***/ }),
+/* 248 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.chunkUsers(_vm.usersdata), function(groupedUsers) {
+      return _c("div", { key: groupedUsers.id }, [
+        _c(
+          "div",
+          { staticClass: "columns" },
+          _vm._l(groupedUsers, function(user) {
+            return _c(
+              "div",
+              {
+                key: user.id,
+                staticClass: "message is-primary mb-1 column is-3"
+              },
+              [
+                _c("div", {}, [
+                  _c("div", { staticClass: "card" }, [
+                    _c("div", { staticClass: "card-image" }, [
+                      _c("figure", { staticClass: "image is-4by3" }, [
+                        _c("img", {
+                          attrs: {
+                            src: _vm.linkToThumb(user.images),
+                            alt: "Image"
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-content" }, [
+                      _c("div", { staticClass: "media" }, [
+                        _c("div", { staticClass: "media-content" }, [
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: _vm.linkToUsername(user.username) }
+                            },
+                            [
+                              _c("p", { staticClass: "title is-5" }, [
+                                _vm._v(
+                                  _vm._s(user.first_name) +
+                                    " " +
+                                    _vm._s(user.last_name)
+                                )
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "subtitle is-" }, [
+                            _vm._v("@" + _vm._s(user.username))
+                          ])
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              ]
+            )
+          })
+        )
+      ])
+    })
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-659074a6", module.exports)
   }
 }
 

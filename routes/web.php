@@ -29,7 +29,7 @@ Route::group(['middleware'=>'auth', 'prefix'=>''], function(){
 /* ProfilePage */
 
 Route::get('user/@{username}', 'User\UserProfileController@show')
-->name('profile')
+->name('my-profile')
 ->middleware('auth');
 
 
@@ -79,5 +79,6 @@ Route::group(['middleware'=>'auth', 'prefix'=>'counts'], function(){
     Route::get('reshares/{id}', 'Ajax\GetCountsController@reshares');
 });
 Route::group(['middleware'=>'auth', 'prefix'=>'friends'], function(){
-    Route::get('list', 'User\FriendsListController@index');
+    Route::get('list/@{username}', 'User\FriendsListController@index')->name('friends-list');
+    Route::get('followers/{id}','User\FriendsListController@followers');
 });

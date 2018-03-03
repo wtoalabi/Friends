@@ -1,18 +1,18 @@
 <div class="tabs is-centered">
     <ul>
-        <li class="is-active">
+        <li class="{{setActive(route('home'))}}">
         <a href="/home">
             <span class="icon is-small"><i class="fa fa-exchange"></i></span>
             <span>My Stream</span>
         </a>
         </li>
-        <li class="">
-        <a href="/friends/list">
+          <li class="{{setActive(route('friends-list',$currentUser->username))}}">
+            <a href="/friends/list/{{$currentUser->usernameSlug()}}">
             <span class="icon is-small"><i class="fa fa-group"></i></span>
-            <span>Friends</span>
+            <span>My Friends</span>
         </a>
-        </li>
-        <li>
+        </li> 
+        <li class="{{setActive(route('my-profile',$currentUser->username))}}">
         <a href="/user/{{$currentUser->usernameSlug()}}">
             <span class="icon is-small"><i class="fa fa-hashtag"></i></span>
             <span> My Profile</span>

@@ -1,5 +1,10 @@
 <?php
 
 function setActive($path){
-  return Request::is($path) ? "active nav-link": "nav-link" ;
+    if(url()->current() == $path){
+        return "is-active";
+    }  
+    else{
+        return '';
+    }
 }

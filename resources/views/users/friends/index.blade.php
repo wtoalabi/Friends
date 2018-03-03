@@ -1,14 +1,17 @@
 @component('layouts.users.one-sidebar')
 
 @slot('title')
- {{$currentUser->pageTitle()}} Friends List
+ {{$user->pageTitle()}} Friends List
 @endslot
 
 @slot('user_right_column')
-    @include('users.partials.user-info-card',['user'=>$currentUser])
+    @include('users.partials.user-info-card',['user'=>$user])
     
 @endslot
 
-@include('users.friends.partials.list')
+<friendslist
+    userid="{{$user->id}}"
+    imagepath="{{asset('storage/user')}}">
+</friendslist>
 
 @endcomponent
