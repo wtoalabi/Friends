@@ -23,7 +23,7 @@
         <div class="card-footer column is-centered" v-show="!isProfileUser">
             <div class="columns is-centered">
                 <div class="column has-text-centered">
-                    <followbutton :following="propuserid" :isfollowed="this.propisfollowed"></followbutton>
+                    <followbutton :recipientuserid="propuserid"></followbutton>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
 import followbutton from './../Users/FollowButton'
 import {EventBus} from './../../utilities/EventBus'
 export default {
-    props:['propuserid', 'propimagepath', 'propcurrentuserid','propisfollowed','propusername'],
+    props:['propuserid', 'propimagepath', 'propcurrentuserid','propusername'],
     components:{
         'followbutton': followbutton
     },

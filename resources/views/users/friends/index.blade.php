@@ -11,6 +11,7 @@
 
 <friendslist
     userid="{{$user->id}}"
+    loggedinuserid="{{$currentUser->id}}"
     imagepath="{{asset('storage/user')}}">
 </friendslist>
 

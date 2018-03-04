@@ -1,11 +1,7 @@
 <template>
     <div>
-<form class="form" method="post" @submit.prevent="onSubmit">
-<input class="hidden" v-model="form.follow_id" name="follow_id" type="hidden">
-
-<button :class="stateClass" type="submit" @click="toggleChanges(form.follow_id)">{{buttonText}}</button>
-</form>
-</div>
+        <button :class="stateClass" type="submit" @click="onSubmit()">{{buttonText}}</button>
+    </div>
 </template>
 
 <script>
@@ -13,19 +9,14 @@ import Form from '../../utilities/Form';
 import {EventBus} from './../../utilities/EventBus'
 
     export default {
-        props:['following', 'isfollowed'],
-           mounted() {
-               
-               if(this.isfollowed == true){
-                   this.followed()
-               }else if(this.isfollowed == false){
-                   this.unFollowed()
-               }
+        props:['recipientuserid'],
+           mounted() {   
+               this.getStatus()                           
         },
             data(){
                 return{
                     form: new Form({
-                        follow_id: this.following
+                        follow_id: this.recipientuserid
                     }),
                     followingState: '',
                     buttonText: '',
@@ -34,36 +25,43 @@ import {EventBus} from './../../utilities/EventBus'
                 }
             },
         methods:{
-            onSubmit(){
-                this.form.post('/following')
-                .then(response=>this.submitted(response))
+            onSubmit(){                
+                return axios.post('/following/' +this.recipientuserid)
+                    .then(response=>this.submitted(response.data.status))
 
             },
-            toggleChanges(data){
-                if(this.isFollowing ==true){
-                    this.unFollowed(data)
-                }
-                else if(this.isFollowing == false){
-                    this.followed(data)
-                }
-            },
-            followed(id){
+            followed(){
                 this.isFollowing = true
                 this.buttonText = "Unfollow"
                 this.stateClass = "button is-danger"
             },
-            unFollowed(id){
+            unfollowed(){
                 this.isFollowing = false
                 this.buttonText = "Follow"
                 this.stateClass = "button is-primary"
             },
             submitted(response){
-                if(response[0] == 200){
-                    EventBus.$emit("user-unfollowed");
+                
+                if(response == 200){
+                    this.followed()
+                    EventBus.$emit("user-followed");
                 }
-                     else if(response[0] ==300){
-                        EventBus.$emit("user-followed")};
+                     else if(response ==300){
+                        this.unfollowed()
+
+                    EventBus.$emit("user-unfollowed")};
                 },
+            getStatus(){
+                return axios.get('/get-follow-status/'+this.recipientuserid).then(response=>(this.setStatus(response.data.status)))
+            },
+            setStatus(response){
+                if(response == true){
+                   this.followed()
+               }
+               else if(response == false){
+                   this.unfollowed()
+               }
+            }
             }
     }
 </script>

@@ -3,7 +3,7 @@
       
     <div v-for="groupedUsers in chunkUsers(usersdata)" :key="groupedUsers.id">
         <div class="columns">
-            <div class="message is-primary mb-1 column is-3" v-for="user in groupedUsers" :key="user.id">
+            <div class="message is-primary mb-1 column" :class="columnsize" v-for="user in groupedUsers" :key="user.id">
                 <div class="">
                     <div class="card">
                         <div class="card-image">
@@ -20,6 +20,14 @@
                                         <p class="subtitle is-">@{{user.username}}</p>
                                 </div>
                             </div>
+                            <div v-if="user.id != loggedinuserid">
+                                <followbutton
+                                    :recipientuserid="user.id">
+                                </followbutton>
+                            </div>
+                            <div v-else>
+                                <span class="button is-primary">Yours Truly....</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -30,10 +38,13 @@
 </template>
 
 <script>
+import FollowButton from "./FollowButton"
 export default {
-  props:['usersdata', 'imagepath'],
+  props:['usersdata', 'imagepath','columnsize','chunksize','loggedinuserid'],
   mounted(){
-      console.log(this.usersdata);  
+  },
+  components:{
+      'followbutton': FollowButton
   },
   data(){
       return{
@@ -42,7 +53,7 @@ export default {
   methods:{
         
         chunkUsers(users){
-            return _.chunk(users,4);
+            return _.chunk(users,this.chunksize);
         },
         
         linkToThumb(image){
@@ -56,10 +67,7 @@ export default {
             linkToUsername(username){
                 return "/user/@"+username
         },
-            reduceFirstNameCharacters(name){
-                var reducedname = name.substring(0,6)
-                    return reducedname + "..."
-            }
+           
     }
 }
 </script>

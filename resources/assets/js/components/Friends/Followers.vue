@@ -3,7 +3,10 @@
         <div>
             <usercard
                 :usersdata="followers"
-                :imagepath="imagepath">
+                :imagepath="imagepath"
+                :columnsize="'is-3'"
+                :chunksize="3"
+                :loggedinuserid="loggedinuserid">
             </usercard>
         </div>
     </div>
@@ -12,8 +15,8 @@
 <script>
 import UserCard from "./../Users/UserCard"
 export default {
-  props:['userid','imagepath'],
-  mounted(){
+  props:['userid','imagepath','loggedinuserid'],
+  mounted(){      
       this.getFollowers()      
   },
   components:{

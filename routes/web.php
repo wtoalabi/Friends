@@ -35,9 +35,8 @@ Route::get('user/@{username}', 'User\UserProfileController@show')
 
 /* Following */
 
-Route::resource('following', 'User\FollowingController')
-->only(['store', 'destroy'])
-->middleware('auth');
+Route::get('get-follow-status/{id}', 'User\FollowingController@followingStatus')->middleware('auth');
+Route::post('following/{id}', 'User\FollowingController@make')->middleware('auth');
 
 
 /* Ajax Requests */

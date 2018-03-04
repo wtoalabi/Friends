@@ -18,7 +18,8 @@
         <followers 
             v-if="followers"
             :userid="userid"
-            :imagepath="imagepath">
+            :imagepath="imagepath"
+            :loggedinuserid="loggedinuserid">
         </followers>
   </div>
 </template>
@@ -27,8 +28,8 @@
 import Following from "./Following";
 import Followers from "./Followers";
 export default {
-    props:['userid','imagepath'],
-    mounted(){
+    props:['userid','imagepath','loggedinuserid'],
+    mounted(){        
     },
     components:{
         'following': Following,
