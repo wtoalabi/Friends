@@ -3,11 +3,11 @@
         <nav class="level is-mobile">
             <div class="level-left">
                <div class="field is-grouped is-grouped-multiline" @click.prevent.self>
-                    <postcomment :count="status.comments_count" 
+                    <postcomment :propcount="status.comments_count" 
                                  :statusid="status.id">
                                  </postcomment>
-                    <likestatus :statusid="status.id" :count="status.likes_count" :currentuser="currentuserid" ></likestatus>
-                    <resharestatus :count="status.reshares_count" :status="status"></resharestatus>
+                    <likestatus :statusid="status.id" :currentuser="currentuserid" ></likestatus>
+                    <resharestatus :propcount="status.reshares_count" :status="status"></resharestatus>
                 </div>
                 </div>
             <div class="level-right" v-show="isOwnedBy(status.user.id)">

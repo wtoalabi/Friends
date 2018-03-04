@@ -25,15 +25,24 @@ class LikesController extends Controller
                 'status_id' => $id,
                 ]);
             }
-         Redis::HSET("StatusLikes:Status$id", $user->id, 1);
-         return response(['message'=>"Status Liked!", "status"=> 200]);
+            Redis::HSET("StatusLikes:Status$id", $user->id, 1);
+            $totalLikes = $this->getTotalLikes($id);
+            return response(['message'=>"Status Liked!", "status"=> 200, "total"=>$totalLikes]);
         }
-    public function likeStatus ($userID,$statusID){
-         return REDIS::HEXISTS("StatusLikes:Status$statusID", $userID);
-    }
-    public function destroy ($like){
-        Redis::HDEL("StatusLikes:Status$like->status_id", $like->user_id);
-        $like->delete();
-        return response(['message'=> "Unliked!", "status"=> 300]);
-    }
+
+        public function likeStatus ($userID,$statusID){
+            $status = REDIS::HEXISTS("StatusLikes:Status$statusID", $userID);
+            $totalLikes = $this->getTotalLikes($statusID);
+            return response(['status'=>$status, 'total'=>$totalLikes]);
+        }
+
+        public function destroy ($like){
+            Redis::HDEL("StatusLikes:Status$like->status_id", $like->user_id);
+            $like->delete();
+            $totalLikes = $this->getTotalLikes($like->status_id);
+            return response(['message'=> "Unliked!", "status"=> 300, 'total'=>$totalLikes]);
+        }
+        public function getTotalLikes ($id){
+            return Redis::HLEN("StatusLikes:Status$id");
+        }
 }

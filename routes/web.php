@@ -75,7 +75,6 @@ Route::group(['middleware'=>'auth'],function(){
 });
 Route::group(['middleware'=>'auth', 'prefix'=>'counts'], function(){
     Route::get('replies/{id}', 'Ajax\GetCountsController@replies');
-    Route::get('likes/{id}', 'Ajax\GetCountsController@likes');
     Route::get('reshares/{id}', 'Ajax\GetCountsController@reshares');
 });
 Route::group(['middleware'=>'auth', 'prefix'=>'friends'], function(){

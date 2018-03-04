@@ -39,9 +39,9 @@
     import Form from "./../../utilities/Form";
     import {EventBus} from './../../utilities/EventBus'
 export default {
-    props:['statusid'],
+    props:['statusid', 'propcount'],
     mounted(){
-        this.getCount()        
+        this.count = this.propcount
     },
     data(){
           return{

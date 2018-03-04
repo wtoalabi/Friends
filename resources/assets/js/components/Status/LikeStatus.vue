@@ -15,8 +15,7 @@ import {EventBus} from './../../utilities/EventBus'
 export default {
     props:['statusid','currentuser'],
     mounted(){        
-        this.getCount()
-        this.getLikeStatus((this.currentuser,this.statusid)  )
+        this.getLikeStatus(this.currentuser,this.statusid)
         },
     data(){
         return{
@@ -30,16 +29,16 @@ export default {
     methods:{
         processClick(id){
             this.statusID = id
-            return axios.post('/like-status/'+this.statusID).then(response=> this.setResponse(response.data.status))
+            return axios.post('/like-status/'+this.statusID).then(response=> this.setResponse(response.data))
         },
 
         setResponse(response){
-            this.getCount()
-            if(response == 200){
+            this.count = response.total            
+            if(response.status == 200){
                 this.liked()
                 EventBus.$emit('status-liked')
                 }
-                if(response == 300){
+                if(response.status == 300){
                     this.unLiked()
                     EventBus.$emit('status-unLiked')
                 }
@@ -53,14 +52,15 @@ export default {
             this.LikeText = "Click to Like!"
             this.LikeClass = "is-primary"
         },
-        getLikeStatus(user,status){
+        getLikeStatus(user,status){            
             return axios.get("/like-status/"+user+"/"+status).then(response=>this.mountLikes(response.data))
         },
-        mountLikes(likeStatus){
-            if(likeStatus == 1){
+        mountLikes(response){
+            this.count = response.total
+            if(response.status == 1){
                 this.liked()
             }
-            else if(likeStatus ==0){
+            else if(response.status ==0){
                 this.unLiked()
             }
         },
