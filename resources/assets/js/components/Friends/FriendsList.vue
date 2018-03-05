@@ -13,7 +13,9 @@
         </nav>
         <following 
             v-if="following"
-            :userid="userid">
+            :userid="userid"
+            :imagepath="imagepath"
+            :loggedinuserid="loggedinuserid">
         </following>
         <followers 
             v-if="followers"

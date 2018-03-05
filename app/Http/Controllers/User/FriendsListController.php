@@ -13,7 +13,10 @@ class FriendsListController extends Controller
          return view('users.friends.index', compact('user'));
     }
 
-    public function following (){
+    public function following ($id){
+        $user = User::find($id);
+
+        return $user->following;
     }
     
     public function followers ($id){

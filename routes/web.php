@@ -79,4 +79,5 @@ Route::group(['middleware'=>'auth', 'prefix'=>'counts'], function(){
 Route::group(['middleware'=>'auth', 'prefix'=>'friends'], function(){
     Route::get('list/@{username}', 'User\FriendsListController@index')->name('friends-list');
     Route::get('followers/{id}','User\FriendsListController@followers');
+    Route::get('following/{id}','User\FriendsListController@following');
 });
