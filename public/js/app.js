@@ -49424,6 +49424,15 @@ Vue.component('friendslist', __webpack_require__(228));
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_Form__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_simple_spinner__ = __webpack_require__(249);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_simple_spinner___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_simple_spinner__);
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -49439,6 +49448,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         this.getStatus();
     },
+
+    components: {
+        'spinner': __WEBPACK_IMPORTED_MODULE_2_vue_simple_spinner___default.a
+    },
     data: function data() {
         return {
             form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */]({
@@ -49447,7 +49460,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             followingState: '',
             buttonText: '',
             isFollowing: '',
-            stateClass: ''
+            stateClass: '',
+            loading: ''
         };
     },
 
@@ -49470,7 +49484,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.stateClass = "button is-primary";
         },
         submitted: function submitted(response) {
-
             if (response == 200) {
                 this.followed();
                 __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$emit("user-followed");
@@ -49483,11 +49496,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getStatus: function getStatus() {
             var _this2 = this;
 
+            this.loading = true;
             return axios.get('/get-follow-status/' + this.recipientuserid).then(function (response) {
                 return _this2.setStatus(response.data.status);
             });
         },
         setStatus: function setStatus(response) {
+            this.loading = false;
             if (response == true) {
                 this.followed();
             } else if (response == false) {
@@ -49561,19 +49576,23 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "button",
-      {
-        class: _vm.stateClass,
-        attrs: { type: "submit" },
-        on: {
-          click: function($event) {
-            _vm.onSubmit()
-          }
-        }
-      },
-      [_vm._v(_vm._s(_vm.buttonText))]
-    )
+    _vm.loading
+      ? _c("div", [_c("spinner", { attrs: { size: "small" } })], 1)
+      : _c("div", [
+          _c(
+            "button",
+            {
+              class: _vm.stateClass,
+              attrs: { type: "submit" },
+              on: {
+                click: function($event) {
+                  _vm.onSubmit()
+                }
+              }
+            },
+            [_vm._v(_vm._s(_vm.buttonText))]
+          )
+        ])
   ])
 }
 var staticRenderFns = []
