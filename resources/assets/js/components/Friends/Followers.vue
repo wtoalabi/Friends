@@ -1,6 +1,9 @@
 <template>
     <div>
-        <div>
+        <spinner v-if="loading"
+            message="loading..."
+            size="huge">
+        </spinner>
             <usercard
                 :usersdata="followers"
                 :imagepath="imagepath"
@@ -8,31 +11,42 @@
                 :chunksize="3"
                 :loggedinuserid="loggedinuserid">
             </usercard>
-        </div>
+        {{nofollower}}
     </div>
 </template>
 
 <script>
 import UserCard from "./../Users/UserCard"
+import Spinner from 'vue-simple-spinner'
 export default {
   props:['userid','imagepath','loggedinuserid'],
   mounted(){      
       this.getFollowers()      
   },
   components:{
-      'usercard': UserCard
+      'usercard': UserCard,
+      'spinner':Spinner
   },
   data(){
       return{
-          followers:''
+          followers:'',
+          loading:'',
+          nofollower:''
       }
   },
   methods:{
       getFollowers(){
-        return axios.get('/friends/followers/'+this.userid).then(response=>(this.followers = response.data))
+        this.loading = true
+        return axios.get('/friends/followers/'+this.userid).then(response=>(this.processFollowers(response.data)))
       },
       processFollowers(users){
-        this.followers = users
+        this.loading = false
+        if(users.length > 0){
+            this.followers = users        
+        }
+        else{
+            this.nofollower = "There are no followers yet!"
+        }
       },
     chunkUsers(users){
         return users
