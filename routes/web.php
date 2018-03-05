@@ -65,7 +65,7 @@ Route::get('users', 'User\UsersDirectoryController@index')
 
 /* Statuses */
 Route::group(['middleware'=>'auth'],function(){
-
+    
     Route::resource('statuses', 'Statuses\StatusController')
     ->middleware('auth')
     ->only('store','destroy');
@@ -76,6 +76,13 @@ Route::group(['middleware'=>'auth', 'prefix'=>'counts'], function(){
     Route::get('replies/{id}', 'Ajax\GetCountsController@replies');
     Route::get('reshares/{id}', 'Ajax\GetCountsController@reshares');
 });
+
+Route::group(['middleware'=>'auth',], function(){
+    Route::get('pictures/@{username}', 'MyPictures\PageController@index')->name('pictures');
+    Route::get('get-user-folders/{id}','MyPictures\PageController@folders');
+    Route::get('get-folder-pictures/{userid}/{folderid}','MyPictures\PageController@pictures');
+});
+
 Route::group(['middleware'=>'auth', 'prefix'=>'friends'], function(){
     Route::get('list/@{username}', 'User\FriendsListController@index')->name('friends-list');
     Route::get('followers/{id}','User\FriendsListController@followers');

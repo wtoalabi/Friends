@@ -18,8 +18,8 @@
             <span> My Profile</span>
         </a>
         </li>
-        <li>
-        <a>
+        <li class="{{setActive(route('pictures',$currentUser->username))}}">
+        <a href="/pictures/{{$currentUser->usernameSlug()}}">
             <span class="icon is-small"><i class="fa fa-camera"></i></span>
             <span>My Pictures</span>
         </a>

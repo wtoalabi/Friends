@@ -49,6 +49,14 @@
                 </div>
             </a>
         </div>
+    <div class="column is-centered card-footer">
+        <a :href="'/pictures/@'+propusername">
+            <div class="columns">
+                <span class="column is-8 title is-size-4"> Pictures </span> 
+                <span class="column is-4"> <span class="button mb-1"> <span class="has-text-success is-link is-size-6">{{imagesCount}}</span></span> </span>
+            </div>
+        </a>
+    </div>
   </div>
   </div>
 </template>
@@ -74,7 +82,8 @@ export default {
           isProfileUser: '',
           followersCount: '',
           followingCount: '',
-          statusesCount: ''
+          statusesCount: '',
+          imagesCount:''
       }
   },
   methods:{
@@ -92,6 +101,7 @@ export default {
           this.followersCount = user.followers_count
           this.followingCount = user.following_count
           this.statusesCount = user.statuses_count
+          this.imagesCount = user.images_count
       },
       decorateUsername(username){
           return "/user/@"+username

@@ -10,7 +10,7 @@ class GetUserController extends Controller
 {
     public function show ($id){
         return User::where('id',$id)
-                ->withCount(['following','followers','statuses'])
+                ->withCount(['following','followers','statuses','images'])
                 ->with(['images'=>function($query){
             $query->where('profile', 1);
         }])->first();
