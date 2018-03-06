@@ -10,7 +10,7 @@
             </div>
         <div v-for="chunkedAlbums in albums" :key="chunkedAlbums.id" class="columns is-centered">
             <div v-for="album in chunkedAlbums" :key="album.id" class="column is-4">
-                <div class="card">
+                <div class="card" @mouseover="showDelete(album.folderID)" @mouseout="hideDelete(album.folderID)">
                     <div class="card-content has-text-centered">
                         <a class="button is-primary" @click.prevent="loadPictures(album.folderID, album.name, album.images_count,album.id)" :disabled="album.images_count<1 && user.id != loggedinuserid">
                             <span class="title is-4 has-text-white">{{album.name}}</span>
@@ -19,6 +19,11 @@
                             <div class="tags has-addons mb-2">
                                 <span class="tag">Count</span>
                                 <span class="tag is-danger">{{album.images_count}}</span>
+                            </div>
+                            <div v-if="loggedinuserid == user.id">
+                                <div v-if="album.folderID !=1 && album.folderID !=2 && showDeleteButton==album.folderID" class="tags has-addons mb-2">
+                                    <span class="tag">Delete</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,7 +68,8 @@ data(){
         albumName: '',
         loadAlbums: '',
         folderID: '',
-        albumID:''
+        albumID:'',
+        showDeleteButton:false
     }
 },
 methods:{
@@ -97,6 +103,12 @@ methods:{
         this.PicturesPage = false
         this.loadAlbums = false
         this.getFolders()
+    },
+    showDelete(albumid){
+        this.showDeleteButton = albumid
+    },
+    hideDelete(albumid){
+        this.showDeleteButton = false
     }
     },
 

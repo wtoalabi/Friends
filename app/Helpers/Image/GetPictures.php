@@ -3,12 +3,21 @@
 namespace App\Helpers\Image;
 
 use App\Models\Images\Image;
+use App\Models\Images\Album;
 
 class GetPictures{
 
     public static function for ($userID, $folderID){
-        return Image::where([['user_id', $userID], ['folderID', $folderID]])
-                ->latest()->get();
+        $album = Album::where('folderID', $folderID)->first();
+        
+        if($folderID == 1){
+            $whereCommand = ['folderID', 1];
+        }
+        else{
+            $whereCommand = ['album_id', $album->id];
+        }
+            return Image::where([['user_id', $userID],$whereCommand])
+            ->latest()->get();
     }
 
 }

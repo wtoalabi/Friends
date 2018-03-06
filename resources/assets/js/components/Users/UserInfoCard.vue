@@ -130,6 +130,7 @@ export default {
         EventBus.$on('status-posted',status=>{this.getUser()})
         EventBus.$on('status-deleted',status=>{this.getUser()})
         EventBus.$on('user-unfollowed', unfollowed=> {this.getUser()})
+        EventBus.$on('ProfilePictureChanged', picture=> {this.getUser()})
       }
     }
 }

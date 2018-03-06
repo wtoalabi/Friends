@@ -56913,6 +56913,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('user-unfollowed', function (unfollowed) {
                 _this2.getUser();
             });
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('ProfilePictureChanged', function (picture) {
+                _this2.getUser();
+            });
         }
     }
 });
@@ -59061,6 +59064,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -59087,7 +59095,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             albumName: '',
             loadAlbums: '',
             folderID: '',
-            albumID: ''
+            albumID: '',
+            showDeleteButton: false
         };
     },
 
@@ -59130,6 +59139,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.PicturesPage = false;
             this.loadAlbums = false;
             this.getFolders();
+        },
+        showDelete: function showDelete(albumid) {
+            this.showDeleteButton = albumid;
+        },
+        hideDelete: function hideDelete(albumid) {
+            this.showDeleteButton = false;
         }
     }
 
@@ -59339,6 +59354,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -59361,9 +59389,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return {
             form: new __WEBPACK_IMPORTED_MODULE_3__utilities_Form__["a" /* default */]((_ref = {
                 body: ''
-            }, _defineProperty(_ref, "body", "Posted in " + this.albumname + 'Album...'), _defineProperty(_ref, "mood", 1), _defineProperty(_ref, "profileID", this.loggedinuserid), _defineProperty(_ref, "pictures", []), _ref)),
+            }, _defineProperty(_ref, "body", "Posted in " + this.albumname + ' Album...'), _defineProperty(_ref, "mood", 1), _defineProperty(_ref, "profileID", this.loggedinuserid), _defineProperty(_ref, "pictures", []), _ref)),
             pictures: '',
-            loading: ''
+            loading: '',
+            optionPanel: '',
+            profilePicture: 'profilePicture'
         };
     },
 
@@ -59400,6 +59430,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return this.form.post('/create-picture-status').then(function (response) {
                 return _this3.getPictures();
             });
+        },
+        showOptionPanel: function showOptionPanel(id) {
+            this.optionPanel = id;
+        },
+        makeProfileImage: function makeProfileImage(id) {
+            var _this4 = this;
+
+            if (confirm("Are you sure you want this image as your profile picture?")) {
+                return axios.post('/make-profile-picture/' + id).then(function (response) {
+                    return _this4.profilePictureChanged(response);
+                });
+            }
+        },
+        profilePictureChanged: function profilePictureChanged() {
+            this.getPictures();
+            __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__["a" /* EventBus */].$emit('ProfilePictureChanged');
+        },
+        deleteImage: function deleteImage(id) {
+            if (confirm("Are you sure you want to delete this image?")) {
+                console.log(id);
+            }
         }
     }
 });
@@ -59600,25 +59651,85 @@ var render = function() {
           "div",
           { key: chunkedPictures.id, staticClass: "columns" },
           _vm._l(chunkedPictures, function(picture) {
-            return _c("div", { key: picture.id, staticClass: "column is-3" }, [
-              _c("img", {
-                directives: [
-                  {
-                    name: "img",
-                    rawName: "v-img",
-                    value: {
-                      title: _vm.albumname,
-                      group: _vm.pictures,
-                      src: _vm.imagepath + "/" + picture.full,
-                      sourceButton: true
-                    },
-                    expression:
-                      "{ \n                    title: albumname, \n                    group: pictures, \n                    src: imagepath + '/' + picture.full,\n                    sourceButton: true}"
+            return _c(
+              "div",
+              {
+                key: picture.id,
+                staticClass: "column is-3",
+                class: picture.profile ? _vm.profilePicture : null
+              },
+              [
+                _c("img", {
+                  directives: [
+                    {
+                      name: "img",
+                      rawName: "v-img",
+                      value: {
+                        title: _vm.albumname,
+                        group: _vm.pictures,
+                        src: _vm.imagepath + "/" + picture.full,
+                        sourceButton: true
+                      },
+                      expression:
+                        "{ \n                title: albumname, \n                group: pictures, \n                src: imagepath + '/' + picture.full,\n                sourceButton: true}"
+                    }
+                  ],
+                  attrs: { src: _vm.imagepath + "/" + picture.thumb, alt: "" },
+                  on: {
+                    mouseover: function($event) {
+                      _vm.showOptionPanel(picture.id)
+                    }
                   }
-                ],
-                attrs: { src: _vm.imagepath + "/" + picture.thumb, alt: "" }
-              })
-            ])
+                }),
+                _vm._v(" "),
+                _vm.optionPanel == picture.id &&
+                _vm.loggedinuserid == _vm.userid
+                  ? _c("div", [
+                      picture.profile != 1
+                        ? _c("div", { staticClass: "columns optional" }, [
+                            _c("div", { staticClass: "column is-7" }, [
+                              _c(
+                                "span",
+                                {
+                                  staticClass: "button is-warning is-small",
+                                  on: {
+                                    click: function($event) {
+                                      _vm.makeProfileImage(picture.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Make Profile Image")]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "column is-5 ml-1" }, [
+                              _c(
+                                "span",
+                                {
+                                  staticClass: "button is-danger is-small",
+                                  on: {
+                                    click: function($event) {
+                                      _vm.deleteImage(picture.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Delete")]
+                              )
+                            ])
+                          ])
+                        : _c("div", [
+                            _c(
+                              "span",
+                              { staticClass: "button is-primary is-small" },
+                              [_vm._v("Current Profile Picture")]
+                            )
+                          ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div")
+              ]
+            )
           })
         )
       })
@@ -59997,67 +60108,104 @@ var render = function() {
                       "div",
                       { key: album.id, staticClass: "column is-4" },
                       [
-                        _c("div", { staticClass: "card" }, [
-                          _c(
-                            "div",
-                            { staticClass: "card-content has-text-centered" },
-                            [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "button is-primary",
-                                  attrs: {
-                                    disabled:
-                                      album.images_count < 1 &&
-                                      _vm.user.id != _vm.loggedinuserid
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      _vm.loadPictures(
-                                        album.folderID,
-                                        album.name,
-                                        album.images_count,
-                                        album.id
-                                      )
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "span",
-                                    {
-                                      staticClass: "title is-4 has-text-white"
+                        _c(
+                          "div",
+                          {
+                            staticClass: "card",
+                            on: {
+                              mouseover: function($event) {
+                                _vm.showDelete(album.folderID)
+                              },
+                              mouseout: function($event) {
+                                _vm.hideDelete(album.folderID)
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "div",
+                              { staticClass: "card-content has-text-centered" },
+                              [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "button is-primary",
+                                    attrs: {
+                                      disabled:
+                                        album.images_count < 1 &&
+                                        _vm.user.id != _vm.loggedinuserid
                                     },
-                                    [_vm._v(_vm._s(album.name))]
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "columns is-centered mt-1" },
-                                [
-                                  _c(
-                                    "div",
-                                    { staticClass: "tags has-addons mb-2" },
-                                    [
-                                      _c("span", { staticClass: "tag" }, [
-                                        _vm._v("Count")
-                                      ]),
-                                      _vm._v(" "),
-                                      _c(
-                                        "span",
-                                        { staticClass: "tag is-danger" },
-                                        [_vm._v(_vm._s(album.images_count))]
-                                      )
-                                    ]
-                                  )
-                                ]
-                              )
-                            ]
-                          )
-                        ])
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.loadPictures(
+                                          album.folderID,
+                                          album.name,
+                                          album.images_count,
+                                          album.id
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass: "title is-4 has-text-white"
+                                      },
+                                      [_vm._v(_vm._s(album.name))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "columns is-centered mt-1" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "tags has-addons mb-2" },
+                                      [
+                                        _c("span", { staticClass: "tag" }, [
+                                          _vm._v("Count")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          { staticClass: "tag is-danger" },
+                                          [_vm._v(_vm._s(album.images_count))]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm.loggedinuserid == _vm.user.id
+                                      ? _c("div", [
+                                          album.folderID != 1 &&
+                                          album.folderID != 2 &&
+                                          _vm.showDeleteButton == album.folderID
+                                            ? _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "tags has-addons mb-2"
+                                                },
+                                                [
+                                                  _c(
+                                                    "span",
+                                                    { staticClass: "tag" },
+                                                    [_vm._v("Delete")]
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e()
+                                        ])
+                                      : _vm._e()
+                                  ]
+                                )
+                              ]
+                            )
+                          ]
+                        )
                       ]
                     )
                   })

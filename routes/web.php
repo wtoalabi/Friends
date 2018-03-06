@@ -84,6 +84,7 @@ Route::group(['middleware'=>'auth',], function(){
     Route::get('get-folder-pictures/{userid}/{folderid}','MyPictures\PicturesController@index');
     Route::post('upload-pictures/{folderid}/{albumid}','MyPictures\PicturesController@store');
     Route::post('create-picture-status/','MyPictures\PicturesController@storePicturesStatus');
+    Route::post('make-profile-picture/{id}','MyPictures\PicturesController@update');
 
 });
 

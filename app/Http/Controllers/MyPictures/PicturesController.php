@@ -8,6 +8,7 @@ use App\Helpers\Image\GetPictures;
 use App\Helpers\Image\StorePictures;
 use App\Http\Controllers\Controller;
 use App\Helpers\Statuses\CreateStatus;
+use App\Helpers\Image\MakeProfilePicture;
 
 class PicturesController extends Controller
 {
@@ -22,12 +23,10 @@ class PicturesController extends Controller
 
     public function storePicturesStatus (){
         $status = CreateStatus::with(request()->all());
-        $status = Status::where('id', $status->id)->with([
-            'mood','user'=>function($query){
-                $query->with('images');
-            }])
-            ->withCount(['likes','comments','reshares'])
-            ->first();
-            return response(["message"=>"Status Posted", "status"=> $status], 200);
+        return response(["message"=>"Status Posted", "status"=> $status], 200);
+    }
+    public function update ($id){
+        MakeProfilePicture::Process($id);
+        return response(['status'=>'Picture Updated!']);
     }
 }
