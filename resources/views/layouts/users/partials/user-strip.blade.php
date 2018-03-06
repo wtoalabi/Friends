@@ -24,14 +24,14 @@
             <span>My Pictures</span>
         </a>
         </li>
-        <li>
+      {{--    <li>
         <a>
             <span class="icon is-small"><i class="fa fa-comment"></i></span>
             <span>Messages</span>
         </a>
-        </li>
-        <li>
-        <a>
+        </li>  --}}
+        <li class="{{setActive(route('users_directory'))}}">
+        <a href="/users">
             <span class="icon is-small"><i class="fa fa-file-text-o"></i></span>
             <span>Users Directory</span>
         </a>

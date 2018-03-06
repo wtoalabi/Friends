@@ -11,3 +11,4 @@ Vue.component('commentssection', require('./Status/Comments/CommentsSection'));
 Vue.component('imagegallery', require('./Status/ImageGallery'));
 Vue.component('friendslist', require('./Friends/FriendsList'));
 Vue.component('picturesdashboard', require('./Pictures/PicturesDashboard'));
+Vue.component('userslist', require('./Users/Directory/UsersList'));

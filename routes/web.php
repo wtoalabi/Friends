@@ -45,6 +45,7 @@ Route::group([ 'middleware'=>'auth'], function(){
     Route::get('users-to-follow', 'Ajax\UsersToFollowController@index');
     Route::get('get-moods', 'Ajax\MoodsController@index');
     Route::get('get-mood/{id}', 'Ajax\MoodsController@show');
+    Route::get('get-all-users', 'Ajax\GetUserController@index');
     Route::get('get-user/{id}', 'Ajax\GetUserController@show');
     Route::get('stream/', 'Ajax\StatusesController@home');
     Route::get('stream/{profileUserID}', 'Ajax\StatusesController@profile');

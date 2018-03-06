@@ -8,7 +8,9 @@
                     <div class="card">
                         <div class="card-image">
                             <figure class="image is-4by3">
-                                <img class="" :src="linkToThumb(user.images)" alt="Image">
+                                <a :href="linkToUsername(user.username)">
+                                    <img class="" :src="linkToThumb(user.images)" alt="Image">
+                                </a> 
                             </figure>
                         </div>
                         <div class="card-content">
@@ -26,7 +28,7 @@
                                 </followbutton>
                             </div>
                             <div v-else>
-                                <span class="button is-primary">Yours Truly....</span>
+                                <span class="button is-warning">Yours Truly....</span>
                             </div>
                         </div>
                     </div>
