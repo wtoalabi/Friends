@@ -56916,6 +56916,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('ProfilePictureChanged', function (picture) {
                 _this2.getUser();
             });
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('PictureDeleted', function (picture) {
+                _this2.getUser();
+            });
         }
     }
 });
@@ -59448,9 +59451,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__["a" /* EventBus */].$emit('ProfilePictureChanged');
         },
         deleteImage: function deleteImage(id) {
+            var _this5 = this;
+
             if (confirm("Are you sure you want to delete this image?")) {
-                console.log(id);
+                return axios.delete('/delete-picture/' + id).then(function (response) {
+                    return _this5.pictureDeleted(response);
+                });
             }
+        },
+        pictureDeleted: function pictureDeleted() {
+            this.getPictures();
+            __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__["a" /* EventBus */].$emit('PictureDeleted');
         }
     }
 });

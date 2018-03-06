@@ -105,8 +105,13 @@ export default {
         },
         deleteImage(id){
             if(confirm("Are you sure you want to delete this image?")){
-                console.log(id); 
+                return axios.delete('/delete-picture/' +id).then(response=>(this.pictureDeleted(response)))
             }
+        },
+        pictureDeleted(){
+            this.getPictures()
+            EventBus.$emit('PictureDeleted')
+
         }
     }
 }

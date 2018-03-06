@@ -85,6 +85,7 @@ Route::group(['middleware'=>'auth',], function(){
     Route::post('upload-pictures/{folderid}/{albumid}','MyPictures\PicturesController@store');
     Route::post('create-picture-status/','MyPictures\PicturesController@storePicturesStatus');
     Route::post('make-profile-picture/{id}','MyPictures\PicturesController@update');
+    Route::delete('delete-picture/{id}','MyPictures\PicturesController@destroy');
 
 });
 
