@@ -26,13 +26,15 @@ class GetAlbums{
                             [
                                 "folderID" => 1,
                                 "name" => "Profile Pictures",
-                                "images_count"=>$profileCount
+                                "images_count"=>$profileCount,
+                                "created_at" =>'2018-03-04'
                             ],
                             [
                                 "folderID" => 2,
                                 "name" => "Wall Pictures",
-                                "images_count" => $wallCount
-                            ]
+                                "images_count" => $wallCount,
+                                "created_at" =>'2018-03-05'
+                                ]
                         ];
         
          return $defaultAlbums;

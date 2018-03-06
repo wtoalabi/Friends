@@ -31,8 +31,6 @@ class StatusController extends Controller
      */
     public function store(ValidateStatus $valid)
     {
-        //dd(collect($valid->request));
-        //dd(request()->all());
         $status = CreateStatus::with($valid->request);
         event(new StatusCreated($status));
         $status = Status::where('id', $status->id)->with([

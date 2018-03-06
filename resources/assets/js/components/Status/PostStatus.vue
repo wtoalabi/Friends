@@ -6,7 +6,22 @@
                 <textarea class="textarea mb-1" name="body" placeholder="Whats on your mind...?" v-model="formBody" required></textarea> 
                 <div class="columns">
                     <div class="file column is-primary is-4"> 
-                       <picturesupload :token="token"></picturesupload>
+                        <div class="" @click="activateModal()">
+                            <label class="file-label">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                            <i class="fa fa-upload"></i>
+                                        </span>
+                                        <span class="file-label">
+                                            Add Picture...
+                                        </span>
+                                    </span>
+                                </label>
+                        </div>
+                       <picturesupload :token="token"
+                           :clicked ="modalActivated"
+                           url="/picture-upload">
+                       </picturesupload>
                     </div>
                     <div class="column  is-5">
                             <div class="control has-icons-left">
@@ -57,6 +72,7 @@ import PicturesUpload from './PicturesUpload'
                 defaultMood: 1,
                 formBody: '',
                 profile: '',
+                modalActivated:''
             }
         },
         methods:{
@@ -88,6 +104,9 @@ import PicturesUpload from './PicturesUpload'
                 EventBus.$on('picture-uploaded',ids=>{
                     this.form.pictures = ids
                 })  
+            },
+            activateModal(){
+                EventBus.$emit('PictureUploadClicked')
             }
         },
     }

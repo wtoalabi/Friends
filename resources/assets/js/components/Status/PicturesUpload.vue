@@ -19,18 +19,6 @@
             </footer>
   </div>
 </div>
-    <div class="" @click="openModal">
-    <label class="file-label">
-            <span class="file-cta">
-                <span class="file-icon">
-                    <i class="fa fa-upload"></i>
-                </span>
-                <span class="file-label">
-                    Add Picture...
-                </span>
-            </span>
-        </label>
-    </div>
 </div>
 </template>
 <script>
@@ -45,9 +33,10 @@ Dropzone.options.Photos = {
     acceptedFiles: '.jpeg, .jpg, .png, .bmp',
 };
 export default {
-    props:['token'],
+    props:['token','url'],
     mounted(){
-    this.setForm()  
+    this.setForm()
+    this.listenForEvents()
 },
     data(){
         return{
@@ -66,6 +55,7 @@ export default {
         },
         closeModal(){
             this.ModalBox = null
+            EventBus.$emit('PictureModalClosed')
         },
         addToPhotoToStatus(imageID, file){
             this.imagesID.push(imageID)
@@ -79,22 +69,24 @@ export default {
             var vm = this
             this.myDropzone = new Dropzone(".dropzone",{
             autoDiscover: false,
-            url: "/picture-upload",
+            url: this.url,
             headers: { "X-CSRF-TOKEN": this.token}
         });
-      /*  myDropzone.on("sending", function(file, xhr, formData) {
-           formData.append("imageUUID", file.lastModified);
-    }); */
-    
+            
         this.myDropzone.on("success", function(file, response) {
+            console.log(response);
+            
             vm.addToPhotoToStatus(response, file)
                 });
                
         this.myDropzone.on("maxfilesexceeded", function(file, response) {
             alert('You cant upload more than 10 pictures at a time...you can remove some of those uploaded or simply make new post...')
                 });
-        }
+        },
+    listenForEvents(){
+        EventBus.$on('PictureUploadClicked', picture=>{this.openModal()})
     }
+    },
   
 }
 </script>

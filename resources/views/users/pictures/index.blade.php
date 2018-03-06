@@ -10,7 +10,9 @@
 
 <picturesdashboard
     :user="{{$user}}"
-    imagepath="{{asset("storage/user")}}">
+    imagepath="{{asset("storage/user")}}"
+    loggedinuserid="{{$currentUser->id}}"
+    token="{{csrf_token()}}">
 </picturesdashboard>
 
 

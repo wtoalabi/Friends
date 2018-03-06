@@ -79,8 +79,12 @@ Route::group(['middleware'=>'auth', 'prefix'=>'counts'], function(){
 
 Route::group(['middleware'=>'auth',], function(){
     Route::get('pictures/@{username}', 'MyPictures\PageController@index')->name('pictures');
-    Route::get('get-user-folders/{id}','MyPictures\PageController@folders');
-    Route::get('get-folder-pictures/{userid}/{folderid}','MyPictures\PageController@pictures');
+    Route::get('get-user-folders/{id}','MyPictures\AlbumsController@index');
+    Route::post('create-albums','MyPictures\AlbumsController@store');
+    Route::get('get-folder-pictures/{userid}/{folderid}','MyPictures\PicturesController@index');
+    Route::post('upload-pictures/{folderid}/{albumid}','MyPictures\PicturesController@store');
+    Route::post('create-picture-status/','MyPictures\PicturesController@storePicturesStatus');
+
 });
 
 Route::group(['middleware'=>'auth', 'prefix'=>'friends'], function(){

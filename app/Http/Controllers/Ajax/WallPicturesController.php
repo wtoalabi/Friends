@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Auth;
 class WallPicturesController extends Controller
 {
     public function store (){
-        //return true;
-        //dd(request(['picture','imageUUID']));
-        //dd(request()->all());
         $user = Auth::user();
         $image = (new ImageUpload(request('picture') ,$user, $folderID=2, $album = null, $profile=0))
          ->process();

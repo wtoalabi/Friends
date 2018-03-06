@@ -4,11 +4,15 @@
         <spinner v-if="loading"
             size="massive">
         </spinner>
-        <div v-if="loadAlbums" v-for="chunkedAlbums in albums" :key="chunkedAlbums.id" class="columns is-centered">
+        <div v-if="loadAlbums" >
+            <div class="columns is-centered">
+                <createalbum></createalbum>
+            </div>
+        <div v-for="chunkedAlbums in albums" :key="chunkedAlbums.id" class="columns is-centered">
             <div v-for="album in chunkedAlbums" :key="album.id" class="column is-4">
                 <div class="card">
                     <div class="card-content has-text-centered">
-                        <a class="button is-primary" @click.prevent="loadPictures(album.folderID, album.name, album.images_count)" :disabled="album.images_count<1">
+                        <a class="button is-primary" @click.prevent="loadPictures(album.folderID, album.name, album.images_count,album.id)" :disabled="album.images_count<1 && user.id != loggedinuserid">
                             <span class="title is-4 has-text-white">{{album.name}}</span>
                         </a>
                         <div class="columns is-centered mt-1">
@@ -20,12 +24,16 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     <pictureslisting v-if="PicturesPage"
         :folderid="folderID"
         :userid="user.id"
         :imagepath="imagepath"
-        :albumname="albumName">
+        :albumname="albumName"
+        :token="token"
+        :albumid="albumID"
+        :loggedinuserid="loggedinuserid">
     </pictureslisting>
     </div>
 </template>
@@ -34,18 +42,18 @@
 import {EventBus} from "./../../utilities/EventBus"
 import Breadcrumb from "./Breadcrumbs"
 import PicturesListing from "./PicturesListing"
-import PictureUpload from "./PictureUpload"
 import Spinner from 'vue-simple-spinner'
+import CreateAlbum from "./CreateAlbum"
 export default {
-props:['user', 'imagepath',], 
+props:['user', 'imagepath','loggedinuserid', 'token'], 
 mounted(){    
     this.listenForEvents()
     this.getFolders()
 },components:{
     'pictureslisting': PicturesListing,
-    'pictureupload': PictureUpload,
     'spinner': Spinner,
-    'breadcrumb': Breadcrumb
+    'breadcrumb': Breadcrumb,
+    'createalbum':CreateAlbum
 },
 data(){
     return{
@@ -54,7 +62,8 @@ data(){
         PicturesPage: false,
         albumName: '',
         loadAlbums: '',
-        folderID: ''
+        folderID: '',
+        albumID:''
     }
 },
 methods:{
@@ -65,20 +74,24 @@ methods:{
     prepareFolder(response){
         this.loading = false
         this.loadAlbums = true
-        var result = _.sortBy(response, ['folderID']);
+        var result = _.orderBy(response, ['created_at'],['asc']);
         this.albums = _.chunk(result, 3)
         this.PicturesPage = false
+        
         },
-    loadPictures(folderID, name, count){
-        if(count >= 1){
+    loadPictures(folderID, name, count, albumID){        
+        if(count >= 1 || this.user.id == this.loggedinuserid ){
         this.folderID = folderID
         this.albumName = name
         this.PicturesPage = true
         this.loadAlbums = false
+        this.albumID = albumID
         }
     },
     listenForEvents(){
         EventBus.$on('MainPage',load=>{this.hideBreadcrumbs()})
+        EventBus.$on('AlbumCreated',album=>{this.getFolders()})
+
     },
     hideBreadcrumbs(){       
         this.PicturesPage = false

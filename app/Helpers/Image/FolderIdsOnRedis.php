@@ -10,7 +10,9 @@ class FolderIdsOnRedis{
         Redis::HSET("UserFolders:User$userID", 2, "Wall Pictures");
     }
 
-    public static function CreateFolderForUserGeneratedAlbums (){
-         ;
+    public static function CreateFolderID ($id, $name){
+        $folderID = str_random(5);
+        Redis::HSET("UserFolders:User$id",$folderID, $name);
+        return $folderID;
     }
 }

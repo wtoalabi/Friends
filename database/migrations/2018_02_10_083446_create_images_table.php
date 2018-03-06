@@ -17,7 +17,7 @@ class CreateImagesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('album_id')->unsigned()->nullable();
-            $table->integer('folderID')->unsigned();
+            $table->string('folderID');
             $table->integer('status_id')->unsigned()->nullable();
             $table->string('full');
             $table->string('thumb');
