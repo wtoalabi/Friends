@@ -59383,8 +59383,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -59672,6 +59670,8 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
+      _vm.pictures.length == 0 ? _c("div", [_vm._v(" No Picture ")]) : _vm._e(),
+      _vm._v(" "),
       _vm._l(_vm.pictures, function(chunkedPictures) {
         return _c(
           "div",
@@ -59697,7 +59697,7 @@ var render = function() {
                         sourceButton: true
                       },
                       expression:
-                        "{ \n                title: albumname, \n                group: pictures, \n                src: imagepath + '/' + picture.full,\n                sourceButton: true}"
+                        "{ \n                    title: albumname, \n                    group: pictures, \n                    src: imagepath + '/' + picture.full,\n                    sourceButton: true}"
                     }
                   ],
                   attrs: { src: _vm.imagepath + "/" + picture.thumb, alt: "" },
@@ -59751,9 +59751,7 @@ var render = function() {
                             )
                           ])
                     ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("div")
+                  : _vm._e()
               ]
             )
           })
@@ -60700,12 +60698,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -60787,9 +60779,7 @@ var render = function() {
         _vm.isLoaded
           ? _c("div", [
               _c("span", { staticClass: "has-text-primary" }, [
-                _vm._v(
-                  "\n            Double click on your information to change them...\n        "
-                )
+                _vm._v(" Double click on your information to change them...")
               ]),
               _vm._v(" "),
               _c("table", [
@@ -60894,10 +60884,7 @@ var render = function() {
                                   ])
                                 ])
                               : _c("div", { staticClass: "column" }, [
-                                  _vm._v(
-                                    _vm._s(_vm.form.email) +
-                                      "\n                                    "
-                                  )
+                                  _vm._v(_vm._s(_vm.form.email))
                                 ])
                           ])
                         ]
@@ -60908,11 +60895,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("tbody", [
                   _c("tr", [
-                    _c("td", [
-                      _vm._v(
-                        "\n                            First Name:\n                        "
-                      )
-                    ]),
+                    _c("td", [_vm._v("First Name:")]),
                     _vm._v(" "),
                     _c("td", [
                       _c(

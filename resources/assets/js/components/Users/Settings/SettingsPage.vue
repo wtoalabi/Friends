@@ -1,13 +1,9 @@
 <template>
     <div class="columns">
         <div class="column is-6 is-offset-3 content">
-            <spinner v-if="isLoading"
-                size="massive">
-            </spinner>
+            <spinner v-if="isLoading" size="massive"> </spinner>
             <div v-if="isLoaded">
-            <span class="has-text-primary">
-                Double click on your information to change them...
-            </span>
+                <span class="has-text-primary"> Double click on your information to change them...</span>
                 <table>
                     <thead>
                         <tr>
@@ -21,12 +17,12 @@
                                                     <input class="input" :class="{'is-danger':form.errors.has('email')}" @keyup.enter="submitInput()"  type="text" v-model="form.email">
                                                     <span class="help is-danger" v-if="form.errors.has('email')">{{form.errors.get('email')}}</span>
                                                 </div>
-                                            <div class="column is-1">
-                                                <span @click="submitInput()" class="icon has-text-success"><i class="fa fa-check"></i></span>                        
+                                                <div class="column is-1">
+                                                    <span @click="submitInput()" class="icon has-text-success"><i class="fa fa-check"></i></span>                        
+                                                </div>
                                             </div>
-                                        </div></div>
-                                        <div v-else class="column">{{form.email}}
                                         </div>
+                                        <div v-else class="column">{{form.email}}</div>
                                     </div>
                                 </span>
                             </th>
@@ -34,9 +30,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
-                                First Name:
-                            </td>
+                            <td>First Name:</td>
                             <td>
                                 <span @dblclick="dbClicked('first_name')">
                                     <div v-if="inputBox == 'first_name'">

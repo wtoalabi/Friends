@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 class GetUserController extends Controller
 {
     public function index (){
-        return $users = User::with(['images'])
+        return $users = User::with(['images'=>function($query){
+            $query->where('profile', 1);
+        }])
          ->orderBy('last_name', 'asc')
          ->paginate(12);
     }
