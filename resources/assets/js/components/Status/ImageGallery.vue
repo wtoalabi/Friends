@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="columns is-centered" v-for="chunkedImages in chunkImages(galleryImages)" :key="chunkedImages.id">
+    <div class="columns is-mobile is-centered" v-for="chunkedImages in chunkImages(galleryImages)" :key="chunkedImages.id">
         <div class="column" v-for="image in chunkedImages" :key="image.id">
             <img class="" v-if="lightbox" 
                 v-img="{ 

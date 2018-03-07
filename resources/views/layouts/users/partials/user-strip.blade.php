@@ -33,7 +33,7 @@
             </li>
         <li class="{{setActive(route('my-settings',$currentUser->username))}}">
         <a href="/user/settings/{{$currentUser->usernameSlug()}}">
-            <span class="icon is-small"><i class="fa fa-wheel"></i></span>
+            <span class="icon is-small"><i class="fa fa-gear"></i></span>
             <span>My Settings</span>
         </a>
         </li>

@@ -15,9 +15,9 @@ class AdminSeeder extends Seeder
     public function run()
     {
         factory(User::class)->create([
-            'email'=> 'wtoalabi@gmail.com',
+            'email'=> 'test@test.com',
             'username'=> 'admin',
-            'password' => 12,
+            'password' => test,
             'auth' => 1,
         ]);
         factory(Mood::class)->create([

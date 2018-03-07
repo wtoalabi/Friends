@@ -10,7 +10,7 @@
             </uploadbutton>
         </div>
         <div v-if="pictures.length == 0"> No Picture </div>
-            <div v-for="chunkedPictures in pictures" :key="chunkedPictures.id" class="columns">
+            <div v-for="chunkedPictures in pictures" :key="chunkedPictures.id" class="columns is-mobile">
                 <div v-for="picture in chunkedPictures" :key="picture.id" class="column is-3" :class="picture.profile ? profilePicture : null">
                     <img  :src="imagepath+'/'+picture.thumb" alt="" @mouseover="showOptionPanel(picture.id)"
                         v-img="{ 

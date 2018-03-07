@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LoginTest extends DuskTestCase
 {
-    //use DatabaseMigrations; //39secs
+    //use DatabaseMigrations; 
     //use DatabaseTransactions;
     //use RefreshDatabase;
     /**

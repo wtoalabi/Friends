@@ -7,7 +7,9 @@
 @endslot
 
 @slot('user_left_column')
-@include('users.partials.user-followers-card',['user'=>$profileUser])
+<div class=" is-hidden-mobile ">
+    @include('users.partials.user-followers-card',['user'=>$profileUser])    
+</div>
 @endslot
   
 @include('users.partials.status-post',['profileID'=> $profileUser->id])

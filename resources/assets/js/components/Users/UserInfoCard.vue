@@ -1,9 +1,9 @@
 <template>
 <div>
-    <a :href="decorateUsername(user.username)">
+    <a :href="decorateUsername(user.username)" class="is-hidden-mobile">
         <p class="title has-text-centered mb-1">{{user.first_name}} {{user.last_name}}</p>
     </a> 
-    <div class="card">
+    <div class="card is-hidden-mobile">
         <div class="card-image">
             <figure class="image is-4by3">
                 <a :href="decorateUsername(user.username)">

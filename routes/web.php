@@ -12,7 +12,7 @@
 */
 
 /* Static Pages */
-Route::view('/', 'pages.home');
+Route::view('/', 'pages.home')->middleware('guest');
 Route::resource('accounts', 'User\AccountController');
 
 /* Users Registration/Login */

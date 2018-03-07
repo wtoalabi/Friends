@@ -55105,10 +55105,13 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("div", { staticClass: "columns" }, [
+          _c("div", { staticClass: "columns is-centered is-mobile" }, [
             _c(
               "div",
-              { staticClass: "file column is-primary is-4" },
+              {
+                staticClass:
+                  "file column is-primary is-4-desktop is-7-mobile is-4-tablet"
+              },
               [
                 _c(
                   "div",
@@ -55133,7 +55136,7 @@ var render = function() {
               1
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "column  is-5" }, [
+            _c("div", { staticClass: "column is-hidden-mobile is-5" }, [
               _c("div", { staticClass: "control has-icons-left" }, [
                 _c("div", { staticClass: "select" }, [
                   _c(
@@ -55191,7 +55194,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "column" }, [
+            _c("div", { staticClass: "column is-5-mobile" }, [
               _c(
                 "button",
                 {
@@ -55622,7 +55625,7 @@ var render = function() {
     _vm._l(_vm.chunkImages(_vm.galleryImages), function(chunkedImages) {
       return _c(
         "div",
-        { key: chunkedImages.id, staticClass: "columns is-centered" },
+        { key: chunkedImages.id, staticClass: "columns is-mobile is-centered" },
         _vm._l(chunkedImages, function(image) {
           return _c("div", { key: image.id, staticClass: "column" }, [
             _vm.lightbox
@@ -56463,7 +56466,7 @@ var render = function() {
               expression: "isOwnedBy(status.user.id)"
             }
           ],
-          staticClass: "level-right"
+          staticClass: "level-right is-hidden-mobile"
         },
         [
           _c(
@@ -56937,13 +56940,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("a", { attrs: { href: _vm.decorateUsername(_vm.user.username) } }, [
-      _c("p", { staticClass: "title has-text-centered mb-1" }, [
-        _vm._v(_vm._s(_vm.user.first_name) + " " + _vm._s(_vm.user.last_name))
-      ])
-    ]),
+    _c(
+      "a",
+      {
+        staticClass: "is-hidden-mobile",
+        attrs: { href: _vm.decorateUsername(_vm.user.username) }
+      },
+      [
+        _c("p", { staticClass: "title has-text-centered mb-1" }, [
+          _vm._v(_vm._s(_vm.user.first_name) + " " + _vm._s(_vm.user.last_name))
+        ])
+      ]
+    ),
     _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
+    _c("div", { staticClass: "card is-hidden-mobile" }, [
       _c("div", { staticClass: "card-image" }, [
         _c("figure", { staticClass: "image is-4by3" }, [
           _c(
@@ -59675,7 +59685,7 @@ var render = function() {
       _vm._l(_vm.pictures, function(chunkedPictures) {
         return _c(
           "div",
-          { key: chunkedPictures.id, staticClass: "columns" },
+          { key: chunkedPictures.id, staticClass: "columns is-mobile" },
           _vm._l(chunkedPictures, function(picture) {
             return _c(
               "div",

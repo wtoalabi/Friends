@@ -4,10 +4,10 @@
             <div class="navbar-item">
                 <div class="field is-grouped">
                     @auth
-                    <a href="/home" class="button is-primary">FOLLOWSBOOK</a>
+                    <a href="/home" class="button is-primary">FRIENDSBOOK</a>
                     @endauth
                     @guest
-                    <a href="/" class="button is-primary">FOLLOWSBOOK</a>
+                    <a href="/" class="button is-primary">FRIENDSBOOK</a>
                     @endguest
                 </div>
             </div>

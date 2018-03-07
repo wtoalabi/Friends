@@ -10,7 +10,7 @@
                     <resharestatus :propcount="status.reshares_count" :status="status"></resharestatus>
                 </div>
                 </div>
-            <div class="level-right" v-show="isOwnedBy(status.user.id)">
+            <div class="level-right is-hidden-mobile" v-show="isOwnedBy(status.user.id)">
                 <button class="button" :class="deleting" @click.prevent.self @click="deleteStatus(status.id) " type="submit">Delete Status</button>
             </div>
         </nav>

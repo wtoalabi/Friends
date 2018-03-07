@@ -4,8 +4,8 @@
             <form action="" method="POST" @submit.prevent>
                 <input type="hidden" name="profileID" v-model="profile">
                 <textarea class="textarea mb-1" name="body" placeholder="Whats on your mind...?" v-model="formBody" required></textarea> 
-                <div class="columns">
-                    <div class="file column is-primary is-4"> 
+                <div class="columns is-centered is-mobile">
+                    <div class="file column is-primary is-4-desktop is-7-mobile is-4-tablet"> 
                         <div class="" @click="activateModal()">
                             <label class="file-label">
                                     <span class="file-cta">
@@ -23,7 +23,7 @@
                            url="/picture-upload">
                        </picturesupload>
                     </div>
-                    <div class="column  is-5">
+                    <div class="column is-hidden-mobile is-5">
                             <div class="control has-icons-left">
                                     <div class="select">
                                       <select class="is-focused" name="mood" v-model="selectedMood" @change="sendToForm(selectedMood)">
@@ -36,7 +36,7 @@
                                     </span>
                                   </div>
                     </div>
-                    <div class="column">
+                    <div class="column is-5-mobile">
                         <button type="submit" class="button is-link" @click="onSubmit">Post Status...</button>
                     </div>
                 </div>

@@ -9,7 +9,9 @@
 @endslot
 
 @slot('user_left_column')
-@include('users.partials.users-to-follow-card',['user'=>$currentUser])
+<div class="is-hidden-mobile">
+    @include('users.partials.users-to-follow-card',['user'=>$currentUser])
+</div>
 @endslot
 
 @include('users.statuses.partials.single-status')

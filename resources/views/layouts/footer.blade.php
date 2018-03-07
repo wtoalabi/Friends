@@ -1,3 +1,8 @@
+<div class="hero is-info">
+        <div class="hero-body columns is-centered">
+            <span class="mr-1 has-text-centered">(C) {{date('Y')}} | MIT Licensed. Improve, Contribute and Use</span> <a class="has-text-warning" href="https://github.com/wtoalabi/Friends">HERE </a>. Thanks.
+        </div>
+    </div> 
 </div>
 </div>  
 </div>{{--  Closes the #app id  --}}
