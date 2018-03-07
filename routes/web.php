@@ -28,9 +28,12 @@ Route::group(['middleware'=>'auth', 'prefix'=>''], function(){
 
 /* ProfilePage */
 
-Route::get('user/@{username}', 'User\UserProfileController@show')
-->name('my-profile')
-->middleware('auth');
+Route::group(['middleware'=>'auth', 'prefix'=>'user'],function(){
+    Route::get('@{username}', 'User\ProfileController@show')->name('my-profile');
+    Route::get('settings/@{username}', 'User\SettingsController@show')->name('my-settings');
+    Route::post('update-settings/{username}', 'User\SettingsController@update')->name('update-settings');
+    ;
+});
 
 
 /* Following */
@@ -60,7 +63,7 @@ Route::group([ 'middleware'=>'auth'], function(){
 });
 /* Users Directory Page*/
 
-Route::get('users', 'User\UsersDirectoryController@index')
+Route::get('users', 'User\DirectoryController@index')
 ->name('users_directory')
 ->middleware('auth');
 

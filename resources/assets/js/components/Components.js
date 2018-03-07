@@ -12,3 +12,4 @@ Vue.component('imagegallery', require('./Status/ImageGallery'));
 Vue.component('friendslist', require('./Friends/FriendsList'));
 Vue.component('picturesdashboard', require('./Pictures/PicturesDashboard'));
 Vue.component('userslist', require('./Users/Directory/UsersList'));
+Vue.component('settingspage', require('./Users/Settings/SettingsPage'));

@@ -50199,6 +50199,7 @@ Vue.component('imagegallery', __webpack_require__(139));
 Vue.component('friendslist', __webpack_require__(230));
 Vue.component('picturesdashboard', __webpack_require__(241));
 Vue.component('userslist', __webpack_require__(265));
+Vue.component('settingspage', __webpack_require__(270));
 
 /***/ }),
 /* 179 */
@@ -56920,6 +56921,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('PictureDeleted', function (picture) {
                 _this2.getUser();
             });
+            __WEBPACK_IMPORTED_MODULE_1__utilities_EventBus__["a" /* EventBus */].$on('UserInfoChanged', function (user) {
+                _this2.getUser();
+            });
         }
     }
 });
@@ -60544,6 +60548,644 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-5b1049c8", module.exports)
+  }
+}
+
+/***/ }),
+/* 270 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(273)
+/* template */
+var __vue_template__ = __webpack_require__(274)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Users\\Settings\\SettingsPage.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d4290b20", Component.options)
+  } else {
+    hotAPI.reload("data-v-d4290b20", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 271 */,
+/* 272 */,
+/* 273 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utilities_Form__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_simple_spinner__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_simple_spinner___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_simple_spinner__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__ = __webpack_require__(2);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['loggedinuserid'],
+    mounted: function mounted() {
+        this.getUser();
+    },
+
+    components: {
+        'spinner': __WEBPACK_IMPORTED_MODULE_1_vue_simple_spinner___default.a
+    },
+    data: function data() {
+        return {
+            form: new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */](),
+            inputBox: '',
+            username: '',
+            isLoading: '',
+            isLoaded: false
+        };
+    },
+
+    methods: {
+        getUser: function getUser() {
+            var _this = this;
+
+            this.isLoading = true;
+            return axios.get('/get-user/' + this.loggedinuserid).then(function (response) {
+                return _this.prepareUser(response.data);
+            });
+        },
+        prepareUser: function prepareUser(response) {
+            this.username = response.username;
+            this.form = new __WEBPACK_IMPORTED_MODULE_0__utilities_Form__["a" /* default */]({
+                email: response.email,
+                first_name: response.first_name,
+                last_name: response.last_name
+            });
+            this.isLoading = false;
+            this.isLoaded = true;
+        },
+        dbClicked: function dbClicked(field) {
+            this.inputBox = field;
+        },
+        submitInput: function submitInput() {
+            var _this2 = this;
+
+            return this.form.post('/user/update-settings/' + this.username).then(function (response) {
+                return _this2.infoChanged(response);
+            });
+        },
+        infoChanged: function infoChanged(response) {
+            this.prepareUser(response.user);
+            this.inputBox = '';
+            __WEBPACK_IMPORTED_MODULE_2__utilities_EventBus__["a" /* EventBus */].$emit("UserInfoChanged");
+        }
+    }
+
+});
+
+/***/ }),
+/* 274 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "columns" }, [
+    _c(
+      "div",
+      { staticClass: "column is-6 is-offset-3 content" },
+      [
+        _vm.isLoading
+          ? _c("spinner", { attrs: { size: "massive" } })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.isLoaded
+          ? _c("div", [
+              _c("span", { staticClass: "has-text-primary" }, [
+                _vm._v(
+                  "\n            Double click on your information to change them...\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c("table", [
+                _c("thead", [
+                  _c("tr", [
+                    _c("th", [_vm._v("Email:")]),
+                    _vm._v(" "),
+                    _c("th", [
+                      _c(
+                        "span",
+                        {
+                          on: {
+                            dblclick: function($event) {
+                              _vm.dbClicked("email")
+                            }
+                          }
+                        },
+                        [
+                          _c("div", { staticClass: "columns" }, [
+                            _vm.inputBox == "email"
+                              ? _c("div", { staticClass: "column is-11" }, [
+                                  _c("div", { staticClass: "columns" }, [
+                                    _c("div", { staticClass: "column is-11" }, [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.form.email,
+                                            expression: "form.email"
+                                          }
+                                        ],
+                                        staticClass: "input",
+                                        class: {
+                                          "is-danger": _vm.form.errors.has(
+                                            "email"
+                                          )
+                                        },
+                                        attrs: { type: "text" },
+                                        domProps: { value: _vm.form.email },
+                                        on: {
+                                          keyup: function($event) {
+                                            if (
+                                              !("button" in $event) &&
+                                              _vm._k(
+                                                $event.keyCode,
+                                                "enter",
+                                                13,
+                                                $event.key
+                                              )
+                                            ) {
+                                              return null
+                                            }
+                                            _vm.submitInput()
+                                          },
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.form,
+                                              "email",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _vm.form.errors.has("email")
+                                        ? _c(
+                                            "span",
+                                            { staticClass: "help is-danger" },
+                                            [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.form.errors.get("email")
+                                                )
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e()
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "column is-1" }, [
+                                      _c(
+                                        "span",
+                                        {
+                                          staticClass: "icon has-text-success",
+                                          on: {
+                                            click: function($event) {
+                                              _vm.submitInput()
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fa fa-check"
+                                          })
+                                        ]
+                                      )
+                                    ])
+                                  ])
+                                ])
+                              : _c("div", { staticClass: "column" }, [
+                                  _vm._v(
+                                    _vm._s(_vm.form.email) +
+                                      "\n                                    "
+                                  )
+                                ])
+                          ])
+                        ]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tbody", [
+                  _c("tr", [
+                    _c("td", [
+                      _vm._v(
+                        "\n                            First Name:\n                        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "span",
+                        {
+                          on: {
+                            dblclick: function($event) {
+                              _vm.dbClicked("first_name")
+                            }
+                          }
+                        },
+                        [
+                          _vm.inputBox == "first_name"
+                            ? _c("div", [
+                                _c("div", { staticClass: "columns" }, [
+                                  _c("div", { staticClass: "column is-12" }, [
+                                    _c("div", { staticClass: "columns" }, [
+                                      _c(
+                                        "div",
+                                        { staticClass: "column is-10" },
+                                        [
+                                          _c("input", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value: _vm.form.first_name,
+                                                expression: "form.first_name"
+                                              }
+                                            ],
+                                            staticClass: "input",
+                                            attrs: { type: "text" },
+                                            domProps: {
+                                              value: _vm.form.first_name
+                                            },
+                                            on: {
+                                              keyup: function($event) {
+                                                if (
+                                                  !("button" in $event) &&
+                                                  _vm._k(
+                                                    $event.keyCode,
+                                                    "enter",
+                                                    13,
+                                                    $event.key
+                                                  )
+                                                ) {
+                                                  return null
+                                                }
+                                                _vm.submitInput()
+                                              },
+                                              input: function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "first_name",
+                                                  $event.target.value
+                                                )
+                                              }
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _vm.form.errors.has("email")
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass: "help is-danger"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.form.errors.get(
+                                                        "email"
+                                                      )
+                                                    )
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e()
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "column is-2" },
+                                        [
+                                          _c(
+                                            "span",
+                                            {
+                                              staticClass:
+                                                "icon has-text-success",
+                                              on: {
+                                                click: function($event) {
+                                                  _vm.submitInput()
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fa fa-check"
+                                              })
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  ])
+                                ])
+                              ])
+                            : _c("span", [_vm._v(_vm._s(_vm.form.first_name))])
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [
+                      _vm._v(
+                        "\n                            Last Name:\n                        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "span",
+                        {
+                          on: {
+                            dblclick: function($event) {
+                              _vm.dbClicked("last_name")
+                            }
+                          }
+                        },
+                        [
+                          _vm.inputBox == "last_name"
+                            ? _c("div", [
+                                _c("div", { staticClass: "columns" }, [
+                                  _c("div", { staticClass: "column is-12" }, [
+                                    _c("div", { staticClass: "columns" }, [
+                                      _c(
+                                        "div",
+                                        { staticClass: "column is-10" },
+                                        [
+                                          _c("input", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value: _vm.form.last_name,
+                                                expression: "form.last_name"
+                                              }
+                                            ],
+                                            staticClass: "input",
+                                            attrs: { type: "text" },
+                                            domProps: {
+                                              value: _vm.form.last_name
+                                            },
+                                            on: {
+                                              keyup: function($event) {
+                                                if (
+                                                  !("button" in $event) &&
+                                                  _vm._k(
+                                                    $event.keyCode,
+                                                    "enter",
+                                                    13,
+                                                    $event.key
+                                                  )
+                                                ) {
+                                                  return null
+                                                }
+                                                _vm.submitInput()
+                                              },
+                                              input: function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "last_name",
+                                                  $event.target.value
+                                                )
+                                              }
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _vm.form.errors.has("email")
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass: "help is-danger"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.form.errors.get(
+                                                        "email"
+                                                      )
+                                                    )
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e()
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "column is-2" },
+                                        [
+                                          _c(
+                                            "span",
+                                            {
+                                              staticClass:
+                                                "icon has-text-success",
+                                              on: {
+                                                click: function($event) {
+                                                  _vm.submitInput()
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fa fa-check"
+                                              })
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  ])
+                                ])
+                              ])
+                            : _c("span", [_vm._v(_vm._s(_vm.form.last_name))])
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("Username:")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("em", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "button is-primary",
+                            attrs: {
+                              disabled: "",
+                              title: "You cant change your username"
+                            }
+                          },
+                          [_vm._v(" " + _vm._s(_vm.username))]
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ])
+            ])
+          : _vm._e()
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-d4290b20", module.exports)
   }
 }
 

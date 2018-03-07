@@ -25,61 +25,6 @@
                             <span class="icon"><i class="fa fa-book" aria-hidden="true"></i></span>Get in Touch
                         </a>
                     @endauth
-                {{--  <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link  is-active" href="#">Dropdown</a>
-                        <div class="navbar-dropdown ">
-                            <a class="navbar-item " href="#">Elements</a>
-                            <a class="navbar-item is-active" href="#">Components</a>
-                            <hr class="navbar-divider">
-                            <div class="navbar-item">
-                                <div>
-                                    <p class="is-size-6-desktop"><strong>0.6.1</strong></p>            
-                                    <small><a class="bd-view-all-versions" href="#">View all versions</a></small>
-                                </div>
-                            </div>
-                            <hr class="navbar-divider">
-                            <a class="navbar-item" href="#">
-                                <div class="navbar-content">
-                                    <p><small class="has-text-link">14 Nov 2017</small></p>
-                                    <p>Bulma is on Patreon!</p>
-                                </div>
-                            </a>
-                            <hr class="navbar-divider">
-                            <a class="navbar-item " href="#/">
-                                <p>
-                                <strong>Patreon backers</strong>
-                                <br>
-                                <small>Everyone who is supporting Bulma</small>
-                                </p>
-                            </a>
-                            <hr class="navbar-divider">
-                            <div class="navbar-item">
-                                <div class="navbar-content">
-                                <div class="level is-mobile">
-                                    <div class="level-left">
-                                    <div class="level-item">
-                                        <strong>Stay up to date!</strong>
-                                    </div>
-                                    </div>
-                                    <div class="level-right">
-                                    <div class="level-item">
-                                        <a class="button bd-is-rss is-small" href="#">
-                                            <span class="icon is-small">
-                                                <i class="fa fa-rss"></i>
-                                            </span>
-                                            <span>Subscribe</span>
-                                        </a>
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  --}}        
-                    {{--  <a class="navbar-item " href="#">
-                        <span class="icon"><i class="fa fa-weixin" aria-hidden="true"></i></span>
-                        Channels Page
-                    </a>  --}}
                 </div>
             <div class="navbar-end">    
                 
@@ -106,14 +51,16 @@
                             <div class="navbar-item has-dropdown is-hoverable control">
                                 <a class="button is-info" href="/user/{{$currentUser->usernameSlug()}}">
                                     <span class="icon">
-                                        <i class="fa fa-user"></i>
+                                        <img class="is-circle nav-image" src="{{asset("storage/user/".$currentUser->profile_image())}}" alt="Image">
                                     </span>
                                     <span>{{ $currentUser->first_name }}</span>
-                                    <img class="is-circle"src="{{asset("storage/user/".$currentUser->profile_image())}}" alt="Image">
                                 </a>
                             <div class="navbar-dropdown ">
-                                <a class="navbar-item " href="#/">
-                                    <p><strong>User Profile</strong></p>
+                                <a class="navbar-item " href="/user/{{$currentUser->usernameSlug()}}">
+                                    <p><strong>My Profile</strong></p>
+                                </a>
+                                <a class="navbar-item " href="/user/settings/{{$currentUser->usernameSlug()}}">
+                                    <p><strong>My Settings</strong></p>
                                 </a>
                             </div>
                         </div>

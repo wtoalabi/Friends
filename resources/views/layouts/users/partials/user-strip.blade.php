@@ -18,23 +18,24 @@
             <span> My Profile</span>
         </a>
         </li>
+        
         <li class="{{setActive(route('pictures',$currentUser->username))}}">
         <a href="/pictures/{{$currentUser->usernameSlug()}}">
             <span class="icon is-small"><i class="fa fa-camera"></i></span>
             <span>My Pictures</span>
         </a>
         </li>
-      {{--    <li>
-        <a>
-            <span class="icon is-small"><i class="fa fa-comment"></i></span>
-            <span>Messages</span>
-        </a>
-        </li>  --}}
         <li class="{{setActive(route('users_directory'))}}">
-        <a href="/users">
-            <span class="icon is-small"><i class="fa fa-file-text-o"></i></span>
-            <span>Users Directory</span>
+                <a href="/users">
+                    <span class="icon is-small"><i class="fa fa-file-text-o"></i></span>
+                    <span>Users Directory</span>
+                </a>
+            </li>
+        <li class="{{setActive(route('my-settings',$currentUser->username))}}">
+        <a href="/user/settings/{{$currentUser->usernameSlug()}}">
+            <span class="icon is-small"><i class="fa fa-wheel"></i></span>
+            <span>My Settings</span>
         </a>
-    </li>
+        </li>
 </ul>
 </div>

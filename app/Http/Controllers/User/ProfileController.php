@@ -8,7 +8,7 @@ use App\Models\Statuses\Status;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class UserProfileController extends Controller
+class ProfileController extends Controller
 {
     public function show ($username){
         $profileUser = User::where('username', $username)
